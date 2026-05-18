@@ -1,0 +1,9 @@
+{
+  "title": "Reproduction alerts",
+  "upcomingCalvings": "Upcoming calvings (21 days)",
+  "dryOffDue": "Cows due for dry-off",
+  "servedWithoutCheck": "Served without pregnancy check",
+  "openTooLong": "Cows open more than 120 days",
+  "noAlerts": "No alerts",
+  "animal": "Animal"
+}

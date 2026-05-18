@@ -1,0 +1,14 @@
+{
+  "internal": "Internal error",
+  "validation": "Validation failed",
+  "unauthenticated": "Session expired",
+  "forbidden": "Forbidden",
+  "notFound": "Not found",
+  "conflict": "Conflict",
+  "auth": { "invalidCredentials": "Invalid email or password", "emailNotVerified": "You must verify your email", "userDisabled": "User disabled", "tokenInvalid": "Invalid token", "tokenExpired": "Token expired", "refreshInvalid": "Invalid session", "emailAlreadyUsed": "Email already in use" },
+  "invitation": { "invalid": "Invalid invitation", "expired": "Expired invitation", "alreadyAccepted": "Already accepted" },
+  "ranch": { "hasAnimals": "Ranch has active animals" },
+  "lot": { "hasAnimals": "Lot has active animals" },
+  "animal": { "tagDuplicate": "Internal tag already exists", "officialTagDuplicate": "Official tag already exists", "notDeletable": "Cannot delete; change status" },
+  "photo": { "publicIdInvalid": "Invalid photo", "notFound": "Photo not found", "serviceUnavailable": "Photo service unavailable" }
+}

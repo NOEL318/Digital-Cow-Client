@@ -1,0 +1,8 @@
+{
+  "title": "Equipo",
+  "invite": "Invitar usuario",
+  "fields": { "email": "Correo", "role": "Rol", "name": "Nombre" },
+  "roles": { "OWNER": "Propietario", "ADMIN": "Administrador", "MANAGER": "Gerente", "WORKER": "Trabajador", "VIEWER": "Visualizador" },
+  "status": { "ACTIVE": "Activo", "INVITED": "Invitado", "DISABLED": "Deshabilitado" },
+  "pending": "Invitaciones pendientes"
+}

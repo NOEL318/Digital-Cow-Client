@@ -1,0 +1,12 @@
+{
+  "title": "Animals",
+  "new": "New animal",
+  "fields": { "internalTag": "Internal tag", "officialTag": "Official tag", "rfid": "RFID", "name": "Name", "sex": "Sex", "birthDate": "Birth date", "birthDateEstimated": "Estimated date", "breed": "Breed", "purpose": "Purpose", "status": "Status", "ranch": "Ranch", "lot": "Lot", "notes": "Notes", "coverPhoto": "Cover photo" },
+  "sex": { "FEMALE": "Female", "MALE": "Male" },
+  "purpose": { "BEEF": "Beef", "DAIRY": "Dairy", "DUAL": "Dual" },
+  "status": { "ACTIVE": "Active", "SOLD": "Sold", "DEAD": "Dead", "MISSING": "Missing", "TRANSFERRED": "Transferred" },
+  "filters": { "search": "Search by tag or name" },
+  "tabs": { "info": "Information", "photos": "Photos" },
+  "photos": { "upload": "Upload photo", "camera": "Take photo", "setCover": "Set as cover", "uploading": "Uploading...", "compress": "Compressing..." },
+  "empty": "No animals yet."
+}

@@ -1,0 +1,7 @@
+{
+  "title": "Tablero",
+  "totals": { "total": "Total animales", "active": "Activos", "sold": "Vendidos este año", "dead": "Bajas este año", "ranches": "Ranchos", "lots": "Lotes" },
+  "charts": { "byBreed": "Por raza", "byPurpose": "Por propósito", "byRanch": "Por rancho", "recent": "Altas (30 días)" },
+  "empty": { "title": "No hay animales aún", "cta": "Agrega tu primer animal" },
+  "vetSpendMonth": "Gasto veterinario del mes"
+}

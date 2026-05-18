@@ -1,0 +1,80 @@
+{
+  "nav": {
+    "section": "Reports",
+    "pnl": "Income and expense",
+    "inventory": "Inventory",
+    "salesHistory": "Sales history",
+    "healthSummary": "Health summary",
+    "animal": "Animal report"
+  },
+  "actions": {
+    "downloadCsv": "Download CSV",
+    "print": "Print"
+  },
+  "common": {
+    "from": "From",
+    "to": "To",
+    "groupBy": "Group by",
+    "groupByMonth": "Month",
+    "groupByCategory": "Category"
+  },
+  "pnl": {
+    "title": "Income and expense report",
+    "totalIncome": "Total income",
+    "totalExpense": "Total expense",
+    "margin": "Margin",
+    "key": "Key",
+    "label": "Label",
+    "income": "Income",
+    "expense": "Expense",
+    "importedCosts": "Imported costs",
+    "treatments": "Treatments",
+    "vaccinations": "Vaccinations",
+    "pestControls": "Pest controls",
+    "vetVisits": "Vet visits",
+    "feedingRecords": "Feeding",
+    "services": "Reproductive services"
+  },
+  "inventory": {
+    "title": "Current inventory",
+    "internalTag": "Internal tag",
+    "breed": "Breed",
+    "sex": "Sex",
+    "purpose": "Purpose",
+    "ageDays": "Age in days",
+    "currentLot": "Current lot",
+    "currentRanch": "Current ranch",
+    "lastWeightKg": "Last weight in kilograms"
+  },
+  "animal": {
+    "title": "Animal report",
+    "info": "Info",
+    "vaccinations": "Vaccinations",
+    "diagnoses": "Diagnoses",
+    "treatments": "Treatments",
+    "weighings": "Weighings",
+    "milkings": "Milkings",
+    "calvings": "Calvings",
+    "sale": "Sale"
+  },
+  "salesHistory": {
+    "title": "Sales history",
+    "kind": "Kind",
+    "date": "Date",
+    "description": "Description",
+    "amount": "Amount",
+    "buyer": "Buyer",
+    "animalSale": "Animal sale",
+    "milkSale": "Milk sale"
+  },
+  "healthSummary": {
+    "title": "Health summary",
+    "month": "Month",
+    "vaccinations": "Vaccinations",
+    "diagnosesMild": "Mild diagnoses",
+    "diagnosesModerate": "Moderate diagnoses",
+    "diagnosesSevere": "Severe diagnoses",
+    "treatments": "Treatments",
+    "totalCost": "Total cost"
+  }
+}

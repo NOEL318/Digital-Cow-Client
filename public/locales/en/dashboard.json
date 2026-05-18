@@ -1,0 +1,7 @@
+{
+  "title": "Dashboard",
+  "totals": { "total": "Total animals", "active": "Active", "sold": "Sold this year", "dead": "Dead this year", "ranches": "Ranches", "lots": "Lots" },
+  "charts": { "byBreed": "By breed", "byPurpose": "By purpose", "byRanch": "By ranch", "recent": "Recent (30 days)" },
+  "empty": { "title": "No animals yet", "cta": "Add your first animal" },
+  "vetSpendMonth": "Vet spend this month"
+}

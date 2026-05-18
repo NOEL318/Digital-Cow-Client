@@ -1,0 +1,123 @@
+{
+  "nav": {
+    "section": "Production",
+    "weighings": "Weighings",
+    "milkings": "Milkings",
+    "milkSamples": "Milk samples",
+    "bulkTank": "Bulk tank",
+    "slaughter": "Slaughter",
+    "growthCurve": "Growth curve",
+    "lactationCurve": "Lactation curve",
+    "kpis": "Production KPIs"
+  },
+  "weighing": {
+    "title": "Weighings",
+    "new": "New weighing",
+    "animal": "Animal",
+    "weighedAt": "Date",
+    "weightKg": "Weight in kilograms",
+    "method": "Method",
+    "bodyConditionScore": "Body condition score",
+    "notes": "Notes",
+    "methodValue": {
+      "SCALE": "Scale",
+      "TAPE": "Tape",
+      "VISUAL_ESTIMATE": "Visual estimate"
+    }
+  },
+  "milking": {
+    "title": "Milkings",
+    "new": "New milking",
+    "newBulk": "Bulk entry",
+    "animal": "Animal",
+    "milkingDate": "Date",
+    "session": "Session",
+    "liters": "Liters",
+    "notes": "Notes",
+    "lot": "Lot",
+    "tabIndividual": "Individual",
+    "tabBulk": "Bulk",
+    "selectLot": "Select a lot",
+    "noActiveAnimals": "No active animals in this lot",
+    "save": "Save milkings",
+    "sessionValue": {
+      "TOTAL": "Total",
+      "AM": "AM",
+      "PM": "PM"
+    }
+  },
+  "milkSample": {
+    "title": "Milk samples",
+    "new": "New sample",
+    "animal": "Animal",
+    "sampledAt": "Date",
+    "scc": "Somatic cell count (cells per milliliter)",
+    "fatPct": "Fat %",
+    "proteinPct": "Protein %",
+    "lactosePct": "Lactose %",
+    "notes": "Notes"
+  },
+  "bulkTank": {
+    "title": "Bulk tank deliveries",
+    "new": "New delivery",
+    "ranch": "Ranch",
+    "deliveryDate": "Date",
+    "totalLiters": "Total liters",
+    "buyer": "Buyer",
+    "notes": "Notes"
+  },
+  "slaughter": {
+    "title": "Slaughter results",
+    "new": "New slaughter",
+    "animal": "Animal",
+    "slaughteredAt": "Date",
+    "liveWeightKg": "Live weight in kilograms",
+    "carcassWeightKg": "Carcass weight in kilograms",
+    "yieldPct": "Yield %",
+    "grade": "Grade",
+    "buyer": "Buyer",
+    "notes": "Notes"
+  },
+  "growthCurve": {
+    "title": "Growth curve",
+    "selectAnimal": "Select an animal",
+    "weightAxis": "Weight in kilograms",
+    "adgAxis": "Average daily gain (kilograms per day)",
+    "empty": "No weighings recorded for the selected animal"
+  },
+  "lactationCurve": {
+    "title": "Lactation curve",
+    "selectAnimal": "Select a cow",
+    "startDate": "Lactation start",
+    "dayOfLactation": "Day of lactation",
+    "litersAxis": "Liters per day",
+    "empty": "No milkings recorded for the selected animal"
+  },
+  "kpis": {
+    "title": "Production KPIs",
+    "from": "From",
+    "to": "To",
+    "totalMilkLiters": "Total milk in liters",
+    "avgDailyMilkLiters": "Average daily milk in liters",
+    "avgAdgKgDay": "Average daily gain (kilograms per day)",
+    "topProducers": "Top producers",
+    "tag": "Tag",
+    "liters": "Liters"
+  },
+  "dashboard": {
+    "section": "Production",
+    "todayMilk": "Today milk in liters",
+    "mtdMilk": "Milk this month in liters",
+    "avgAdgMonth": "Average daily gain this month",
+    "activeMilkingCows": "Active milking cows"
+  },
+  "tab": {
+    "production": "Production",
+    "weighings": "Weighings",
+    "milkings": "Milkings (30 days)",
+    "milkSamples": "Milk samples",
+    "slaughter": "Slaughter",
+    "growthChart": "Growth curve",
+    "empty": "No records"
+  }
+}

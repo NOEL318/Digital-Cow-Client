@@ -1,0 +1,9 @@
+{
+  "title": "Alertas de reproducción",
+  "upcomingCalvings": "Próximos partos (21 días)",
+  "dryOffDue": "Vacas a secar",
+  "servedWithoutCheck": "Servidas sin diagnóstico",
+  "openTooLong": "Vacas vacías más de 120 días",
+  "noAlerts": "Sin alertas",
+  "animal": "Animal"
+}

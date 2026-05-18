@@ -1,0 +1,82 @@
+{
+  "nav": {
+    "section": "Alimentación",
+    "items": "Catálogo de insumos",
+    "plans": "Planes de alimentación",
+    "records": "Registros de consumo",
+    "costSummary": "Resumen de costos"
+  },
+  "item": {
+    "title": "Catálogo de insumos",
+    "new": "Nuevo insumo",
+    "code": "Código",
+    "nameEs": "Nombre (ES)",
+    "nameEn": "Nombre (EN)",
+    "category": "Categoría",
+    "dryMatterPct": "Materia seca %",
+    "proteinPct": "Proteína %",
+    "energyMcalKg": "Energía (megacalorías por kilogramo)",
+    "unitCost": "Costo por kilogramo",
+    "currency": "Moneda",
+    "notes": "Notas",
+    "global": "Insumo global",
+    "categoryValue": {
+      "FORAGE": "Forraje",
+      "SILAGE": "Ensilaje",
+      "CONCENTRATE": "Concentrado",
+      "MINERAL": "Mineral",
+      "BYPRODUCT": "Subproducto",
+      "OTHER": "Otro"
+    }
+  },
+  "plan": {
+    "title": "Planes de alimentación",
+    "new": "Nuevo plan",
+    "name": "Nombre",
+    "category": "Categoría",
+    "description": "Descripción",
+    "items": "Insumos del plan",
+    "addItem": "Agregar insumo",
+    "feedItem": "Insumo",
+    "kgPerHeadDay": "Kilogramos por animal al día",
+    "notes": "Notas",
+    "assign": "Asignar a lote",
+    "lot": "Lote",
+    "ranch": "Rancho",
+    "assignedAt": "Asignado",
+    "unassign": "Desasignar",
+    "categoryValue": {
+      "DAIRY_LACTATION": "Lactancia",
+      "DAIRY_DRY": "Seca",
+      "BEEF_GROWING": "Engorda crecimiento",
+      "BEEF_FINISHING": "Engorda finalización",
+      "CALF": "Becerros",
+      "OTHER": "Otro"
+    }
+  },
+  "record": {
+    "title": "Registros de consumo",
+    "new": "Nuevo registro",
+    "lot": "Lote",
+    "feedItem": "Insumo",
+    "consumedAt": "Fecha",
+    "totalKg": "Total en kilogramos",
+    "cost": "Costo",
+    "notes": "Notas"
+  },
+  "costSummary": {
+    "title": "Resumen de costos de alimentación",
+    "from": "Desde",
+    "to": "Hasta",
+    "groupBy": "Agrupar por",
+    "groupByValue": {
+      "lot": "Lote",
+      "ranch": "Rancho",
+      "month": "Mes"
+    },
+    "key": "Clave",
+    "label": "Etiqueta",
+    "totalCost": "Costo total",
+    "totalKg": "Total en kilogramos"
+  }
+}

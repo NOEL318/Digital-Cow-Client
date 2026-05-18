@@ -1,0 +1,35 @@
+{
+  "title": "Ranches",
+  "new": "New ranch",
+  "fields": { "name": "Name", "location": "Location", "area": "Area (ha)", "notes": "Notes" },
+  "lots": { "title": "Lots", "new": "New lot", "name": "Lot name" },
+  "detail": {
+    "haShort": "ha",
+    "viewOnMap": "View on map",
+    "activeAnimals": "Active animals",
+    "totalLots": "Total lots",
+    "byPurpose": "By purpose",
+    "bySex": "By sex",
+    "monthVetSpend": "Vet spend this month",
+    "recentAnimals": "Recent animals",
+    "recentEvents": "Recent ranch events",
+    "noLots": "No lots",
+    "noAnimals": "No animals",
+    "noEvents": "No recent events",
+    "newAnimal": "New animal in this ranch",
+    "registerVetVisit": "Register vet visit",
+    "editRanch": "Edit ranch",
+    "eventDate": "Date",
+    "eventType": "Type",
+    "eventAnimal": "Animal",
+    "eventDetail": "Detail",
+    "kind": {
+      "vaccination": "Vaccination",
+      "diagnosis": "Diagnosis",
+      "treatment": "Treatment",
+      "calving": "Calving",
+      "milking": "Milking",
+      "sale": "Sale"
+    }
+  }
+}

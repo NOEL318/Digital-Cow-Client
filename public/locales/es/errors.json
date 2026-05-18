@@ -1,0 +1,14 @@
+{
+  "internal": "Error interno",
+  "validation": "Validación fallida",
+  "unauthenticated": "Sesión expirada",
+  "forbidden": "No autorizado",
+  "notFound": "No encontrado",
+  "conflict": "Conflicto",
+  "auth": { "invalidCredentials": "Correo o contraseña inválidos", "emailNotVerified": "Debes verificar tu correo", "userDisabled": "Usuario deshabilitado", "tokenInvalid": "Token inválido", "tokenExpired": "Token expirado", "refreshInvalid": "Sesión inválida", "emailAlreadyUsed": "El correo ya está en uso" },
+  "invitation": { "invalid": "Invitación inválida", "expired": "Invitación expirada", "alreadyAccepted": "Ya aceptada" },
+  "ranch": { "hasAnimals": "El rancho tiene animales activos" },
+  "lot": { "hasAnimals": "El lote tiene animales activos" },
+  "animal": { "tagDuplicate": "Arete interno ya existe", "officialTagDuplicate": "Arete oficial ya existe", "notDeletable": "No se puede eliminar; cambia el estado" },
+  "photo": { "publicIdInvalid": "Foto inválida", "notFound": "Foto no encontrada", "serviceUnavailable": "Servicio de fotos no disponible" }
+}

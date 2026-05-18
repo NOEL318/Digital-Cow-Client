@@ -1,0 +1,123 @@
+{
+  "nav": {
+    "section": "Producción",
+    "weighings": "Pesajes",
+    "milkings": "Ordeños",
+    "milkSamples": "Muestras de leche",
+    "bulkTank": "Tanque a granel",
+    "slaughter": "Sacrificios",
+    "growthCurve": "Curva de crecimiento",
+    "lactationCurve": "Curva de lactancia",
+    "kpis": "KPIs de producción"
+  },
+  "weighing": {
+    "title": "Pesajes",
+    "new": "Nuevo pesaje",
+    "animal": "Animal",
+    "weighedAt": "Fecha",
+    "weightKg": "Peso en kilogramos",
+    "method": "Método",
+    "bodyConditionScore": "Condición corporal",
+    "notes": "Notas",
+    "methodValue": {
+      "SCALE": "Báscula",
+      "TAPE": "Cinta",
+      "VISUAL_ESTIMATE": "Estimación visual"
+    }
+  },
+  "milking": {
+    "title": "Ordeños",
+    "new": "Nuevo ordeño",
+    "newBulk": "Registro masivo",
+    "animal": "Animal",
+    "milkingDate": "Fecha",
+    "session": "Sesión",
+    "liters": "Litros",
+    "notes": "Notas",
+    "lot": "Lote",
+    "tabIndividual": "Individual",
+    "tabBulk": "Masivo",
+    "selectLot": "Selecciona un lote",
+    "noActiveAnimals": "No hay animales activos en este lote",
+    "save": "Guardar ordeños",
+    "sessionValue": {
+      "TOTAL": "Total",
+      "AM": "AM",
+      "PM": "PM"
+    }
+  },
+  "milkSample": {
+    "title": "Muestras de leche",
+    "new": "Nueva muestra",
+    "animal": "Animal",
+    "sampledAt": "Fecha",
+    "scc": "Conteo de células somáticas (células por mililitro)",
+    "fatPct": "Grasa %",
+    "proteinPct": "Proteína %",
+    "lactosePct": "Lactosa %",
+    "notes": "Notas"
+  },
+  "bulkTank": {
+    "title": "Entregas a tanque",
+    "new": "Nueva entrega",
+    "ranch": "Rancho",
+    "deliveryDate": "Fecha",
+    "totalLiters": "Litros totales",
+    "buyer": "Comprador",
+    "notes": "Notas"
+  },
+  "slaughter": {
+    "title": "Sacrificios",
+    "new": "Nuevo sacrificio",
+    "animal": "Animal",
+    "slaughteredAt": "Fecha",
+    "liveWeightKg": "Peso vivo en kilogramos",
+    "carcassWeightKg": "Peso en canal en kilogramos",
+    "yieldPct": "Rendimiento %",
+    "grade": "Grado",
+    "buyer": "Comprador",
+    "notes": "Notas"
+  },
+  "growthCurve": {
+    "title": "Curva de crecimiento",
+    "selectAnimal": "Selecciona un animal",
+    "weightAxis": "Peso en kilogramos",
+    "adgAxis": "Ganancia diaria de peso (kilogramos por día)",
+    "empty": "Sin pesajes registrados para el animal seleccionado"
+  },
+  "lactationCurve": {
+    "title": "Curva de lactancia",
+    "selectAnimal": "Selecciona una vaca",
+    "startDate": "Inicio de lactancia",
+    "dayOfLactation": "Día de lactancia",
+    "litersAxis": "Litros del día",
+    "empty": "Sin ordeños registrados para el animal seleccionado"
+  },
+  "kpis": {
+    "title": "KPIs de producción",
+    "from": "Desde",
+    "to": "Hasta",
+    "totalMilkLiters": "Leche total en litros",
+    "avgDailyMilkLiters": "Leche promedio diaria en litros",
+    "avgAdgKgDay": "Ganancia diaria de peso promedio (kilogramos por día)",
+    "topProducers": "Top productoras",
+    "tag": "Arete",
+    "liters": "Litros"
+  },
+  "dashboard": {
+    "section": "Producción",
+    "todayMilk": "Leche de hoy en litros",
+    "mtdMilk": "Leche del mes en litros",
+    "avgAdgMonth": "Ganancia diaria de peso promedio del mes",
+    "activeMilkingCows": "Vacas en ordeño"
+  },
+  "tab": {
+    "production": "Producción",
+    "weighings": "Pesajes",
+    "milkings": "Ordeños (30 días)",
+    "milkSamples": "Muestras de leche",
+    "slaughter": "Sacrificio",
+    "growthChart": "Curva de crecimiento",
+    "empty": "Sin registros"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "vaccines": "Vacunas",
+  "diseases": "Enfermedades",
+  "medications": "Medicamentos",
+  "pests": "Plagas y parásitos",
+  "code": "Código",
+  "name": "Nombre",
+  "category": "Categoría",
+  "zoonotic": "Zoonótica",
+  "severity": "Severidad",
+  "activeIngredient": "Principio activo",
+  "withdrawalMilkDays": "Retiro leche (días)",
+  "withdrawalMeatDays": "Retiro carne (días)",
+  "scientificName": "Nombre científico",
+  "type": "Tipo",
+  "region": "Región"
+}

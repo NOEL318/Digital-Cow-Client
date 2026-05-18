@@ -1,0 +1,88 @@
+{
+  "nav": {
+    "section": "Health",
+    "overview": "Overview",
+    "vaccinations": "Vaccinations",
+    "diagnoses": "Diagnoses",
+    "treatments": "Treatments",
+    "pestControls": "Pest controls",
+    "vetVisits": "Vet visits",
+    "plans": "Health plans"
+  },
+  "vaccination": {
+    "title": "Vaccinations",
+    "new": "New vaccination",
+    "newBulk": "Bulk vaccination",
+    "vaccine": "Vaccine",
+    "batch": "Lab batch number",
+    "appliedAt": "Applied on",
+    "doseMl": "Dose in milliliters",
+    "route": "Route",
+    "nextDose": "Next dose",
+    "cost": "Cost",
+    "vetVisit": "Vet visit",
+    "lot": "Lot",
+    "individual": "Individual",
+    "byLot": "By lot",
+    "expanded": "{{count}} records created (one per active animal in the lot)"
+  },
+  "diagnosis": {
+    "title": "Diagnoses",
+    "new": "New diagnosis",
+    "disease": "Disease",
+    "diagnosedAt": "Diagnosed on",
+    "severity": "Severity",
+    "symptoms": "Symptoms",
+    "status": "Status",
+    "resolvedAt": "Resolved on"
+  },
+  "treatment": {
+    "title": "Treatments",
+    "new": "New treatment",
+    "medication": "Medication",
+    "diagnosis": "Related diagnosis",
+    "startedAt": "Started",
+    "endedAt": "Ended",
+    "dose": "Dose",
+    "dosesCount": "Number of doses",
+    "route": "Route",
+    "withdrawalMilk": "Milk withdrawal until",
+    "withdrawalMeat": "Meat withdrawal until",
+    "withdrawalActive": "Withdrawal active",
+    "prescribedBy": "Prescribed by"
+  },
+  "pest": {
+    "title": "Pest controls",
+    "new": "New control",
+    "pest": "Pest",
+    "product": "Product used",
+    "appliedAt": "Applied on",
+    "nextApplication": "Next application"
+  },
+  "visit": {
+    "title": "Vet visits",
+    "new": "New visit",
+    "vetName": "Veterinarian",
+    "vetContact": "Contact",
+    "reason": "Reason",
+    "totalCost": "Total cost",
+    "events": "Related events"
+  },
+  "plan": {
+    "title": "Health plans",
+    "new": "New plan",
+    "global": "System global plan",
+    "appliesToPurpose": "Applies to purpose",
+    "appliesToSex": "Applies to sex",
+    "steps": "Steps",
+    "addStep": "Add step",
+    "ageMonthsMin": "Minimum age in months",
+    "recurrenceMonths": "Recurrence in months",
+    "assign": "Assign to animals or lots"
+  },
+  "tab": {
+    "health": "Health",
+    "timeline": "Timeline",
+    "print": "Printable view"
+  }
+}

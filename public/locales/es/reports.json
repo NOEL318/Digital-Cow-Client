@@ -1,0 +1,80 @@
+{
+  "nav": {
+    "section": "Reportes",
+    "pnl": "Ingresos y egresos",
+    "inventory": "Inventario",
+    "salesHistory": "Histórico de ventas",
+    "healthSummary": "Resumen de salud",
+    "animal": "Reporte por animal"
+  },
+  "actions": {
+    "downloadCsv": "Descargar CSV",
+    "print": "Imprimir"
+  },
+  "common": {
+    "from": "Desde",
+    "to": "Hasta",
+    "groupBy": "Agrupar por",
+    "groupByMonth": "Mes",
+    "groupByCategory": "Categoría"
+  },
+  "pnl": {
+    "title": "Reporte de ingresos y egresos",
+    "totalIncome": "Ingresos totales",
+    "totalExpense": "Egresos totales",
+    "margin": "Margen",
+    "key": "Clave",
+    "label": "Etiqueta",
+    "income": "Ingresos",
+    "expense": "Egresos",
+    "importedCosts": "Costos importados",
+    "treatments": "Tratamientos",
+    "vaccinations": "Vacunaciones",
+    "pestControls": "Control de plagas",
+    "vetVisits": "Visitas veterinarias",
+    "feedingRecords": "Alimentación",
+    "services": "Servicios reproductivos"
+  },
+  "inventory": {
+    "title": "Inventario actual",
+    "internalTag": "Marca interna",
+    "breed": "Raza",
+    "sex": "Sexo",
+    "purpose": "Propósito",
+    "ageDays": "Edad en días",
+    "currentLot": "Lote actual",
+    "currentRanch": "Rancho actual",
+    "lastWeightKg": "Último peso en kilogramos"
+  },
+  "animal": {
+    "title": "Reporte del animal",
+    "info": "Información",
+    "vaccinations": "Vacunaciones",
+    "diagnoses": "Diagnósticos",
+    "treatments": "Tratamientos",
+    "weighings": "Pesajes",
+    "milkings": "Ordeños",
+    "calvings": "Partos",
+    "sale": "Venta"
+  },
+  "salesHistory": {
+    "title": "Histórico de ventas",
+    "kind": "Tipo",
+    "date": "Fecha",
+    "description": "Descripción",
+    "amount": "Monto",
+    "buyer": "Comprador",
+    "animalSale": "Venta animal",
+    "milkSale": "Venta leche"
+  },
+  "healthSummary": {
+    "title": "Resumen de salud",
+    "month": "Mes",
+    "vaccinations": "Vacunas",
+    "diagnosesMild": "Diagnósticos leves",
+    "diagnosesModerate": "Diagnósticos moderados",
+    "diagnosesSevere": "Diagnósticos severos",
+    "treatments": "Tratamientos",
+    "totalCost": "Costo total"
+  }
+}

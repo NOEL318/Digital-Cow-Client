@@ -1,0 +1,12 @@
+{
+  "title": "Alertas",
+  "upcoming7d": "Vacunaciones en 7 días",
+  "upcoming30d": "Vacunaciones en 30 días",
+  "withdrawalMilk": "Retiro de leche activo",
+  "withdrawalMeat": "Retiro de carne activo",
+  "diagnosesNoTreatment": "Diagnósticos activos sin tratamiento",
+  "noAlerts": "Sin alertas",
+  "animal": "Animal",
+  "until": "hasta",
+  "dueIn": "Vence en"
+}

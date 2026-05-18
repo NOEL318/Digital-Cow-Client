@@ -1,0 +1,201 @@
+{
+  "nav": {
+    "section": "Reproducción",
+    "overview": "Resumen",
+    "bulls": "Toros",
+    "semen": "Inventario de semen",
+    "heats": "Celos",
+    "services": "Servicios",
+    "pregnancyChecks": "Diagnósticos de gestación",
+    "calvings": "Partos",
+    "abortions": "Abortos",
+    "weanings": "Destetes",
+    "dryOffs": "Secados",
+    "kpis": "KPIs reproductivos"
+  },
+  "bull": {
+    "title": "Toros",
+    "new": "Nuevo toro",
+    "internalCode": "Código interno",
+    "name": "Nombre",
+    "breed": "Raza",
+    "source": "Origen",
+    "registryNumber": "Número de registro",
+    "animal": "Animal asociado",
+    "notes": "Notas",
+    "OWN": "Propio",
+    "EXTERNAL": "Externo"
+  },
+  "semen": {
+    "title": "Inventario de semen",
+    "new": "Nueva pajilla",
+    "bull": "Toro",
+    "provider": "Proveedor",
+    "batchNumber": "Lote",
+    "totalQuantity": "Cantidad total",
+    "availableQuantity": "Disponibles",
+    "receivedAt": "Recibido",
+    "expiresAt": "Vence",
+    "costPerStraw": "Costo por pajilla",
+    "storageLocation": "Ubicación",
+    "notes": "Notas"
+  },
+  "heat": {
+    "title": "Celos",
+    "new": "Nuevo celo",
+    "animal": "Animal",
+    "detectedAt": "Detectado",
+    "detectionMethod": "Método",
+    "intensity": "Intensidad",
+    "notes": "Notas",
+    "method": {
+      "VISUAL": "Visual",
+      "PEDOMETER": "Podómetro",
+      "HEAT_PATCH": "Parche de celo",
+      "CAMERA": "Cámara",
+      "OTHER": "Otro"
+    },
+    "intensityValue": {
+      "WEAK": "Débil",
+      "MODERATE": "Moderada",
+      "STRONG": "Fuerte"
+    }
+  },
+  "service": {
+    "title": "Servicios",
+    "new": "Nuevo servicio",
+    "animal": "Animal",
+    "serviceType": "Tipo",
+    "serviceDate": "Fecha",
+    "bull": "Toro",
+    "semenStraw": "Pajilla",
+    "technician": "Técnico",
+    "heat": "Celo asociado",
+    "cost": "Costo",
+    "notes": "Notas",
+    "estimatedCalvingDate": "Parto estimado",
+    "type": {
+      "AI": "Inseminación artificial",
+      "NATURAL": "Monta natural",
+      "EMBRYO_TRANSFER": "Transferencia de embrión"
+    }
+  },
+  "pregnancy": {
+    "title": "Diagnósticos de gestación",
+    "new": "Nuevo diagnóstico",
+    "animal": "Animal",
+    "service": "Servicio",
+    "checkedAt": "Fecha",
+    "method": "Método",
+    "result": "Resultado",
+    "estimatedGestationDays": "Días de gestación estimados",
+    "estimatedCalvingDate": "Fecha de parto estimada",
+    "notes": "Notas",
+    "methodValue": {
+      "PALPATION": "Palpación",
+      "ULTRASOUND": "Ultrasonido",
+      "BLOOD_TEST": "Prueba de sangre",
+      "MILK_TEST": "Prueba de leche"
+    },
+    "resultValue": {
+      "POSITIVE": "Positivo",
+      "NEGATIVE": "Negativo",
+      "DOUBTFUL": "Dudoso"
+    }
+  },
+  "calving": {
+    "title": "Partos",
+    "new": "Nuevo parto",
+    "animal": "Madre",
+    "calvedAt": "Fecha",
+    "ease": "Facilidad",
+    "outcome": "Resultado",
+    "calfSex": "Sexo del becerro",
+    "calfBirthWeight": "Peso al nacer en kilogramos",
+    "notes": "Notas",
+    "createCalfAnimal": "Registrar becerro como nuevo animal",
+    "calfInternalTag": "Arete interno del becerro",
+    "calfRanch": "Rancho del becerro",
+    "calfLot": "Lote del becerro",
+    "calfBreed": "Raza del becerro",
+    "calfPurpose": "Propósito del becerro",
+    "easeValue": {
+      "FREE": "Sin asistencia",
+      "EASY": "Fácil",
+      "ASSISTED": "Asistido",
+      "DIFFICULT": "Difícil",
+      "SURGERY": "Cirugía"
+    },
+    "outcomeValue": {
+      "LIVE": "Vivo",
+      "STILLBORN": "Nacido muerto",
+      "TWIN_LIVE": "Gemelos vivos",
+      "TWIN_MIXED": "Gemelos mixto",
+      "TWIN_STILLBORN": "Gemelos nacidos muertos"
+    }
+  },
+  "abortion": {
+    "title": "Abortos",
+    "new": "Nuevo aborto",
+    "animal": "Animal",
+    "abortedAt": "Fecha",
+    "estimatedGestationDays": "Días de gestación estimados",
+    "cause": "Causa",
+    "notes": "Notas"
+  },
+  "weaning": {
+    "title": "Destetes",
+    "new": "Nuevo destete",
+    "animal": "Animal",
+    "weanedAt": "Fecha",
+    "weightKg": "Peso en kilogramos",
+    "notes": "Notas"
+  },
+  "dryOff": {
+    "title": "Secados",
+    "new": "Nuevo secado",
+    "animal": "Animal",
+    "driedOffAt": "Fecha",
+    "lactationDays": "Días en lactancia",
+    "notes": "Notas"
+  },
+  "kpis": {
+    "title": "KPIs reproductivos",
+    "from": "Desde",
+    "to": "Hasta",
+    "daysOpen": "Días abiertos",
+    "median": "Mediana",
+    "p75": "Percentil 75",
+    "max": "Máximo",
+    "iep": "Intervalo entre partos en días",
+    "firstCalvingAge": "Edad al primer parto en días",
+    "firstServiceConception": "Concepción al primer servicio",
+    "servicesPerConception": "Servicios por concepción",
+    "pregnancyRate": "Tasa de gestación",
+    "distribution": "Distribución de días abiertos",
+    "bucket0_60": "0-60",
+    "bucket61_90": "61-90",
+    "bucket91_120": "91-120",
+    "bucket121plus": "121+"
+  },
+  "dashboard": {
+    "section": "Reproducción",
+    "pregnantConfirmed": "Gestaciones confirmadas",
+    "upcomingCalvings21d": "Partos en 21 días",
+    "openCows": "Vacas vacías",
+    "avgDaysOpen": "Días abiertos promedio"
+  },
+  "tab": {
+    "reproduction": "Reproducción",
+    "timeline": "Línea de tiempo"
+  },
+  "timeline": {
+    "heat": "Celo",
+    "service": "Servicio",
+    "pregnancyCheck": "Diagnóstico",
+    "calving": "Parto",
+    "abortion": "Aborto",
+    "weaning": "Destete",
+    "dryOff": "Secado"
+  }
+}

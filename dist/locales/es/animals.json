@@ -1,0 +1,12 @@
+{
+  "title": "Animales",
+  "new": "Nuevo animal",
+  "fields": { "internalTag": "Arete interno", "officialTag": "Arete oficial", "rfid": "RFID", "name": "Nombre", "sex": "Sexo", "birthDate": "Fecha de nacimiento", "birthDateEstimated": "Fecha estimada", "breed": "Raza", "purpose": "Propósito", "status": "Estado", "ranch": "Rancho", "lot": "Lote", "notes": "Observaciones", "coverPhoto": "Foto principal" },
+  "sex": { "FEMALE": "Hembra", "MALE": "Macho" },
+  "purpose": { "BEEF": "Carne", "DAIRY": "Leche", "DUAL": "Doble propósito" },
+  "status": { "ACTIVE": "Activo", "SOLD": "Vendido", "DEAD": "Baja", "MISSING": "Perdido", "TRANSFERRED": "Transferido" },
+  "filters": { "search": "Buscar por arete o nombre" },
+  "tabs": { "info": "Información", "photos": "Fotos" },
+  "photos": { "upload": "Subir foto", "camera": "Tomar foto", "setCover": "Marcar principal", "uploading": "Subiendo...", "compress": "Comprimiendo..." },
+  "empty": "No hay animales aún."
+}

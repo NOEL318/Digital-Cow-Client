@@ -1,0 +1,8 @@
+{
+  "title": "Team",
+  "invite": "Invite user",
+  "fields": { "email": "Email", "role": "Role", "name": "Name" },
+  "roles": { "OWNER": "Owner", "ADMIN": "Admin", "MANAGER": "Manager", "WORKER": "Worker", "VIEWER": "Viewer" },
+  "status": { "ACTIVE": "Active", "INVITED": "Invited", "DISABLED": "Disabled" },
+  "pending": "Pending invitations"
+}

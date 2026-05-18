@@ -1,0 +1,201 @@
+{
+  "nav": {
+    "section": "Reproduction",
+    "overview": "Overview",
+    "bulls": "Bulls",
+    "semen": "Semen inventory",
+    "heats": "Heats",
+    "services": "Services",
+    "pregnancyChecks": "Pregnancy checks",
+    "calvings": "Calvings",
+    "abortions": "Abortions",
+    "weanings": "Weanings",
+    "dryOffs": "Dry-offs",
+    "kpis": "Reproductive KPIs"
+  },
+  "bull": {
+    "title": "Bulls",
+    "new": "New bull",
+    "internalCode": "Internal code",
+    "name": "Name",
+    "breed": "Breed",
+    "source": "Source",
+    "registryNumber": "Registry number",
+    "animal": "Linked animal",
+    "notes": "Notes",
+    "OWN": "Own",
+    "EXTERNAL": "External"
+  },
+  "semen": {
+    "title": "Semen inventory",
+    "new": "New straw batch",
+    "bull": "Bull",
+    "provider": "Provider",
+    "batchNumber": "Batch number",
+    "totalQuantity": "Total quantity",
+    "availableQuantity": "Available",
+    "receivedAt": "Received",
+    "expiresAt": "Expires",
+    "costPerStraw": "Cost per straw",
+    "storageLocation": "Storage location",
+    "notes": "Notes"
+  },
+  "heat": {
+    "title": "Heats",
+    "new": "New heat",
+    "animal": "Animal",
+    "detectedAt": "Detected",
+    "detectionMethod": "Method",
+    "intensity": "Intensity",
+    "notes": "Notes",
+    "method": {
+      "VISUAL": "Visual",
+      "PEDOMETER": "Pedometer",
+      "HEAT_PATCH": "Heat patch",
+      "CAMERA": "Camera",
+      "OTHER": "Other"
+    },
+    "intensityValue": {
+      "WEAK": "Weak",
+      "MODERATE": "Moderate",
+      "STRONG": "Strong"
+    }
+  },
+  "service": {
+    "title": "Services",
+    "new": "New service",
+    "animal": "Animal",
+    "serviceType": "Type",
+    "serviceDate": "Date",
+    "bull": "Bull",
+    "semenStraw": "Straw",
+    "technician": "Technician",
+    "heat": "Related heat",
+    "cost": "Cost",
+    "notes": "Notes",
+    "estimatedCalvingDate": "Estimated calving date",
+    "type": {
+      "AI": "Artificial insemination",
+      "NATURAL": "Natural mating",
+      "EMBRYO_TRANSFER": "Embryo transfer"
+    }
+  },
+  "pregnancy": {
+    "title": "Pregnancy checks",
+    "new": "New pregnancy check",
+    "animal": "Animal",
+    "service": "Service",
+    "checkedAt": "Date",
+    "method": "Method",
+    "result": "Result",
+    "estimatedGestationDays": "Estimated gestation days",
+    "estimatedCalvingDate": "Estimated calving date",
+    "notes": "Notes",
+    "methodValue": {
+      "PALPATION": "Palpation",
+      "ULTRASOUND": "Ultrasound",
+      "BLOOD_TEST": "Blood test",
+      "MILK_TEST": "Milk test"
+    },
+    "resultValue": {
+      "POSITIVE": "Positive",
+      "NEGATIVE": "Negative",
+      "DOUBTFUL": "Doubtful"
+    }
+  },
+  "calving": {
+    "title": "Calvings",
+    "new": "New calving",
+    "animal": "Dam",
+    "calvedAt": "Date",
+    "ease": "Ease",
+    "outcome": "Outcome",
+    "calfSex": "Calf sex",
+    "calfBirthWeight": "Birth weight in kilograms",
+    "notes": "Notes",
+    "createCalfAnimal": "Register calf as new animal",
+    "calfInternalTag": "Calf internal tag",
+    "calfRanch": "Calf ranch",
+    "calfLot": "Calf lot",
+    "calfBreed": "Calf breed",
+    "calfPurpose": "Calf purpose",
+    "easeValue": {
+      "FREE": "Unassisted",
+      "EASY": "Easy",
+      "ASSISTED": "Assisted",
+      "DIFFICULT": "Difficult",
+      "SURGERY": "Surgery"
+    },
+    "outcomeValue": {
+      "LIVE": "Live",
+      "STILLBORN": "Stillborn",
+      "TWIN_LIVE": "Twin live",
+      "TWIN_MIXED": "Twin mixed",
+      "TWIN_STILLBORN": "Twin stillborn"
+    }
+  },
+  "abortion": {
+    "title": "Abortions",
+    "new": "New abortion",
+    "animal": "Animal",
+    "abortedAt": "Date",
+    "estimatedGestationDays": "Estimated gestation days",
+    "cause": "Cause",
+    "notes": "Notes"
+  },
+  "weaning": {
+    "title": "Weanings",
+    "new": "New weaning",
+    "animal": "Animal",
+    "weanedAt": "Date",
+    "weightKg": "Weight in kilograms",
+    "notes": "Notes"
+  },
+  "dryOff": {
+    "title": "Dry-offs",
+    "new": "New dry-off",
+    "animal": "Animal",
+    "driedOffAt": "Date",
+    "lactationDays": "Lactation days",
+    "notes": "Notes"
+  },
+  "kpis": {
+    "title": "Reproductive KPIs",
+    "from": "From",
+    "to": "To",
+    "daysOpen": "Days open",
+    "median": "Median",
+    "p75": "75th percentile",
+    "max": "Maximum",
+    "iep": "Calving interval in days",
+    "firstCalvingAge": "Age at first calving in days",
+    "firstServiceConception": "First-service conception",
+    "servicesPerConception": "Services per conception",
+    "pregnancyRate": "Pregnancy rate",
+    "distribution": "Days open distribution",
+    "bucket0_60": "0-60",
+    "bucket61_90": "61-90",
+    "bucket91_120": "91-120",
+    "bucket121plus": "121+"
+  },
+  "dashboard": {
+    "section": "Reproduction",
+    "pregnantConfirmed": "Confirmed pregnancies",
+    "upcomingCalvings21d": "Calvings in 21 days",
+    "openCows": "Open cows",
+    "avgDaysOpen": "Average days open"
+  },
+  "tab": {
+    "reproduction": "Reproduction",
+    "timeline": "Timeline"
+  },
+  "timeline": {
+    "heat": "Heat",
+    "service": "Service",
+    "pregnancyCheck": "Pregnancy check",
+    "calving": "Calving",
+    "abortion": "Abortion",
+    "weaning": "Weaning",
+    "dryOff": "Dry-off"
+  }
+}

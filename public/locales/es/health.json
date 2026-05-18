@@ -1,0 +1,88 @@
+{
+  "nav": {
+    "section": "Salud",
+    "overview": "Resumen",
+    "vaccinations": "Vacunaciones",
+    "diagnoses": "Diagnósticos",
+    "treatments": "Tratamientos",
+    "pestControls": "Control de plagas",
+    "vetVisits": "Visitas veterinarias",
+    "plans": "Planes sanitarios"
+  },
+  "vaccination": {
+    "title": "Vacunaciones",
+    "new": "Nueva vacunación",
+    "newBulk": "Vacunación por lote",
+    "vaccine": "Vacuna",
+    "batch": "Lote del laboratorio",
+    "appliedAt": "Aplicada el",
+    "doseMl": "Dosis en mililitros",
+    "route": "Vía",
+    "nextDose": "Próxima dosis",
+    "cost": "Costo",
+    "vetVisit": "Visita veterinaria",
+    "lot": "Lote",
+    "individual": "Individual",
+    "byLot": "Por lote",
+    "expanded": "Se crearon {{count}} registros (uno por animal activo del lote)"
+  },
+  "diagnosis": {
+    "title": "Diagnósticos",
+    "new": "Nuevo diagnóstico",
+    "disease": "Enfermedad",
+    "diagnosedAt": "Diagnosticado el",
+    "severity": "Severidad",
+    "symptoms": "Síntomas",
+    "status": "Estado",
+    "resolvedAt": "Resuelto el"
+  },
+  "treatment": {
+    "title": "Tratamientos",
+    "new": "Nuevo tratamiento",
+    "medication": "Medicamento",
+    "diagnosis": "Diagnóstico relacionado",
+    "startedAt": "Inicio",
+    "endedAt": "Término",
+    "dose": "Dosis",
+    "dosesCount": "Número de aplicaciones",
+    "route": "Vía",
+    "withdrawalMilk": "Retiro de leche hasta",
+    "withdrawalMeat": "Retiro de carne hasta",
+    "withdrawalActive": "Retiro activo",
+    "prescribedBy": "Prescrito por"
+  },
+  "pest": {
+    "title": "Control de plagas",
+    "new": "Nuevo control",
+    "pest": "Plaga",
+    "product": "Producto utilizado",
+    "appliedAt": "Aplicado el",
+    "nextApplication": "Próxima aplicación"
+  },
+  "visit": {
+    "title": "Visitas veterinarias",
+    "new": "Nueva visita",
+    "vetName": "Veterinario",
+    "vetContact": "Contacto",
+    "reason": "Motivo",
+    "totalCost": "Costo total",
+    "events": "Eventos asociados"
+  },
+  "plan": {
+    "title": "Planes sanitarios",
+    "new": "Nuevo plan",
+    "global": "Plan global del sistema",
+    "appliesToPurpose": "Aplica a propósito",
+    "appliesToSex": "Aplica a sexo",
+    "steps": "Pasos",
+    "addStep": "Agregar paso",
+    "ageMonthsMin": "Edad mínima en meses",
+    "recurrenceMonths": "Recurrencia en meses",
+    "assign": "Asignar a animales o lotes"
+  },
+  "tab": {
+    "health": "Salud",
+    "timeline": "Línea de tiempo",
+    "print": "Vista imprimible"
+  }
+}

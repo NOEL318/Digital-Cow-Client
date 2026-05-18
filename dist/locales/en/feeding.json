@@ -1,0 +1,82 @@
+{
+  "nav": {
+    "section": "Feeding",
+    "items": "Feed catalog",
+    "plans": "Feeding plans",
+    "records": "Consumption records",
+    "costSummary": "Cost summary"
+  },
+  "item": {
+    "title": "Feed catalog",
+    "new": "New feed item",
+    "code": "Code",
+    "nameEs": "Name (ES)",
+    "nameEn": "Name (EN)",
+    "category": "Category",
+    "dryMatterPct": "Dry matter %",
+    "proteinPct": "Protein %",
+    "energyMcalKg": "Energy (megacalories per kilogram)",
+    "unitCost": "Unit cost per kilogram",
+    "currency": "Currency",
+    "notes": "Notes",
+    "global": "Global item",
+    "categoryValue": {
+      "FORAGE": "Forage",
+      "SILAGE": "Silage",
+      "CONCENTRATE": "Concentrate",
+      "MINERAL": "Mineral",
+      "BYPRODUCT": "By-product",
+      "OTHER": "Other"
+    }
+  },
+  "plan": {
+    "title": "Feeding plans",
+    "new": "New plan",
+    "name": "Name",
+    "category": "Category",
+    "description": "Description",
+    "items": "Plan items",
+    "addItem": "Add item",
+    "feedItem": "Feed item",
+    "kgPerHeadDay": "Kilograms per animal per day",
+    "notes": "Notes",
+    "assign": "Assign to lot",
+    "lot": "Lot",
+    "ranch": "Ranch",
+    "assignedAt": "Assigned at",
+    "unassign": "Unassign",
+    "categoryValue": {
+      "DAIRY_LACTATION": "Lactation",
+      "DAIRY_DRY": "Dry",
+      "BEEF_GROWING": "Beef growing",
+      "BEEF_FINISHING": "Beef finishing",
+      "CALF": "Calves",
+      "OTHER": "Other"
+    }
+  },
+  "record": {
+    "title": "Consumption records",
+    "new": "New record",
+    "lot": "Lot",
+    "feedItem": "Feed item",
+    "consumedAt": "Date",
+    "totalKg": "Total in kilograms",
+    "cost": "Cost",
+    "notes": "Notes"
+  },
+  "costSummary": {
+    "title": "Feeding cost summary",
+    "from": "From",
+    "to": "To",
+    "groupBy": "Group by",
+    "groupByValue": {
+      "lot": "Lot",
+      "ranch": "Ranch",
+      "month": "Month"
+    },
+    "key": "Key",
+    "label": "Label",
+    "totalCost": "Total cost",
+    "totalKg": "Total in kilograms"
+  }
+}
