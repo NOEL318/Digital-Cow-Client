@@ -1,3 +1,6 @@
+/**
+ * Este componente muestra una tarjeta resumen del modulo ranches.
+ */
 import { useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';

@@ -1,3 +1,6 @@
+/**
+ * Esta pagina permite al usuario editar su perfil, nombre, telefono y otros datos.
+ */
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/features/auth/AuthContext';

@@ -1,5 +1,9 @@
+/**
+ * Este archivo define los esquemas de validacion zod para los formularios del modulo animals.
+ */
 import { z } from 'zod';
 
+// Este esquema zod valida los datos de animal.
 export const animalSchema = z.object({
   ranchId: z.coerce.number().int().positive(),
   lotId: z.coerce.number().int().positive().optional().nullable(),

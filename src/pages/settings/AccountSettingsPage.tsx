@@ -1,3 +1,6 @@
+/**
+ * Esta pagina permite al usuario cambiar su contrasena y configurar la seguridad de la cuenta.
+ */
 import { useForm } from 'react-hook-form';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -25,11 +28,11 @@ export default function AccountSettingsPage() {
   return (
     <form onSubmit={onSubmit} className="max-w-md space-y-4">
       <div>
-        <Label htmlFor="name">Account name</Label>
+        <Label htmlFor="name">{t('labels.accountName')}</Label>
         <Input id="name" {...form.register('name')} />
       </div>
       <div>
-        <Label htmlFor="locale">Default locale</Label>
+        <Label htmlFor="locale">{t('labels.defaultLocale')}</Label>
         <select id="locale" {...form.register('defaultLocale')} className="w-full h-10 rounded-md border border-input bg-background px-3">
           <option value="es">ES</option>
           <option value="en">EN</option>

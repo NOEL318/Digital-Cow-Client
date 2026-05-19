@@ -1,3 +1,6 @@
+/**
+ * Este archivo define los tipos typescript del modulo reproduction/semen compartidos por la api, los formularios y los componentes.
+ */
 export interface SemenStraw {
   id: number;
   bullId: number;

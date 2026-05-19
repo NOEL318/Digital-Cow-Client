@@ -1,5 +1,9 @@
+/**
+ * Este archivo define los esquemas de validacion zod para los formularios del modulo reproduction/bulls.
+ */
 import { z } from 'zod';
 
+// Este esquema valida los datos para crear un registro de bull.
 export const bullCreateSchema = z.object({
   internalCode: z.string().min(1).max(60),
   name: z.string().min(1).max(160),

@@ -1,3 +1,7 @@
+/**
+ * Este archivo inicializa i18next con backend HTTP y deteccion de idioma,
+ * y expone helpers para normalizar las claves de error que vienen del backend.
+ */
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import HttpBackend from 'i18next-http-backend';

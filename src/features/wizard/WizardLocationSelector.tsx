@@ -1,3 +1,6 @@
+/**
+ * Este componente permite a los wizards seleccionar rancho y lote como contexto del evento.
+ */
 import { useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { MapPin, Boxes } from 'lucide-react';

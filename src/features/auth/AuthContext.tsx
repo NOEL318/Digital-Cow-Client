@@ -1,3 +1,6 @@
+/**
+ * Este archivo expone el contexto de autenticacion con el usuario actual y las acciones de login y logout.
+ */
 import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from 'react';
 import { authApi } from './api';
 import { AuthStorage } from '@/lib/auth-storage';
@@ -57,4 +60,5 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   return <Ctx.Provider value={{ user, loading, login, register, logout, refreshMe }}>{children}</Ctx.Provider>;
 }
 
+// Este hook expone los datos y acciones de Auth.
 export const useAuth = () => useContext(Ctx);

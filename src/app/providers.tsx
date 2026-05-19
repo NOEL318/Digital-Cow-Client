@@ -1,3 +1,7 @@
+/**
+ * Este archivo agrupa los providers globales que envuelven toda la app:
+ * react-query, tema, autenticacion y toasts.
+ */
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { type ReactNode } from 'react';
 import { ThemeProvider } from './theme';

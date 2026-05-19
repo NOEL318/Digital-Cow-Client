@@ -1,3 +1,6 @@
+/**
+ * Este archivo define los tipos typescript del modulo auth compartidos por la api, los formularios y los componentes.
+ */
 export type UserRole = 'OWNER' | 'ADMIN' | 'MANAGER' | 'WORKER' | 'VIEWER' | 'SUPERADMIN';
 export type Locale = 'es' | 'en';
 

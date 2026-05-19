@@ -1,3 +1,6 @@
+/**
+ * Este archivo define los tipos typescript del modulo health/vetVisits compartidos por la api, los formularios y los componentes.
+ */
 export interface VetVisit {
   id: number;
   ranchId: number;

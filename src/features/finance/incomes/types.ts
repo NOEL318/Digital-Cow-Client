@@ -1,3 +1,6 @@
+/**
+ * Este archivo define los tipos typescript del modulo finance/incomes compartidos por la api, los formularios y los componentes.
+ */
 export type IncomeSourceType = 'MANUAL' | 'ANIMAL_SALE' | 'MILK_SALE' | 'BULK_TANK' | 'OTHER';
 
 export interface Income {

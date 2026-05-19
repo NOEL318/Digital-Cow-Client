@@ -1,3 +1,6 @@
+/**
+ * Este archivo define los tipos typescript del modulo production/milkSamples compartidos por la api, los formularios y los componentes.
+ */
 export interface MilkSample {
   id: number;
   animalId: number;

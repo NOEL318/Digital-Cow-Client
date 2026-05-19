@@ -1,5 +1,9 @@
-import { useState } from 'react';
+/**
+ * Este wizard guia al usuario para registrar la compra de un animal nuevo.
+ */
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useQuery } from '@tanstack/react-query';
 import { ShoppingCart, Calendar, DollarSign, User, Tag } from 'lucide-react';
 import { WizardStep } from '@/components/ui/wizard-step';
@@ -20,6 +24,7 @@ type Purpose = 'BEEF' | 'DAIRY' | 'DUAL';
  * /animals/with-purchase crea el animal y el gasto en una transaccion.
  */
 export function ComprarAnimalFlow() {
+  const { t: tCommon } = useTranslation('common');
   const nav = useNavigate();
   const create = useCreateAnimalWithPurchase();
   const breeds = useQuery({ queryKey: ['breeds'], queryFn: breedsApi.list });
@@ -41,10 +46,14 @@ export function ComprarAnimalFlow() {
 
   const [error, setError] = useState<string | null>(null);
 
-  // Auto-select first ranch when there's only one and user reaches step 3
-  if (step === 3 && ranchId === null && ranches.data && ranches.data.length === 1) {
-    setRanchId(ranches.data[0].id);
-  }
+  // Selecciona el rancho cuando solo hay uno disponible. Se hace en un efecto
+  // en lugar de durante el render para evitar el warning de React 18 sobre
+  // actualizaciones de estado fuera de useEffect o de un manejador de evento.
+  useEffect(() => {
+    if (step === 3 && ranchId === null && ranches.data && ranches.data.length === 1) {
+      setRanchId(ranches.data[0].id);
+    }
+  }, [step, ranchId, ranches.data]);
 
   async function save() {
     setError(null);
@@ -105,7 +114,7 @@ export function ComprarAnimalFlow() {
             onChange={e => setBreedId(e.target.value ? Number(e.target.value) : null)}
             className="w-full border rounded-md px-3 py-2 text-base bg-background"
           >
-            <option value="">Elige la raza</option>
+            <option value="">{tCommon("placeholder.selectBreed")}</option>
             {(breeds.data ?? []).map(b => (
               <option key={b.id} value={b.id}>{b.nameEs}</option>
             ))}

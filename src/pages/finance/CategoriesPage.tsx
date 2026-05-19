@@ -1,3 +1,6 @@
+/**
+ * Esta pagina permite gestionar las categorias de gastos e ingresos del rancho.
+ */
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as Tabs from '@radix-ui/react-tabs';

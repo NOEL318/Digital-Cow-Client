@@ -1,3 +1,6 @@
+/**
+ * Esta pagina lista los partos registrados con sus resultados.
+ */
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Plus } from 'lucide-react';

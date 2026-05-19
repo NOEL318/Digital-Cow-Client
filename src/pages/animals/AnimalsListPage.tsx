@@ -1,3 +1,6 @@
+/**
+ * Esta pagina lista todos los animales del rancho con filtros, busqueda y acciones rapidas.
+ */
 import { useQuery } from '@tanstack/react-query';
 import { Link, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';

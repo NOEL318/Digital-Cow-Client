@@ -1,3 +1,6 @@
+/**
+ * Este componente es un dialogo modal del modulo health/plans para una accion especifica.
+ */
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';

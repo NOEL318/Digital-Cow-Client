@@ -1,5 +1,9 @@
+/**
+ * Este wizard guia al usuario para registrar un ingreso de dinero al rancho.
+ */
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { PlusCircle, Calendar, DollarSign, Tags, User } from 'lucide-react';
 import { WizardStep } from '@/components/ui/wizard-step';
 import { HelpfulField } from '@/components/ui/helpful-field';
@@ -10,6 +14,7 @@ import { useCreateIncome } from '@/features/finance/incomes/api';
  * Wizard "Recibi dinero". Dos pasos: categoria y monto, confirmar.
  */
 export function RecibirDineroFlow() {
+  const { t: tCommon } = useTranslation('common');
   const nav = useNavigate();
   const create = useCreateIncome();
   const categories = useIncomeCategories();
@@ -57,7 +62,7 @@ export function RecibirDineroFlow() {
             onChange={e => setCategoryId(e.target.value ? Number(e.target.value) : null)}
             className="w-full border rounded-md px-3 py-2 text-base bg-background"
           >
-            <option value="">Elige una categoria</option>
+            <option value="">{tCommon("placeholder.selectCategory")}</option>
             {(categories.data ?? []).map(c => (
               <option key={c.id} value={c.id}>{c.nameEs}</option>
             ))}

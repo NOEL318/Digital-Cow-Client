@@ -1,3 +1,6 @@
+/**
+ * Este wizard guia al usuario para registrar la deteccion de un celo.
+ */
 import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Heart, Calendar, Eye, Activity, Thermometer, Camera, MoreHorizontal, Flame, Sparkle, Sparkles } from 'lucide-react';

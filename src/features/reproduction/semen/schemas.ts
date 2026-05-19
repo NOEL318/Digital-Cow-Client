@@ -1,5 +1,9 @@
+/**
+ * Este archivo define los esquemas de validacion zod para los formularios del modulo reproduction/semen.
+ */
 import { z } from 'zod';
 
+// Este esquema valida los datos para crear un registro de semenStraw.
 export const semenStrawCreateSchema = z.object({
   bullId: z.number().int().positive(),
   provider: z.string().max(160).optional(),

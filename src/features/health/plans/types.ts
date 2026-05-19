@@ -1,3 +1,6 @@
+/**
+ * Este archivo define los tipos typescript del modulo health/plans compartidos por la api, los formularios y los componentes.
+ */
 export type PlanPurpose = 'BEEF' | 'DAIRY' | 'DUAL' | 'ANY';
 export type PlanSex = 'FEMALE' | 'MALE' | 'ANY';
 

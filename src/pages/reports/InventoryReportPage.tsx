@@ -1,3 +1,6 @@
+/**
+ * Esta pagina muestra el reporte de inventario actual del rancho por categorias.
+ */
 import { useTranslation } from 'react-i18next';
 import { Download } from 'lucide-react';
 import { Button } from '@/components/ui/button';

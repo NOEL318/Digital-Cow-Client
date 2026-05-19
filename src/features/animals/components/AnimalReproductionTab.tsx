@@ -1,3 +1,6 @@
+/**
+ * Este componente es una pestana del detalle del modulo animals.
+ */
 import { useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';

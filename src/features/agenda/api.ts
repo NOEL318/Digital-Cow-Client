@@ -1,3 +1,6 @@
+/**
+ * Este archivo contiene la api cliente del modulo agenda, con las funciones para llamar al backend y los hooks de react-query.
+ */
 import { useQuery } from '@tanstack/react-query';
 import { http } from '@/lib/http';
 
@@ -29,6 +32,7 @@ export interface LactationStatus {
   recentAvgLiters: number | null;
 }
 
+// Este hook expone los datos y acciones de AgendaToday.
 export function useAgendaToday() {
   return useQuery({
     queryKey: ['agenda', 'today'],
@@ -37,6 +41,7 @@ export function useAgendaToday() {
   });
 }
 
+// Este hook expone los datos y acciones de PredictiveAlerts.
 export function usePredictiveAlerts() {
   return useQuery({
     queryKey: ['alerts', 'predictive'],
@@ -45,6 +50,7 @@ export function usePredictiveAlerts() {
   });
 }
 
+// Este hook expone los datos y acciones de AnimalLactation.
 export function useAnimalLactation(animalId: number | undefined) {
   return useQuery({
     queryKey: ['animal', animalId, 'lactation'],

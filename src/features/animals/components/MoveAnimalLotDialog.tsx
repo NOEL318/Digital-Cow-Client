@@ -1,3 +1,6 @@
+/**
+ * Este componente es un dialogo modal del modulo animals para una accion especifica.
+ */
 import { useEffect, useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Move, X, MapPin, Map as MapIcon } from 'lucide-react';

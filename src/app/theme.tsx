@@ -1,3 +1,6 @@
+/**
+ * Este archivo expone el contexto de tema (claro u oscuro) y persiste la preferencia en localStorage.
+ */
 import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
 
 type Theme = 'light' | 'dark';
@@ -19,4 +22,5 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   return <Ctx.Provider value={{ theme, toggle: () => setTheme(t => t === 'light' ? 'dark' : 'light') }}>{children}</Ctx.Provider>;
 }
 
+// Este hook devuelve el tema actual y la funcion para alternar entre claro y oscuro.
 export const useTheme = () => useContext(Ctx);

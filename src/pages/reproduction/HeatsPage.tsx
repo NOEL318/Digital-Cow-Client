@@ -1,3 +1,6 @@
+/**
+ * Esta pagina lista los celos detectados en las hembras del rancho.
+ */
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Plus } from 'lucide-react';

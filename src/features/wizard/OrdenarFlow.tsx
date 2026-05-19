@@ -1,3 +1,6 @@
+/**
+ * Este wizard guia al usuario para registrar un ordeno individual o por lote.
+ */
 import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Milk, Calendar, Sun, Moon } from 'lucide-react';

@@ -1,3 +1,6 @@
+/**
+ * Esta pagina permite a un usuario invitado aceptar la invitacion y unirse al rancho.
+ */
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -16,6 +19,7 @@ const schema = z.object({
   password: z.string().min(8).max(100)
 });
 
+// Este componente renderiza la pagina AcceptInvitation.
 export default function AcceptInvitationPage() {
   const { t } = useTranslation(['auth', 'errors']);
   const [params] = useSearchParams();
@@ -29,8 +33,9 @@ export default function AcceptInvitationPage() {
     try {
       await http.post(`/team/invitations/${token}/accept`, values);
       nav('/login');
-    } catch (e: any) {
-      const raw = e?.response?.data?.error?.messageKey ?? 'errors:internal';
+    } catch (e) {
+      const err = e as { response?: { data?: { error?: { messageKey?: string } } } };
+      const raw = err?.response?.data?.error?.messageKey ?? 'errors:internal';
       toast.push(t(toI18nKey(raw)), 'destructive');
     }
   });

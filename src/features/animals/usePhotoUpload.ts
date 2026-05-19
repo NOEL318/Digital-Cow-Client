@@ -1,3 +1,6 @@
+/**
+ * Este hook gestiona la subida de fotos del animal y devuelve estado de progreso y errores.
+ */
 import { useState } from 'react';
 import imageCompression from 'browser-image-compression';
 import { http } from '@/lib/http';

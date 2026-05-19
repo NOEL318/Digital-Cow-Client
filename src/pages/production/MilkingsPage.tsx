@@ -1,3 +1,6 @@
+/**
+ * Esta pagina lista los ordenos individuales registrados y permite agregar nuevos.
+ */
 import { useQuery } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
 import { Plus, Milk, Sun, Moon } from 'lucide-react';

@@ -1,3 +1,7 @@
+/**
+ * Este archivo contiene el menu de usuario del navbar,
+ * que muestra el nombre y permite cerrar sesion.
+ */
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Button } from './ui/button';

@@ -1,3 +1,6 @@
+/**
+ * Este archivo contiene la api cliente del modulo animals, con las funciones para llamar al backend y los hooks de react-query.
+ */
 import { useQuery } from '@tanstack/react-query';
 import { http } from '@/lib/http';
 import type { AnimalListItem, AnimalResponse, Page } from './types';
@@ -9,6 +12,7 @@ export interface AnimalFilters {
   page?: number; size?: number;
 }
 
+// Este objeto agrupa las llamadas al backend del modulo correspondiente.
 export const animalsApi = {
   list: (filters: AnimalFilters) =>
     http.get<Page<AnimalListItem>>('/animals', { params: filters }).then(r => r.data),

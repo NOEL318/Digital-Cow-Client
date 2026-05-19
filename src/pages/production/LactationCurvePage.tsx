@@ -1,3 +1,6 @@
+/**
+ * Esta pagina muestra la curva de lactacion de las vacas en ordeno.
+ */
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {

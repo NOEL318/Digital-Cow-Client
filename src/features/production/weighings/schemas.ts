@@ -1,5 +1,9 @@
+/**
+ * Este archivo define los esquemas de validacion zod para los formularios del modulo production/weighings.
+ */
 import { z } from 'zod';
 
+// Este esquema valida los datos para crear un registro de weighing.
 export const weighingCreateSchema = z.object({
   animalId: z.number().int().positive(),
   weighedAt: z.string().min(1),

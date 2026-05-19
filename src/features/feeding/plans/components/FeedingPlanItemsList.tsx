@@ -1,3 +1,6 @@
+/**
+ * Este componente lista registros del modulo feeding/plans con paginacion y acciones rapidas.
+ */
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Trash2, Plus } from 'lucide-react';

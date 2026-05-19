@@ -1,3 +1,6 @@
+/**
+ * Esta pagina es el indice del menu de paneles operativos del rancho.
+ */
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Activity, Wheat, DollarSign, Heart, Scale, FileText } from 'lucide-react';

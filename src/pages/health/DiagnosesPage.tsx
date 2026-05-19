@@ -1,3 +1,6 @@
+/**
+ * Esta pagina lista los diagnosticos registrados para los animales del rancho.
+ */
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Plus } from 'lucide-react';

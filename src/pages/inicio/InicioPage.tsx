@@ -1,3 +1,6 @@
+/**
+ * Esta pagina es la portada del usuario y combina pendientes, captura y acceso a paneles.
+ */
 import { Link } from 'react-router-dom';
 import {
   Syringe, Baby, Scale, Pill, AlertTriangle, Sparkles, Sun, Stethoscope,

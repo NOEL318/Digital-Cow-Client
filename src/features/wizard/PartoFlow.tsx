@@ -1,5 +1,9 @@
+/**
+ * Este wizard guia al usuario para registrar un parto y los datos del ternero.
+ */
 import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { Baby, Calendar, Smile, HelpingHand, Frown, Scissors, Skull } from 'lucide-react';
 import { WizardStep } from '@/components/ui/wizard-step';
 import { HelpfulField } from '@/components/ui/helpful-field';
@@ -15,6 +19,7 @@ type Sex = 'FEMALE' | 'MALE';
 
 /** Wizard "Parto". Pasos: madre, dificultad+resultado+becerro, confirmar. */
 export function PartoFlow() {
+  const { t: tCommon } = useTranslation('common');
   const nav = useNavigate();
   const [params] = useSearchParams();
   const prefAnimalId = params.get('animalId') ? Number(params.get('animalId')) : null;
@@ -120,7 +125,7 @@ export function PartoFlow() {
         {outcome !== 'STILLBORN' && outcome !== 'TWIN_STILLBORN' ? (
           <>
             <div className="space-y-2">
-              <p className="text-sm font-semibold">Sexo del becerro</p>
+              <p className="text-sm font-semibold">{tCommon("labels.calfSex")}</p>
               <BigPicker<Sex>
                 options={[
                   { value: 'FEMALE', label: 'Hembra' },

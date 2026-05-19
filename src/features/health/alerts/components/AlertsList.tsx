@@ -1,3 +1,6 @@
+/**
+ * Este componente lista registros del modulo health/alerts con paginacion y acciones rapidas.
+ */
 import { useTranslation } from 'react-i18next';
 import type { AlertItem } from '@/features/health/alerts/api';
 

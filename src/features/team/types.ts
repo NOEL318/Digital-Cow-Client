@@ -1,3 +1,6 @@
+/**
+ * Este archivo define los tipos typescript del modulo team compartidos por la api, los formularios y los componentes.
+ */
 import type { UserRole } from '@/features/auth/types';
 export type UserStatus = 'ACTIVE' | 'INVITED' | 'DISABLED';
 

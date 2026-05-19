@@ -1,3 +1,6 @@
+/**
+ * Esta pagina muestra los indicadores generales del rancho en la pantalla principal del usuario.
+ */
 import { useQuery } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';

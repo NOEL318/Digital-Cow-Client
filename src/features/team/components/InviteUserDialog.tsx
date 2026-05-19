@@ -1,3 +1,6 @@
+/**
+ * Este componente es un dialogo modal del modulo team para una accion especifica.
+ */
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -9,6 +12,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 
+// Este componente es un dialogo modal para InviteUser.
 export function InviteUserDialog({ open, onClose }: { open: boolean; onClose: () => void }) {
   const { t } = useTranslation(['team', 'common']);
   const qc = useQueryClient();

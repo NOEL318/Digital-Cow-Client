@@ -1,3 +1,6 @@
+/**
+ * Este archivo contiene la api cliente del modulo auth, con las funciones para llamar al backend y los hooks de react-query.
+ */
 import { http } from '@/lib/http';
 import type { AuthTokens, Me } from './types';
 

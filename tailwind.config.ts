@@ -1,4 +1,7 @@
+// Configuracion de Tailwind CSS para el frontend.
+// Define los tokens del tema mapeando variables CSS de shadcn y registra el plugin de animaciones.
 import type { Config } from 'tailwindcss';
+import animate from 'tailwindcss-animate';
 
 const config: Config = {
   darkMode: ['class'],
@@ -22,6 +25,6 @@ const config: Config = {
       borderRadius: { lg: 'var(--radius)', md: 'calc(var(--radius) - 2px)', sm: 'calc(var(--radius) - 4px)' }
     }
   },
-  plugins: [require('tailwindcss-animate')]
+  plugins: [animate]
 };
 export default config;

@@ -1,3 +1,6 @@
+/**
+ * Este archivo define los tipos typescript del modulo health/diagnoses compartidos por la api, los formularios y los componentes.
+ */
 export type DiagnosisStatus = 'ACTIVE' | 'RECOVERED' | 'CHRONIC' | 'DECEASED';
 export type DiagnosisSeverity = 'LOW' | 'MEDIUM' | 'HIGH';
 

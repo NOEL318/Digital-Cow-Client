@@ -1,8 +1,12 @@
+/**
+ * Este archivo define los esquemas de validacion zod para los formularios del modulo health/diagnoses.
+ */
 import { z } from 'zod';
 
 const severityEnum = z.enum(['LOW', 'MEDIUM', 'HIGH']);
 const statusEnum = z.enum(['ACTIVE', 'RECOVERED', 'CHRONIC', 'DECEASED']);
 
+// Este esquema valida los datos para crear un registro de diagnosis.
 export const diagnosisCreateSchema = z.object({
   animalId: z.number().int().positive(),
   diseaseId: z.number().int().positive(),

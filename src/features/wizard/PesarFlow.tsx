@@ -1,3 +1,6 @@
+/**
+ * Este wizard guia al usuario para registrar el pesaje de un animal o lote.
+ */
 import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Scale, Calendar } from 'lucide-react';

@@ -1,3 +1,6 @@
+/**
+ * Este componente es un selector visual del modulo ranches.
+ */
 import { useState, useEffect } from 'react';
 import { MapContainer, TileLayer, Marker, Polygon, useMapEvents, useMap } from 'react-leaflet';
 import { Icon, type LatLngExpression } from 'leaflet';

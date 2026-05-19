@@ -1,3 +1,6 @@
+/**
+ * Esta pagina muestra el detalle de un plan de alimentacion con sus items y lotes asignados.
+ */
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';

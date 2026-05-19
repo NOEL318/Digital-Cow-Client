@@ -1,3 +1,6 @@
+/**
+ * Este archivo define los tipos typescript del modulo finance/animalSales compartidos por la api, los formularios y los componentes.
+ */
 export interface AnimalSale {
   id: number;
   animalId: number;

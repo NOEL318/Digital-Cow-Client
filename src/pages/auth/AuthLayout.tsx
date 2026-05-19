@@ -1,3 +1,6 @@
+/**
+ * Esta pagina envuelve los formularios de autenticacion con un layout centrado y consistente.
+ */
 import { type ReactNode } from 'react';
 import { LanguageSwitcher } from '@/components/language-switcher';
 import { ThemeToggle } from '@/components/theme-toggle';

@@ -1,4 +1,8 @@
+/**
+ * Este componente muestra el panel de condiciones del lote con indicadores ambientales y de manejo.
+ */
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Cloud, CloudRain, Sun, Droplet, Bug,
   Wheat, Wrench, Plus, X, type LucideIcon
@@ -49,6 +53,7 @@ interface LotConditionsPanelProps {
  * lo predefinido no aplica.
  */
 export function LotConditionsPanel({ lotId }: LotConditionsPanelProps) {
+  const { t } = useTranslation('common');
   const conditions = useLotConditions(lotId);
   const create = useCreateLotCondition(lotId);
   const del = useDeleteLotCondition(lotId);
@@ -79,7 +84,7 @@ export function LotConditionsPanel({ lotId }: LotConditionsPanelProps) {
   return (
     <section className="space-y-4">
       <header className="flex items-center justify-between flex-wrap gap-2">
-        <h2 className="text-lg font-semibold">Condiciones del corral hoy</h2>
+        <h2 className="text-lg font-semibold">{t('labels.lotConditionsToday')}</h2>
         <BigButton
           label="Otra cosa"
           icon={Plus}

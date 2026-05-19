@@ -1,3 +1,6 @@
+/**
+ * Este componente muestra una tabla con registros del modulo ranches.
+ */
 import { useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';

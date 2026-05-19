@@ -1,5 +1,9 @@
+/**
+ * Este archivo define los esquemas de validacion zod para los formularios del modulo reproduction/abortions.
+ */
 import { z } from 'zod';
 
+// Este esquema valida los datos para crear un registro de abortion.
 export const abortionCreateSchema = z.object({
   animalId: z.number().int().positive(),
   abortedAt: z.string().min(1),

@@ -1,7 +1,11 @@
+/**
+ * Este archivo define los esquemas de validacion zod para los formularios del modulo health/vaccinations.
+ */
 import { z } from 'zod';
 
 const routeEnum = z.enum(['IM', 'SC', 'ORAL', 'INTRANASAL', 'TOPICAL']);
 
+// Este esquema valida los datos para crear un registro de vaccination.
 export const vaccinationCreateSchema = z.object({
   animalId: z.number().int().positive(),
   vaccineId: z.number().int().positive(),
@@ -16,6 +20,7 @@ export const vaccinationCreateSchema = z.object({
 
 export type VaccinationCreateInput = z.infer<typeof vaccinationCreateSchema>;
 
+// Este esquema valida los datos para crear un registro de vaccinationBulk.
 export const vaccinationBulkCreateSchema = z.object({
   lotId: z.number().int().positive(),
   vaccineId: z.number().int().positive(),

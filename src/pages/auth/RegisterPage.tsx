@@ -1,3 +1,6 @@
+/**
+ * Esta pagina contiene el formulario para registrar una nueva cuenta y rancho.
+ */
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslation } from 'react-i18next';
@@ -25,12 +28,19 @@ export default function RegisterPage() {
   const onSubmit = form.handleSubmit(async values => {
     try {
       await doRegister(values);
-      nav('/dashboard');
-    } catch (e: any) {
-      const raw = e?.response?.data?.error?.messageKey ?? 'errors:internal';
+      nav('/inicio');
+    } catch (e) {
+      const err = e as { response?: { data?: { error?: { messageKey?: string } } } };
+      const raw = err?.response?.data?.error?.messageKey ?? 'errors:internal';
       toast.push(t(toI18nKey(raw)), 'destructive');
     }
   });
+
+  // Helper que devuelve el mensaje de error de cada campo si la validacion fallo.
+  const fieldError = (name: keyof RegisterValues): string | null => {
+    const err = form.formState.errors[name];
+    return err?.message ? String(err.message) : null;
+  };
 
   return (
     <AuthLayout title={t('auth:register.title')}>
@@ -38,18 +48,30 @@ export default function RegisterPage() {
         <div>
           <Label htmlFor="accountName">{t('auth:register.accountName')}</Label>
           <Input id="accountName" {...form.register('accountName')} />
+          {fieldError('accountName') ? (
+            <p role="alert" className="text-xs text-destructive mt-1">{fieldError('accountName')}</p>
+          ) : null}
         </div>
         <div>
           <Label htmlFor="fullName">{t('auth:register.fullName')}</Label>
           <Input id="fullName" {...form.register('fullName')} />
+          {fieldError('fullName') ? (
+            <p role="alert" className="text-xs text-destructive mt-1">{fieldError('fullName')}</p>
+          ) : null}
         </div>
         <div>
           <Label htmlFor="email">{t('auth:login.email')}</Label>
           <Input id="email" type="email" {...form.register('email')} />
+          {fieldError('email') ? (
+            <p role="alert" className="text-xs text-destructive mt-1">{fieldError('email')}</p>
+          ) : null}
         </div>
         <div>
           <Label htmlFor="password">{t('auth:login.password')}</Label>
           <Input id="password" type="password" {...form.register('password')} />
+          {fieldError('password') ? (
+            <p role="alert" className="text-xs text-destructive mt-1">{fieldError('password')}</p>
+          ) : null}
         </div>
         <Button type="submit" className="w-full" disabled={form.formState.isSubmitting}>
           {t('auth:register.submit')}

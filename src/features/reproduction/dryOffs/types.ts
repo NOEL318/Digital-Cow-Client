@@ -1,3 +1,6 @@
+/**
+ * Este archivo define los tipos typescript del modulo reproduction/dryOffs compartidos por la api, los formularios y los componentes.
+ */
 export interface DryOff {
   id: number;
   animalId: number;

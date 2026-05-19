@@ -1,25 +1,31 @@
+/**
+ * Esta pagina agrupa las pestanas del panel financiero: gastos, ingresos, ventas y categorias.
+ */
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { MinusCircle, PlusCircle, Handshake, Milk, ChevronRight } from 'lucide-react';
 import { IconCard } from '@/components/ui/icon-card';
 import FinanceOverviewPage from './FinanceOverviewPage';
 
-const sections = [
-  { to: '/panel/dinero/gastos', icon: MinusCircle, title: 'Gastos', description: 'Lo que pagaste por insumos, servicios y mas.' },
-  { to: '/panel/dinero/ingresos', icon: PlusCircle, title: 'Ingresos', description: 'El dinero que recibiste.' },
-  { to: '/panel/dinero/ventas-animales', icon: Handshake, title: 'Ventas de animales', description: 'Animales que vendiste y a quien.' },
-  { to: '/panel/dinero/ventas-leche', icon: Milk, title: 'Ventas de leche', description: 'Leche entregada al comprador y su precio.' }
-] as const;
-
 /**
- * Panel unificado de Dinero. Resumen de KPIs y graficas arriba; tarjetas
- * grandes para entrar a cada tipo de movimiento.
+ * Panel unificado de Dinero. Muestra primero el resumen de KPIs y graficas y luego
+ * un conjunto de tarjetas grandes que llevan a las pantallas internas de cada
+ * tipo de movimiento. Todos los textos pasan por i18next para soportar espanol e ingles.
  */
 export default function FinancePanelPage() {
+  const { t } = useTranslation(['finance', 'common']);
+  const sections = [
+    { to: '/panel/dinero/gastos', icon: MinusCircle, title: t('finance:panel.expenses.title', { defaultValue: 'Gastos' }), description: t('finance:panel.expenses.desc', { defaultValue: 'Lo que pagaste por insumos, servicios y mas.' }) },
+    { to: '/panel/dinero/ingresos', icon: PlusCircle, title: t('finance:panel.incomes.title', { defaultValue: 'Ingresos' }), description: t('finance:panel.incomes.desc', { defaultValue: 'El dinero que recibiste.' }) },
+    { to: '/panel/dinero/ventas-animales', icon: Handshake, title: t('finance:panel.animalSales.title', { defaultValue: 'Ventas de animales' }), description: t('finance:panel.animalSales.desc', { defaultValue: 'Animales que vendiste y a quien.' }) },
+    { to: '/panel/dinero/ventas-leche', icon: Milk, title: t('finance:panel.milkSales.title', { defaultValue: 'Ventas de leche' }), description: t('finance:panel.milkSales.desc', { defaultValue: 'Leche entregada al comprador y su precio.' }) }
+  ];
+
   return (
     <div className="space-y-6">
       <FinanceOverviewPage />
       <section className="space-y-3">
-        <h2 className="text-xl font-bold">Dinero en detalle</h2>
+        <h2 className="text-xl font-bold">{t('common:labels.moneyDetail')}</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
           {sections.map(s => (
             <Link key={s.to} to={s.to} className="block">
@@ -30,7 +36,8 @@ export default function FinancePanelPage() {
                 size="md"
               >
                 <span className="inline-flex items-center text-xs text-primary mt-1">
-                  Ver todo <ChevronRight className="h-3 w-3" aria-hidden />
+                  {t('common:actions.viewAll')}
+                  <ChevronRight className="h-3 w-3" aria-hidden />
                 </span>
               </IconCard>
             </Link>

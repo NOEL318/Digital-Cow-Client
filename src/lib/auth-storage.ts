@@ -1,3 +1,7 @@
+/**
+ * Este archivo contiene utilidades para leer, guardar y borrar
+ * los tokens de acceso y de refresco en localStorage.
+ */
 const ACCESS_KEY = 'dc_access';
 const REFRESH_KEY = 'dc_refresh';
 

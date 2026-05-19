@@ -1,3 +1,6 @@
+/**
+ * Este archivo define los tipos typescript del modulo reproduction/bulls compartidos por la api, los formularios y los componentes.
+ */
 export type BullSource = 'OWN' | 'EXTERNAL';
 
 export interface Bull {

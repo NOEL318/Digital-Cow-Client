@@ -1,3 +1,6 @@
+/**
+ * Esta pagina permite establecer una nueva contrasena usando el token recibido por correo.
+ */
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -13,6 +16,7 @@ import { toI18nKey } from '@/lib/i18n';
 
 const schema = z.object({ newPassword: z.string().min(8).max(100) });
 
+// Este componente renderiza la pagina ResetPassword.
 export default function ResetPasswordPage() {
   const { t } = useTranslation(['auth', 'errors']);
   const [params] = useSearchParams();
@@ -26,8 +30,9 @@ export default function ResetPasswordPage() {
     try {
       await authApi.resetPassword(token, values.newPassword);
       nav('/login');
-    } catch (e: any) {
-      const raw = e?.response?.data?.error?.messageKey ?? 'errors:internal';
+    } catch (e) {
+      const err = e as { response?: { data?: { error?: { messageKey?: string } } } };
+      const raw = err?.response?.data?.error?.messageKey ?? 'errors:internal';
       toast.push(t(toI18nKey(raw)), 'destructive');
     }
   });

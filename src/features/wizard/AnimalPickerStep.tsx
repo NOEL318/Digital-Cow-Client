@@ -1,3 +1,6 @@
+/**
+ * Este componente es el paso de seleccion de animal reutilizado por varios wizards.
+ */
 import { useState, useMemo } from 'react';
 import { useAnimals } from '@/features/animals/api';
 import type { AnimalListItem } from '@/features/animals/types';

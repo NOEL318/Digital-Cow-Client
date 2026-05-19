@@ -36,6 +36,7 @@ function writeQueue(q: QueuedRequest[]): void {
   window.localStorage.setItem(STORAGE_KEY, JSON.stringify(q));
 }
 
+// Esta utilidad expone la funcionalidad enqueue.
 export function enqueue(req: Omit<QueuedRequest, 'id' | 'queuedAt' | 'attempts'>): void {
   const queue = readQueue();
   queue.push({
@@ -48,12 +49,14 @@ export function enqueue(req: Omit<QueuedRequest, 'id' | 'queuedAt' | 'attempts'>
   notifyListeners();
 }
 
+// Esta utilidad expone la funcionalidad pendingCount.
 export function pendingCount(): number {
   return readQueue().length;
 }
 
 const listeners = new Set<(count: number) => void>();
 
+// Esta utilidad expone la funcionalidad subscribePending.
 export function subscribePending(cb: (count: number) => void): () => void {
   listeners.add(cb);
   cb(pendingCount());

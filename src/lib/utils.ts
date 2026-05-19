@@ -1,3 +1,7 @@
+/**
+ * Este archivo contiene utilidades pequenas reutilizables
+ * para combinar clases de Tailwind sin conflictos.
+ */
 import { type ClassValue, clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 

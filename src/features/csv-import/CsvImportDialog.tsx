@@ -1,3 +1,6 @@
+/**
+ * Este componente es el dialogo de importacion masiva por archivo CSV.
+ */
 import { useState, type ChangeEvent } from 'react';
 import Papa from 'papaparse';
 import { Upload, X, AlertTriangle, CheckCircle2 } from 'lucide-react';

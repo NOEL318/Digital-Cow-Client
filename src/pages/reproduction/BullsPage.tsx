@@ -1,3 +1,6 @@
+/**
+ * Esta pagina lista los toros del rancho con sus datos reproductivos.
+ */
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Plus } from 'lucide-react';

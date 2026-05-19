@@ -1,3 +1,7 @@
+/**
+ * Este archivo define la barra lateral fija para escritorio
+ * con accesos a Inicio, Animales y Ajustes.
+ */
 import { NavLink } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Home, Beef, Settings } from 'lucide-react';

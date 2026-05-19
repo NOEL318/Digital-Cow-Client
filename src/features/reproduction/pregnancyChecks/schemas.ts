@@ -1,5 +1,9 @@
+/**
+ * Este archivo define los esquemas de validacion zod para los formularios del modulo reproduction/pregnancyChecks.
+ */
 import { z } from 'zod';
 
+// Este esquema valida los datos para crear un registro de pregnancyCheck.
 export const pregnancyCheckCreateSchema = z.object({
   animalId: z.number().int().positive(),
   serviceId: z.number().int().positive().optional(),

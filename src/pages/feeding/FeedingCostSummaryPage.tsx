@@ -1,3 +1,6 @@
+/**
+ * Esta pagina muestra el resumen de costos de alimentacion por lote y periodo.
+ */
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {

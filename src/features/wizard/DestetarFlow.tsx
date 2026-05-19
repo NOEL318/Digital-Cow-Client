@@ -1,3 +1,6 @@
+/**
+ * Este wizard guia al usuario para registrar el destete de un ternero.
+ */
 import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { GraduationCap, Calendar, Scale } from 'lucide-react';

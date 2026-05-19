@@ -1,3 +1,6 @@
+/**
+ * Este componente agrupa los botones de accion del modulo animals.
+ */
 import { Link } from 'react-router-dom';
 import {
   Syringe, Scale, Pill, Stethoscope, Milk, Wheat,

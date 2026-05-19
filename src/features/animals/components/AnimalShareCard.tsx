@@ -1,3 +1,6 @@
+/**
+ * Este componente muestra una tarjeta resumen del modulo animals.
+ */
 import { useRef } from 'react';
 import { QRCodeSVG } from 'qrcode.react';
 import { Share2, Printer, MessageCircle, X } from 'lucide-react';

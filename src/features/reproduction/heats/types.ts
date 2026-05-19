@@ -1,3 +1,6 @@
+/**
+ * Este archivo define los tipos typescript del modulo reproduction/heats compartidos por la api, los formularios y los componentes.
+ */
 export type HeatDetectionMethod = 'VISUAL' | 'PEDOMETER' | 'HEAT_PATCH' | 'CAMERA' | 'OTHER';
 export type HeatIntensity = 'WEAK' | 'MODERATE' | 'STRONG';
 

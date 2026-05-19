@@ -1,8 +1,12 @@
+/**
+ * Este archivo define los esquemas de validacion zod para los formularios del modulo health/plans.
+ */
 import { z } from 'zod';
 
 const purposeEnum = z.enum(['BEEF', 'DAIRY', 'DUAL', 'ANY']);
 const sexEnum = z.enum(['FEMALE', 'MALE', 'ANY']);
 
+// Este esquema valida los datos para crear un registro de healthPlan.
 export const healthPlanCreateSchema = z.object({
   name: z.string().min(1).max(160),
   description: z.string().max(500).optional(),
@@ -12,6 +16,7 @@ export const healthPlanCreateSchema = z.object({
 
 export type HealthPlanCreateInput = z.infer<typeof healthPlanCreateSchema>;
 
+// Este esquema valida los datos para crear un registro de healthPlanStep.
 export const healthPlanStepCreateSchema = z.object({
   stepOrder: z.number().int().positive(),
   name: z.string().min(1).max(160),

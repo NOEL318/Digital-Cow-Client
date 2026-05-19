@@ -8,5 +8,8 @@
   "filters": { "search": "Search by tag or name" },
   "tabs": { "info": "Information", "photos": "Photos" },
   "photos": { "upload": "Upload photo", "camera": "Take photo", "setCover": "Set as cover", "uploading": "Uploading...", "compress": "Compressing..." },
-  "empty": "No animals yet."
+  "empty": "No animals yet.",
+  "detail": {
+    "loadFailed": "Could not load the animal."
+  }
 }

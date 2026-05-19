@@ -1,5 +1,9 @@
+/**
+ * Este archivo define los esquemas de validacion zod para los formularios del modulo production/milkSamples.
+ */
 import { z } from 'zod';
 
+// Este esquema valida los datos para crear un registro de milkSample.
 export const milkSampleCreateSchema = z.object({
   animalId: z.number().int().positive(),
   sampledAt: z.string().min(1),

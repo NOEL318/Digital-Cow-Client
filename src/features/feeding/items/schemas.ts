@@ -1,5 +1,9 @@
+/**
+ * Este archivo define los esquemas de validacion zod para los formularios del modulo feeding/items.
+ */
 import { z } from 'zod';
 
+// Este esquema valida los datos para crear un registro de feedItem.
 export const feedItemCreateSchema = z.object({
   code: z.string().min(1).max(60),
   nameEs: z.string().min(1).max(160),

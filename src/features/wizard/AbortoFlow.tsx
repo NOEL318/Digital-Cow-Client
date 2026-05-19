@@ -1,3 +1,6 @@
+/**
+ * Este wizard guia al usuario para registrar un aborto en una hembra del rancho.
+ */
 import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { HeartCrack, Calendar, Baby, MessageSquare } from 'lucide-react';

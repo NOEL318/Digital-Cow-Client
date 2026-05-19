@@ -1,3 +1,6 @@
+/**
+ * Esta pagina es el indice del menu de ajustes con accesos a perfil, cuenta, ranchos, equipo, medicamentos e idioma.
+ */
 import { useEffect, useState } from 'react';
 import {
   User, Building2, Map, Users, Tags, Pill, Palette, Bell, BellOff,

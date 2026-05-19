@@ -1,5 +1,9 @@
+/**
+ * Este archivo define los esquemas de validacion zod para los formularios del modulo health/vetVisits.
+ */
 import { z } from 'zod';
 
+// Este esquema valida los datos para crear un registro de vetVisit.
 export const vetVisitCreateSchema = z.object({
   ranchId: z.number().int().positive(),
   visitedAt: z.string().min(1),

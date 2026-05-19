@@ -1,3 +1,6 @@
+/**
+ * Este archivo define los tipos typescript del modulo finance/expenses compartidos por la api, los formularios y los componentes.
+ */
 export interface Expense {
   id: number;
   expenseCategoryId: number;

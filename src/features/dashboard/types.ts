@@ -1,3 +1,6 @@
+/**
+ * Este archivo define los tipos typescript del modulo dashboard compartidos por la api, los formularios y los componentes.
+ */
 export interface DashboardSummary {
   totals: { totalAnimals: number; activeAnimals: number; soldThisYear: number; deadThisYear: number; ranches: number; lots: number; };
   byRanch: { ranchId: number; ranchName: string; count: number; }[];

@@ -1,3 +1,6 @@
+/**
+ * Este componente es el editor visual del modulo feeding/plans para construir o ajustar un recurso complejo.
+ */
 import { useTranslation } from 'react-i18next';
 import { useFeedingPlan } from '../api';
 import { FeedingPlanItemsList } from './FeedingPlanItemsList';

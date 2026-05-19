@@ -1,3 +1,6 @@
+/**
+ * Este archivo contiene la api cliente del modulo production/bulkTank, con las funciones para llamar al backend y los hooks de react-query.
+ */
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { http } from '@/lib/http';
 import type { BulkTankDelivery, BulkTankDeliveryCreate } from './types';

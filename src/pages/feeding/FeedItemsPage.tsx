@@ -1,3 +1,6 @@
+/**
+ * Esta pagina muestra el catalogo de items alimenticios disponibles con su informacion nutricional.
+ */
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Plus, Lock } from 'lucide-react';

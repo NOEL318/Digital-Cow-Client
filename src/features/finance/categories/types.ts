@@ -1,3 +1,6 @@
+/**
+ * Este archivo define los tipos typescript del modulo finance/categories compartidos por la api, los formularios y los componentes.
+ */
 export type ExpenseKind =
   | 'FEED'
   | 'HEALTH'

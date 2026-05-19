@@ -1,3 +1,6 @@
+/**
+ * Este archivo contiene la api cliente del modulo reports/pnlReport, con las funciones para llamar al backend y los hooks de react-query.
+ */
 import { useQuery } from '@tanstack/react-query';
 import { http } from '@/lib/http';
 import type { Pnl, PnlGroupBy } from '@/features/finance/pnl/api';

@@ -1,3 +1,7 @@
+/**
+ * Este archivo define el shell de la aplicacion autenticada,
+ * con header superior, sidebar lateral en escritorio y nav inferior en movil.
+ */
 import { Outlet } from 'react-router-dom';
 import { UserMenu } from './user-menu';
 import { BottomNav } from './bottom-nav';

@@ -1,3 +1,7 @@
+/**
+ * Este archivo expone un hook que usa la Web Speech API
+ * para leer texto en voz alta segun la preferencia del usuario.
+ */
 import { useCallback, useEffect, useState } from 'react';
 import i18n from './i18n';
 

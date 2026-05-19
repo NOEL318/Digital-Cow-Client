@@ -1,5 +1,9 @@
+/**
+ * Este wizard guia al usuario para registrar el diagnostico de una enfermedad.
+ */
 import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { Stethoscope, Calendar, AlertTriangle, ShieldAlert, Flame } from 'lucide-react';
 import { WizardStep } from '@/components/ui/wizard-step';
 import { HelpfulField } from '@/components/ui/helpful-field';
@@ -15,6 +19,7 @@ import type { DiagnosisSeverity } from '@/features/health/diagnoses/types';
 
 /** Wizard "Diagnostiqué". Pasos: ubicación+animal, enfermedad+severidad+fecha, confirmar. */
 export function DiagnostiqueFlow() {
+  const { t: tCommon } = useTranslation('common');
   const nav = useNavigate();
   const [params] = useSearchParams();
   const prefAnimalId = params.get('animalId') ? Number(params.get('animalId')) : null;
@@ -85,7 +90,7 @@ export function DiagnostiqueFlow() {
           <select id="dx-disease" value={diseaseId ?? ''}
             onChange={e => setDiseaseId(e.target.value ? Number(e.target.value) : null)}
             className="w-full border rounded-md px-3 py-3 text-base bg-background">
-            <option value="">Selecciona una enfermedad</option>
+            <option value="">{tCommon("placeholder.selectDisease")}</option>
             {(diseases.data ?? []).map(d => (
               <option key={d.id} value={d.id}>{localizedName(d, locale)}</option>
             ))}

@@ -1,3 +1,6 @@
+/**
+ * Este componente contiene el formulario para crear o editar registros del modulo production/milkings.
+ */
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';

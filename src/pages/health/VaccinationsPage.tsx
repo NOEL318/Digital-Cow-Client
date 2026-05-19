@@ -1,3 +1,6 @@
+/**
+ * Esta pagina lista las vacunaciones aplicadas y permite registrar nuevas en lote.
+ */
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useToast } from '@/components/ui/toast';

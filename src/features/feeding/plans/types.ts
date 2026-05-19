@@ -1,3 +1,6 @@
+/**
+ * Este archivo define los tipos typescript del modulo feeding/plans compartidos por la api, los formularios y los componentes.
+ */
 export type FeedingPlanCategory =
   | 'DAIRY_LACTATION' | 'DAIRY_DRY' | 'BEEF_GROWING' | 'BEEF_FINISHING' | 'CALF' | 'OTHER';
 

@@ -1,3 +1,6 @@
+/**
+ * Este componente es una pestana del detalle del modulo animals.
+ */
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';

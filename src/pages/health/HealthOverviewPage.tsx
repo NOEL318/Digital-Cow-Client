@@ -1,3 +1,6 @@
+/**
+ * Esta pagina muestra el resumen del estado sanitario del rancho con alertas y kpis.
+ */
 import { useTranslation } from 'react-i18next';
 import { useHealthAlerts } from '@/features/health/alerts/api';
 import { AlertsList } from '@/features/health/alerts/components/AlertsList';

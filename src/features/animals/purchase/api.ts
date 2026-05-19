@@ -1,3 +1,6 @@
+/**
+ * Este archivo contiene la api cliente del modulo animals/purchase, con las funciones para llamar al backend y los hooks de react-query.
+ */
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { http } from '@/lib/http';
 import type { AnimalResponse } from '../types';

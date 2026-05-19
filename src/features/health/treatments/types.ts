@@ -1,3 +1,6 @@
+/**
+ * Este archivo define los tipos typescript del modulo health/treatments compartidos por la api, los formularios y los componentes.
+ */
 import type { MedicationRoute } from '@/features/catalog/types';
 
 export interface Treatment {

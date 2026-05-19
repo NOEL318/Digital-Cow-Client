@@ -1,3 +1,6 @@
+/**
+ * Este archivo define los tipos typescript del modulo production/weighings compartidos por la api, los formularios y los componentes.
+ */
 export type WeighingMethod = 'SCALE' | 'TAPE' | 'VISUAL_ESTIMATE';
 
 export interface Weighing {

@@ -1,3 +1,7 @@
+/**
+ * Este archivo contiene el indicador flotante que avisa cuando no hay conexion
+ * o cuando hay operaciones pendientes en la cola offline.
+ */
 import { useEffect, useState } from 'react';
 import { CloudOff, CloudUpload, RefreshCcw } from 'lucide-react';
 import { subscribePending, flushQueue } from '@/lib/offline-queue';

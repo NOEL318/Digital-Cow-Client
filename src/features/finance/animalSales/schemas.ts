@@ -1,5 +1,9 @@
+/**
+ * Este archivo define los esquemas de validacion zod para los formularios del modulo finance/animalSales.
+ */
 import { z } from 'zod';
 
+// Este esquema valida los datos para crear un registro de animalSale.
 export const animalSaleCreateSchema = z.object({
   animalId: z.number().int().positive(),
   soldAt: z.string().min(1),

@@ -1,5 +1,9 @@
+/**
+ * Este archivo define los esquemas de validacion zod para los formularios del modulo reproduction/services.
+ */
 import { z } from 'zod';
 
+// Este esquema valida los datos para crear un registro de serviceEvent.
 export const serviceEventCreateSchema = z.object({
   animalId: z.number().int().positive(),
   serviceType: z.enum(['AI', 'NATURAL', 'EMBRYO_TRANSFER']),

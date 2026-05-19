@@ -1,5 +1,9 @@
+/**
+ * Este archivo define los esquemas de validacion zod para los formularios del modulo finance/incomes.
+ */
 import { z } from 'zod';
 
+// Este esquema valida los datos para crear un registro de income.
 export const incomeCreateSchema = z.object({
   incomeCategoryId: z.number().int().positive(),
   receivedAt: z.string().min(1),

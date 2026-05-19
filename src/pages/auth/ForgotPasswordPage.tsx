@@ -1,3 +1,6 @@
+/**
+ * Esta pagina permite al usuario solicitar el envio del correo para restablecer la contrasena.
+ */
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -11,6 +14,7 @@ import { Label } from '@/components/ui/label';
 
 const schema = z.object({ email: z.string().email() });
 
+// Este componente renderiza la pagina ForgotPassword.
 export default function ForgotPasswordPage() {
   const { t } = useTranslation(['auth']);
   const form = useForm<{ email: string }>({ resolver: zodResolver(schema) });

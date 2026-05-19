@@ -1,3 +1,7 @@
+/**
+ * Este archivo configura el cliente axios compartido con
+ * autenticacion automatica, refresh de tokens y cola offline para mutaciones.
+ */
 import axios, { type AxiosError, type AxiosRequestConfig } from 'axios';
 import { AuthStorage } from './auth-storage';
 import { enqueue } from './offline-queue';
@@ -75,8 +79,17 @@ http.interceptors.response.use(
         return http.request(original);
       }
       AuthStorage.clear();
+      // En lugar de hard reload se emite un evento personalizado para que el
+      // componente raiz pueda navegar con react-router y conservar el estado
+      // de toasts y query cache. Si nadie escucha el evento se hace un fallback
+      // suave que solo cambia la URL si todavia no estamos en login.
       if (!window.location.pathname.endsWith('/login')) {
-        window.location.href = '/login';
+        const handled = window.dispatchEvent(new CustomEvent('auth:expired'));
+        if (handled) {
+          // El listener cuidara la navegacion via react-router.
+        } else {
+          window.location.assign('/login');
+        }
       }
     }
 

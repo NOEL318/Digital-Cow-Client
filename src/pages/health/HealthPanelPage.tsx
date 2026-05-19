@@ -1,3 +1,6 @@
+/**
+ * Esta pagina agrupa las pestanas del panel de salud: vacunaciones, diagnosticos, tratamientos y mas.
+ */
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Syringe, Stethoscope, Pill, Bug, UserCheck, ClipboardList, ChevronRight } from 'lucide-react';

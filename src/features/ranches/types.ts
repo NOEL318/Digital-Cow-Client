@@ -1,3 +1,6 @@
+/**
+ * Este archivo define los tipos typescript del modulo ranches compartidos por la api, los formularios y los componentes.
+ */
 export interface Ranch {
   id: number;
   name: string;

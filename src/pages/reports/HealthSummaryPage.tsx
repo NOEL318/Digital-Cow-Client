@@ -1,3 +1,6 @@
+/**
+ * Esta pagina muestra el resumen sanitario consolidado del rancho por periodo.
+ */
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Download } from 'lucide-react';

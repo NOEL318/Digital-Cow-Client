@@ -1,3 +1,6 @@
+/**
+ * Esta pagina muestra el formulario de inicio de sesion del usuario final.
+ */
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslation } from 'react-i18next';
@@ -22,12 +25,21 @@ export default function LoginPage() {
   const onSubmit = form.handleSubmit(async values => {
     try {
       await login(values.email, values.password);
-      nav('/dashboard');
-    } catch (e: any) {
-      const raw = e?.response?.data?.error?.messageKey ?? 'errors:auth.invalidCredentials';
+      // Navega directo a la pantalla principal de la app en lugar de pasar por /dashboard
+      // que solo es un redirect, evitando un salto adicional.
+      nav('/inicio');
+    } catch (e) {
+      const err = e as { response?: { data?: { error?: { messageKey?: string } } } };
+      const raw = err?.response?.data?.error?.messageKey ?? 'errors:auth.invalidCredentials';
       toast.push(t(toI18nKey(raw)), 'destructive');
     }
   });
+
+  // Helper que devuelve el mensaje de error formateado para mostrarlo bajo cada campo.
+  const fieldError = (name: keyof LoginValues): string | null => {
+    const err = form.formState.errors[name];
+    return err?.message ? String(err.message) : null;
+  };
 
   return (
     <AuthLayout title={t('auth:login.title')}>
@@ -35,10 +47,16 @@ export default function LoginPage() {
         <div>
           <Label htmlFor="email">{t('auth:login.email')}</Label>
           <Input id="email" type="email" {...form.register('email')} />
+          {fieldError('email') ? (
+            <p role="alert" className="text-xs text-destructive mt-1">{fieldError('email')}</p>
+          ) : null}
         </div>
         <div>
           <Label htmlFor="password">{t('auth:login.password')}</Label>
           <Input id="password" type="password" {...form.register('password')} />
+          {fieldError('password') ? (
+            <p role="alert" className="text-xs text-destructive mt-1">{fieldError('password')}</p>
+          ) : null}
         </div>
         <Button type="submit" className="w-full" disabled={form.formState.isSubmitting}>
           {t('auth:login.submit')}

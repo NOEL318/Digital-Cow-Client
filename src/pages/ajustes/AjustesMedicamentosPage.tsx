@@ -1,3 +1,6 @@
+/**
+ * Esta pagina muestra el catalogo de medicamentos disponibles para tratamientos y vacunaciones.
+ */
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Pill, Plus, ScanLine, Trash2, Edit2, AlertTriangle, Calendar } from 'lucide-react';

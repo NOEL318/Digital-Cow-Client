@@ -1,3 +1,6 @@
+/**
+ * Este archivo define los tipos typescript del modulo feeding/items compartidos por la api, los formularios y los componentes.
+ */
 export type FeedCategory = 'FORAGE' | 'SILAGE' | 'CONCENTRATE' | 'MINERAL' | 'BYPRODUCT' | 'OTHER';
 
 export interface FeedItem {

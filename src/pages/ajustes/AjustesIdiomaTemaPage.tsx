@@ -1,3 +1,6 @@
+/**
+ * Esta pagina permite al usuario cambiar el idioma de la app y alternar el tema claro u oscuro.
+ */
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Bell, BellOff } from 'lucide-react';

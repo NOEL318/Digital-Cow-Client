@@ -1,5 +1,9 @@
+/**
+ * Este wizard guia al usuario para registrar la aplicacion de una vacuna.
+ */
 import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { Syringe, Calendar, Pill } from 'lucide-react';
 import { WizardStep } from '@/components/ui/wizard-step';
 import { HelpfulField } from '@/components/ui/helpful-field';
@@ -11,6 +15,7 @@ import { animalsApi } from '@/features/animals/api';
 
 /** Wizard "Vacune" con selector jerárquico. */
 export function VacunarFlow() {
+  const { t: tCommon } = useTranslation('common');
   const nav = useNavigate();
   const [params] = useSearchParams();
   const prefAnimalId = params.get('animalId') ? Number(params.get('animalId')) : null;
@@ -71,7 +76,7 @@ export function VacunarFlow() {
           <select id="vac-vaccine" value={vaccineId ?? ''}
             onChange={e => setVaccineId(e.target.value ? Number(e.target.value) : null)}
             className="w-full border rounded-md px-3 py-2 text-base bg-background">
-            <option value="">Selecciona una vacuna</option>
+            <option value="">{tCommon("placeholder.selectVaccine")}</option>
             {(vaccines.data ?? []).map(v => <option key={v.id} value={v.id}>{v.nameEs}</option>)}
           </select>
         </HelpfulField>

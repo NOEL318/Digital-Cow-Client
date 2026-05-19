@@ -1,3 +1,6 @@
+/**
+ * Esta pagina muestra el reporte de ganancias y perdidas del rancho.
+ */
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Download } from 'lucide-react';

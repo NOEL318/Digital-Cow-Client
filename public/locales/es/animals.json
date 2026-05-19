@@ -8,5 +8,8 @@
   "filters": { "search": "Buscar por arete o nombre" },
   "tabs": { "info": "Información", "photos": "Fotos" },
   "photos": { "upload": "Subir foto", "camera": "Tomar foto", "setCover": "Marcar principal", "uploading": "Subiendo...", "compress": "Comprimiendo..." },
-  "empty": "No hay animales aún."
+  "empty": "No hay animales aún.",
+  "detail": {
+    "loadFailed": "No se pudo cargar el animal."
+  }
 }

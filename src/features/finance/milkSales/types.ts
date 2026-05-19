@@ -1,3 +1,6 @@
+/**
+ * Este archivo define los tipos typescript del modulo finance/milkSales compartidos por la api, los formularios y los componentes.
+ */
 export interface MilkSale {
   id: number;
   saleDate: string;

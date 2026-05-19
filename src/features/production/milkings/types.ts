@@ -1,3 +1,6 @@
+/**
+ * Este archivo define los tipos typescript del modulo production/milkings compartidos por la api, los formularios y los componentes.
+ */
 export type MilkingSession = 'TOTAL' | 'AM' | 'PM';
 
 export interface Milking {

@@ -1,3 +1,6 @@
+/**
+ * Esta pagina valida el token de verificacion de correo y confirma la cuenta del usuario.
+ */
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';

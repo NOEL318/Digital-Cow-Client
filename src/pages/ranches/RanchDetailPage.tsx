@@ -1,3 +1,6 @@
+/**
+ * Esta pagina muestra el detalle de un rancho con sus lotes, animales y resumen de eventos.
+ */
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Link, useNavigate, useParams } from 'react-router-dom';

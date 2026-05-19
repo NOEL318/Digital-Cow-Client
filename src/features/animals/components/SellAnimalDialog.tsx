@@ -1,3 +1,6 @@
+/**
+ * Este componente es un dialogo modal del modulo animals para una accion especifica.
+ */
 import { useState } from 'react';
 import { Handshake, X, Calendar, DollarSign, Weight, User } from 'lucide-react';
 import { useCreateAnimalSale } from '@/features/finance/animalSales/api';

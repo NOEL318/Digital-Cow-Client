@@ -11,6 +11,7 @@ const VAPID_PUBLIC_KEY = (import.meta.env.VITE_VAPID_PUBLIC_KEY ?? '') as string
 
 export type PushPermission = 'granted' | 'denied' | 'default' | 'unsupported';
 
+// Esta utilidad expone la funcionalidad pushPermission.
 export function pushPermission(): PushPermission {
   if (typeof window === 'undefined') return 'unsupported';
   if (!('Notification' in window) || !('serviceWorker' in navigator) || !('PushManager' in window)) {
@@ -42,7 +43,7 @@ export async function enablePush(): Promise<boolean> {
     });
     await http.post('/push/subscribe', sub.toJSON());
     return true;
-  } catch (e) {
+  } catch {
     return false;
   }
 }

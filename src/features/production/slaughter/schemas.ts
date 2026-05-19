@@ -1,5 +1,9 @@
+/**
+ * Este archivo define los esquemas de validacion zod para los formularios del modulo production/slaughter.
+ */
 import { z } from 'zod';
 
+// Este esquema valida los datos para crear un registro de slaughterResult.
 export const slaughterResultCreateSchema = z.object({
   animalId: z.number().int().positive(),
   slaughteredAt: z.string().min(1),

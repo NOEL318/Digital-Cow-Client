@@ -1,3 +1,6 @@
+/**
+ * Este componente es un dialogo modal del modulo ranches para una accion especifica.
+ */
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';

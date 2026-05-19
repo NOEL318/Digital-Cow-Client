@@ -1,3 +1,6 @@
+/**
+ * Esta pagina es el punto unico para registrar eventos del rancho via wizards cortos.
+ */
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {

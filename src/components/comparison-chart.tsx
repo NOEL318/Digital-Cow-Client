@@ -1,3 +1,7 @@
+/**
+ * Este archivo contiene la grafica comparativa de un animal,
+ * que muestra peso, alimento, gastos e ingresos mes a mes.
+ */
 import { useState } from 'react';
 import {
   ResponsiveContainer, ComposedChart, Line, Bar, CartesianGrid,

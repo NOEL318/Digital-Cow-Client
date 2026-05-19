@@ -1,3 +1,6 @@
+/**
+ * Este archivo define los tipos typescript del modulo health/pestControls compartidos por la api, los formularios y los componentes.
+ */
 export interface PestControl {
   id: number;
   ranchId?: number | null;

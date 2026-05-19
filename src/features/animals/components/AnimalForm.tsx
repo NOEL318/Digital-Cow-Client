@@ -1,3 +1,6 @@
+/**
+ * Este componente contiene el formulario para crear o editar registros del modulo animals.
+ */
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useQuery } from '@tanstack/react-query';

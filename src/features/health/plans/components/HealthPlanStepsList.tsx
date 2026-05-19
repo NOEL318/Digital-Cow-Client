@@ -1,3 +1,6 @@
+/**
+ * Este componente lista registros del modulo health/plans con paginacion y acciones rapidas.
+ */
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Trash2, ArrowUp, ArrowDown, Plus } from 'lucide-react';

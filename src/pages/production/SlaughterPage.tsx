@@ -1,3 +1,6 @@
+/**
+ * Esta pagina lista los resultados de faena registrados para los animales sacrificados.
+ */
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Plus } from 'lucide-react';

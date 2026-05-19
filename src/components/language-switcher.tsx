@@ -1,3 +1,7 @@
+/**
+ * Este archivo contiene el selector de idioma que persiste la preferencia
+ * en el backend cuando el usuario tiene sesion iniciada.
+ */
 import { useTranslation } from 'react-i18next';
 import { Button } from './ui/button';
 import { useAuth } from '@/features/auth/AuthContext';

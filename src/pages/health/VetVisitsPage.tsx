@@ -1,3 +1,6 @@
+/**
+ * Esta pagina lista las visitas veterinarias registradas en el rancho.
+ */
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Plus } from 'lucide-react';

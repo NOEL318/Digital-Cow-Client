@@ -1,3 +1,6 @@
+/**
+ * Esta pagina muestra la curva de crecimiento de un animal o grupo.
+ */
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {

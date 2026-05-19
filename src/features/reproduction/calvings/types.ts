@@ -1,3 +1,6 @@
+/**
+ * Este archivo define los tipos typescript del modulo reproduction/calvings compartidos por la api, los formularios y los componentes.
+ */
 export type CalvingEase = 'FREE' | 'EASY' | 'ASSISTED' | 'DIFFICULT' | 'SURGERY';
 export type CalvingOutcome = 'LIVE' | 'STILLBORN' | 'TWIN_LIVE' | 'TWIN_MIXED' | 'TWIN_STILLBORN';
 export type CalfSex = 'FEMALE' | 'MALE';

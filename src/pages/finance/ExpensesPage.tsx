@@ -1,3 +1,6 @@
+/**
+ * Esta pagina lista los gastos registrados con filtros por categoria y fecha.
+ */
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Plus } from 'lucide-react';

@@ -1,3 +1,6 @@
+/**
+ * Esta pagina lista las muestras de leche tomadas con sus resultados de laboratorio.
+ */
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Plus } from 'lucide-react';

@@ -1,3 +1,6 @@
+/**
+ * Este archivo define los tipos typescript del modulo production/slaughter compartidos por la api, los formularios y los componentes.
+ */
 export interface SlaughterResult {
   id: number;
   animalId: number;

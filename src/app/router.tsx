@@ -1,3 +1,7 @@
+/**
+ * Este archivo declara el router principal de la aplicacion.
+ * Mapea cada ruta publica y protegida hacia su pagina y mantiene redirects de rutas legadas.
+ */
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import LoginPage from '@/pages/auth/LoginPage';
 import RegisterPage from '@/pages/auth/RegisterPage';

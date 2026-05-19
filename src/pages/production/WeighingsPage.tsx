@@ -1,3 +1,6 @@
+/**
+ * Esta pagina lista los pesajes registrados y permite agregar nuevos.
+ */
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Plus, Upload } from 'lucide-react';

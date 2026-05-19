@@ -1,8 +1,12 @@
+/**
+ * Este archivo contiene la api cliente del modulo ranches, con las funciones para llamar al backend y los hooks de react-query.
+ */
 import { useQuery } from '@tanstack/react-query';
 import { http } from '@/lib/http';
 import type { Ranch, Lot } from './types';
 import type { RanchValues, LotValues } from './schemas';
 
+// Este objeto agrupa las llamadas al backend del modulo correspondiente.
 export const ranchApi = {
   list: () => http.get<Ranch[]>('/ranches').then(r => r.data),
   get: (id: number) => http.get<Ranch>(`/ranches/${id}`).then(r => r.data),

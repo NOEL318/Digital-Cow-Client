@@ -1,3 +1,7 @@
+/**
+ * Este archivo arranca la aplicacion React en el navegador.
+ * Inicializa los estilos globales, la traduccion y el soporte offline antes de montar la app.
+ */
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';

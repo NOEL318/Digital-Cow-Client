@@ -11,7 +11,9 @@
     "prev": "Anterior",
     "next": "Siguiente",
     "openMenu": "Abrir menú",
-    "close": "Cerrar"
+    "close": "Cerrar",
+    "retry": "Reintentar",
+    "viewAll": "Ver todo"
   },
   "nav": {
     "inicio": "Inicio",
@@ -42,5 +44,28 @@
   },
   "language": { "label": "Idioma", "es": "Español", "en": "Inglés" },
   "loading": "Cargando...",
-  "themeToggle": "Cambiar tema"
+  "themeToggle": "Cambiar tema",
+  "placeholder": {
+    "selectFeed": "Selecciona un alimento",
+    "selectCategory": "Elige una categoría",
+    "selectMedication": "Selecciona un medicamento",
+    "selectBreed": "Elige la raza",
+    "selectVaccine": "Selecciona una vacuna",
+    "selectDisease": "Selecciona una enfermedad",
+    "selectBull": "Selecciona un toro",
+    "selectSemen": "Selecciona una pajilla"
+  },
+  "labels": {
+    "calfSex": "Sexo del becerro",
+    "mapLocation": "Ubicación en el mapa",
+    "accountName": "Nombre de la cuenta",
+    "defaultLocale": "Idioma por defecto",
+    "signIn": "Iniciar sesión",
+    "bySex": "Por sexo",
+    "feedingDetail": "Alimentación en detalle",
+    "scanToViewOnline": "Escanea para ver online",
+    "animalPhotos": "Fotos del animal",
+    "moneyDetail": "Dinero en detalle",
+    "lotConditionsToday": "Condiciones del corral hoy"
+  }
 }

@@ -1,5 +1,9 @@
+/**
+ * Este wizard guia al usuario para registrar la aplicacion de un tratamiento.
+ */
 import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { Pill, Calendar, Beaker } from 'lucide-react';
 import { WizardStep } from '@/components/ui/wizard-step';
 import { HelpfulField } from '@/components/ui/helpful-field';
@@ -13,6 +17,7 @@ import { localizedName } from '@/lib/catalog';
 
 /** Wizard "Traté". Pasos: ubicación+animal, medicamento+dosis+fecha, confirmar. */
 export function TratarFlow() {
+  const { t: tCommon } = useTranslation('common');
   const nav = useNavigate();
   const [params] = useSearchParams();
   const prefAnimalId = params.get('animalId') ? Number(params.get('animalId')) : null;
@@ -89,7 +94,7 @@ export function TratarFlow() {
           <select id="tx-med" value={medicationId ?? ''}
             onChange={e => setMedicationId(e.target.value ? Number(e.target.value) : null)}
             className="w-full border rounded-md px-3 py-3 text-base bg-background">
-            <option value="">Selecciona un medicamento</option>
+            <option value="">{tCommon("placeholder.selectMedication")}</option>
             {(medications.data ?? []).map(m => (
               <option key={m.id} value={m.id}>{localizedName(m, locale)}</option>
             ))}

@@ -1,6 +1,10 @@
+/**
+ * Este wizard guia al usuario para registrar el consumo de alimento de un lote.
+ */
 import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
+import { useTranslation } from 'react-i18next';
 import { Wheat, Calendar, Package } from 'lucide-react';
 import { http } from '@/lib/http';
 import { WizardStep } from '@/components/ui/wizard-step';
@@ -14,6 +18,7 @@ const COMMON_KG = [1, 2, 3, 5, 8, 10];
 
 /** Wizard "Alimente" para un solo animal, con selector jerárquico. */
 export function AlimentarAnimalFlow() {
+  const { t: tCommon } = useTranslation('common');
   const nav = useNavigate();
   const [params] = useSearchParams();
   const prefAnimalId = params.get('animalId') ? Number(params.get('animalId')) : null;
@@ -84,7 +89,7 @@ export function AlimentarAnimalFlow() {
           <select id="alim-item" value={feedItemId ?? ''}
             onChange={e => setFeedItemId(e.target.value ? Number(e.target.value) : null)}
             className="w-full border rounded-md px-3 py-2 text-base bg-background">
-            <option value="">Selecciona un alimento</option>
+            <option value="">{tCommon("placeholder.selectFeed")}</option>
             {(feedItems.data ?? []).map(f => <option key={f.id} value={f.id}>{f.nameEs}</option>)}
           </select>
         </HelpfulField>

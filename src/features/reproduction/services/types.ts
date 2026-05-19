@@ -1,3 +1,6 @@
+/**
+ * Este archivo define los tipos typescript del modulo reproduction/services compartidos por la api, los formularios y los componentes.
+ */
 export type ServiceType = 'AI' | 'NATURAL' | 'EMBRYO_TRANSFER';
 
 export interface ServiceEvent {

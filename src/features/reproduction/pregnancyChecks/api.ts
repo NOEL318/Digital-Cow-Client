@@ -1,3 +1,6 @@
+/**
+ * Este archivo contiene la api cliente del modulo reproduction/pregnancyChecks, con las funciones para llamar al backend y los hooks de react-query.
+ */
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { http } from '@/lib/http';
 import type { PregnancyCheck, PregnancyCheckCreate } from './types';

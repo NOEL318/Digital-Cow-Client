@@ -1,3 +1,6 @@
+/**
+ * Esta pagina muestra el resumen reproductivo del rancho con alertas y kpis.
+ */
 import { useTranslation } from 'react-i18next';
 import { useReproductionAlerts } from '@/features/reproduction/alerts/api';
 import { ReproductionAlertsList } from '@/features/reproduction/alerts/components/ReproductionAlertsList';

@@ -1,5 +1,9 @@
+/**
+ * Este archivo define los esquemas de validacion zod para los formularios del modulo production/bulkTank.
+ */
 import { z } from 'zod';
 
+// Este esquema valida los datos para crear un registro de bulkTankDelivery.
 export const bulkTankDeliveryCreateSchema = z.object({
   ranchId: z.number().int().positive(),
   deliveryDate: z.string().min(1),

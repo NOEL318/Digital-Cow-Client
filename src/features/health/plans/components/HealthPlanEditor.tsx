@@ -1,3 +1,6 @@
+/**
+ * Este componente es el editor visual del modulo health/plans para construir o ajustar un recurso complejo.
+ */
 import { useTranslation } from 'react-i18next';
 import { Lock } from 'lucide-react';
 import { useHealthPlan } from '../api';

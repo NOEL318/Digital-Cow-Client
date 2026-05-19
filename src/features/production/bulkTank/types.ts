@@ -1,3 +1,6 @@
+/**
+ * Este archivo define los tipos typescript del modulo production/bulkTank compartidos por la api, los formularios y los componentes.
+ */
 export interface BulkTankDelivery {
   id: number;
   ranchId: number;

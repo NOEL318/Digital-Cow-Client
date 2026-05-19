@@ -1,3 +1,6 @@
+/**
+ * Esta pagina lista los ranchos del usuario y permite crear o editar uno.
+ */
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';

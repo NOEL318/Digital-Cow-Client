@@ -1,3 +1,6 @@
+/**
+ * Esta pagina lista las ventas de animales registradas y permite agregar nuevas.
+ */
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Plus } from 'lucide-react';

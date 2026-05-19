@@ -1,3 +1,6 @@
+/**
+ * Esta pagina lista las entregas del tanque a granel registradas.
+ */
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Plus } from 'lucide-react';

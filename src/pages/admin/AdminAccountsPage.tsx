@@ -1,3 +1,6 @@
+/**
+ * Esta pagina permite al administrador listar, suspender y reactivar cuentas tenant.
+ */
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { adminApi } from '@/features/admin/api';
 

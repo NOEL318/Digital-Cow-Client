@@ -1,5 +1,9 @@
+/**
+ * Este archivo define los esquemas de validacion zod para los formularios del modulo reproduction/heats.
+ */
 import { z } from 'zod';
 
+// Este esquema valida los datos para crear un registro de heat.
 export const heatCreateSchema = z.object({
   animalId: z.number().int().positive(),
   detectedAt: z.string().min(1),

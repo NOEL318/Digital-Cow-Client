@@ -1,3 +1,6 @@
+/**
+ * Esta pagina lista los tratamientos sanitarios aplicados a los animales.
+ */
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Plus } from 'lucide-react';

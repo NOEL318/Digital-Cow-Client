@@ -1,3 +1,6 @@
+/**
+ * Esta pagina agrupa las pestanas del panel reproductivo del rancho.
+ */
 import { useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';

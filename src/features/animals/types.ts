@@ -1,3 +1,6 @@
+/**
+ * Este archivo define los tipos typescript del modulo animals compartidos por la api, los formularios y los componentes.
+ */
 export type Sex = 'FEMALE' | 'MALE';
 export type Purpose = 'BEEF' | 'DAIRY' | 'DUAL';
 export type AnimalStatus = 'ACTIVE' | 'SOLD' | 'DEAD' | 'MISSING' | 'TRANSFERRED';

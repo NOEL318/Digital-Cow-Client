@@ -1,3 +1,6 @@
+/**
+ * Este componente lista registros del modulo reproduction/alerts con paginacion y acciones rapidas.
+ */
 import { useTranslation } from 'react-i18next';
 import type { ReproductionAlertItem } from '../api';
 

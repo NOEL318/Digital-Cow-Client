@@ -1,7 +1,11 @@
+/**
+ * Este archivo define los esquemas de validacion zod para los formularios del modulo health/treatments.
+ */
 import { z } from 'zod';
 
 const routeEnum = z.enum(['IM', 'SC', 'IV', 'ORAL', 'TOPICAL', 'INTRAMAMMARY']);
 
+// Este esquema valida los datos para crear un registro de treatment.
 export const treatmentCreateSchema = z.object({
   animalId: z.number().int().positive(),
   diagnosisId: z.number().int().positive().optional(),

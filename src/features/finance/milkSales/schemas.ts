@@ -1,5 +1,9 @@
+/**
+ * Este archivo define los esquemas de validacion zod para los formularios del modulo finance/milkSales.
+ */
 import { z } from 'zod';
 
+// Este esquema valida los datos para crear un registro de milkSale.
 export const milkSaleCreateSchema = z.object({
   saleDate: z.string().min(1),
   totalLiters: z.number().positive(),

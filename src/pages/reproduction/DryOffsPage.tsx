@@ -1,3 +1,6 @@
+/**
+ * Esta pagina lista los secados registrados para las vacas en transicion.
+ */
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Plus } from 'lucide-react';

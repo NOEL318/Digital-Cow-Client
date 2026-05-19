@@ -1,3 +1,6 @@
+/**
+ * Este componente pertenece al modulo ranches y se ocupa de RanchRecentEvents.
+ */
 import { useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';

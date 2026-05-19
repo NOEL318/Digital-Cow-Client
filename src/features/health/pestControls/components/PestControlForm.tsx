@@ -1,3 +1,6 @@
+/**
+ * Este componente contiene el formulario para crear o editar registros del modulo health/pestControls.
+ */
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { useState } from 'react';

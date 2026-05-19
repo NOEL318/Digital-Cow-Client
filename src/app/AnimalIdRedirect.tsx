@@ -1,3 +1,7 @@
+/**
+ * Este archivo define un componente que redirige rutas antiguas de animales
+ * reemplazando el placeholder ":id" por el valor real del parametro de la URL.
+ */
 import { Navigate, useParams } from 'react-router-dom';
 
 interface Props {

@@ -1,3 +1,6 @@
+/**
+ * Este archivo contiene un boton que alterna entre el tema claro y oscuro.
+ */
 import { Moon, Sun } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';

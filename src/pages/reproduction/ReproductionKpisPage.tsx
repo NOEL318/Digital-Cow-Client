@@ -1,3 +1,6 @@
+/**
+ * Esta pagina muestra los indicadores clave de reproduccion del rancho.
+ */
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {

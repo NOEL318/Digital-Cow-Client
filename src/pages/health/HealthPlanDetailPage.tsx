@@ -1,3 +1,6 @@
+/**
+ * Esta pagina muestra el detalle de un plan sanitario con sus pasos y asignaciones.
+ */
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';

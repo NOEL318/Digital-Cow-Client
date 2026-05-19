@@ -1,3 +1,7 @@
+/**
+ * Este archivo contiene la barra de navegacion inferior para movil,
+ * con cuatro destinos y un boton central elevado para crear notas.
+ */
 import { NavLink } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Home, Beef, PencilLine, Settings } from 'lucide-react';

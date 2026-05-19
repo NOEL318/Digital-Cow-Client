@@ -11,7 +11,9 @@
     "prev": "Previous",
     "next": "Next",
     "openMenu": "Open menu",
-    "close": "Close"
+    "close": "Close",
+    "retry": "Retry",
+    "viewAll": "View all"
   },
   "nav": {
     "inicio": "Home",
@@ -42,5 +44,28 @@
   },
   "language": { "label": "Language", "es": "Spanish", "en": "English" },
   "loading": "Loading...",
-  "themeToggle": "Toggle theme"
+  "themeToggle": "Toggle theme",
+  "placeholder": {
+    "selectFeed": "Select a feed",
+    "selectCategory": "Choose a category",
+    "selectMedication": "Select a medication",
+    "selectBreed": "Choose a breed",
+    "selectVaccine": "Select a vaccine",
+    "selectDisease": "Select a disease",
+    "selectBull": "Select a bull",
+    "selectSemen": "Select a straw"
+  },
+  "labels": {
+    "calfSex": "Calf sex",
+    "mapLocation": "Map location",
+    "accountName": "Account name",
+    "defaultLocale": "Default locale",
+    "signIn": "Sign in",
+    "bySex": "By sex",
+    "feedingDetail": "Feeding in detail",
+    "scanToViewOnline": "Scan to view online",
+    "animalPhotos": "Animal photos",
+    "moneyDetail": "Money in detail",
+    "lotConditionsToday": "Lot conditions today"
+  }
 }

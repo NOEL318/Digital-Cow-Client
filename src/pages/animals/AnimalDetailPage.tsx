@@ -1,3 +1,6 @@
+/**
+ * Esta pagina muestra el detalle de un animal con sus pestanas de informacion, salud, reproduccion, produccion y dinero.
+ */
 import { useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
@@ -39,6 +42,20 @@ export default function AnimalDetailPage() {
   const [shareOpen, setShareOpen] = useState(false);
   const [moveOpen, setMoveOpen] = useState(false);
 
+  if (q.isError) {
+    return (
+      <div className="p-6 text-center space-y-3">
+        <p className="text-destructive">{t('animals:detail.loadFailed', { defaultValue: 'No se pudo cargar el animal.' })}</p>
+        <button
+          type="button"
+          onClick={() => q.refetch()}
+          className="px-4 py-2 rounded-md bg-primary text-primary-foreground"
+        >
+          {t('common:actions.retry', { defaultValue: 'Reintentar' })}
+        </button>
+      </div>
+    );
+  }
   if (!q.data) return <div>{t('common:loading')}</div>;
   const a = q.data;
   const canSell = a.status === 'ACTIVE';

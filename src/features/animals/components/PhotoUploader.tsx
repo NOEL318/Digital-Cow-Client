@@ -1,3 +1,6 @@
+/**
+ * Este componente sube archivos al backend para el modulo animals.
+ */
 import { useState, type ChangeEvent } from 'react';
 import imageCompression from 'browser-image-compression';
 import { http } from '@/lib/http';
@@ -39,8 +42,9 @@ export function PhotoUploader({ animalId, onUploaded }: Props) {
         width: data.width, height: data.height, bytes: data.bytes
       });
       onUploaded();
-    } catch (e: any) {
-      const raw = e?.response?.data?.error?.messageKey ?? 'errors:photo.serviceUnavailable';
+    } catch (e) {
+      const err = e as { response?: { data?: { error?: { messageKey?: string } } } };
+      const raw = err?.response?.data?.error?.messageKey ?? 'errors:photo.serviceUnavailable';
       toast.push(t(toI18nKey(raw)), 'destructive');
     } finally {
       setBusy(null);

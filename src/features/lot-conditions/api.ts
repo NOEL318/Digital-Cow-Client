@@ -1,3 +1,6 @@
+/**
+ * Este archivo contiene la api cliente del modulo lot-conditions, con las funciones para llamar al backend y los hooks de react-query.
+ */
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { http } from '@/lib/http';
 
@@ -32,6 +35,7 @@ export interface LotConditionCreate {
 
 const KEY = (lotId: number) => ['lot-conditions', lotId] as const;
 
+// Este hook expone los datos y acciones de LotConditions.
 export function useLotConditions(lotId: number | undefined) {
   return useQuery({
     queryKey: KEY(lotId ?? 0),
@@ -41,6 +45,7 @@ export function useLotConditions(lotId: number | undefined) {
   });
 }
 
+// Este hook crea un nuevo registro de lotcondition.
 export function useCreateLotCondition(lotId: number) {
   const qc = useQueryClient();
   return useMutation({
@@ -50,6 +55,7 @@ export function useCreateLotCondition(lotId: number) {
   });
 }
 
+// Este hook elimina un registro de lotcondition.
 export function useDeleteLotCondition(lotId: number) {
   const qc = useQueryClient();
   return useMutation({

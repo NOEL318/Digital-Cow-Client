@@ -1,5 +1,9 @@
+/**
+ * Este archivo define los esquemas de validacion zod para los formularios del modulo finance/expenses.
+ */
 import { z } from 'zod';
 
+// Este esquema valida los datos para crear un registro de expense.
 export const expenseCreateSchema = z.object({
   expenseCategoryId: z.number().int().positive(),
   incurredAt: z.string().min(1),

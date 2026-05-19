@@ -1,5 +1,9 @@
+/**
+ * Este archivo define los esquemas de validacion zod para los formularios del modulo health/pestControls.
+ */
 import { z } from 'zod';
 
+// Este esquema valida los datos para crear un registro de pestControl.
 export const pestControlCreateSchema = z
   .object({
     ranchId: z.number().int().positive().optional(),

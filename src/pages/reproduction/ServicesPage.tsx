@@ -1,3 +1,6 @@
+/**
+ * Esta pagina lista los servicios reproductivos registrados, ya sean montas o inseminaciones.
+ */
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Plus } from 'lucide-react';

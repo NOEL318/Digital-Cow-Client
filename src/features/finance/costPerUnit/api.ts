@@ -1,3 +1,6 @@
+/**
+ * Este archivo contiene la api cliente del modulo finance/costPerUnit, con las funciones para llamar al backend y los hooks de react-query.
+ */
 import { useQuery } from '@tanstack/react-query';
 import { http } from '@/lib/http';
 

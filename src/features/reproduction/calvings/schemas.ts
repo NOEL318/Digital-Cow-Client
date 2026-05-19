@@ -1,5 +1,9 @@
+/**
+ * Este archivo define los esquemas de validacion zod para los formularios del modulo reproduction/calvings.
+ */
 import { z } from 'zod';
 
+// Este esquema valida los datos para crear un registro de calving.
 export const calvingCreateSchema = z.object({
   animalId: z.number().int().positive(),
   calvedAt: z.string().min(1),

@@ -1,3 +1,6 @@
+/**
+ * Esta pagina lista los registros de consumo de alimento por lote y fecha.
+ */
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Plus } from 'lucide-react';

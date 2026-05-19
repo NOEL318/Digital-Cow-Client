@@ -1,3 +1,6 @@
+/**
+ * Este componente es el bloque destacado de la cabecera del modulo animals.
+ */
 import { useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { Camera, Plus, ImageIcon } from 'lucide-react';

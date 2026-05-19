@@ -1,3 +1,6 @@
+/**
+ * Este archivo define los tipos typescript del modulo reproduction/pregnancyChecks compartidos por la api, los formularios y los componentes.
+ */
 export type PregnancyMethod = 'PALPATION' | 'ULTRASOUND' | 'BLOOD_TEST' | 'MILK_TEST';
 export type PregnancyResult = 'POSITIVE' | 'NEGATIVE' | 'DOUBTFUL';
 

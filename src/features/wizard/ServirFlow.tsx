@@ -1,5 +1,9 @@
+/**
+ * Este wizard guia al usuario para registrar un servicio reproductivo.
+ */
 import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { Droplet, Calendar, User, Beef, Heart } from 'lucide-react';
 import { WizardStep } from '@/components/ui/wizard-step';
 import { HelpfulField } from '@/components/ui/helpful-field';
@@ -15,6 +19,7 @@ type ServiceType = 'AI' | 'NATURAL' | 'EMBRYO_TRANSFER';
 
 /** Wizard "Inseminé / Servicio". Pasos: hembra, tipo+toro/pajilla+fecha, confirmar. */
 export function ServirFlow() {
+  const { t: tCommon } = useTranslation('common');
   const nav = useNavigate();
   const [params] = useSearchParams();
   const prefAnimalId = params.get('animalId') ? Number(params.get('animalId')) : null;
@@ -112,7 +117,7 @@ export function ServirFlow() {
             <select id="srv-bull" value={bullId ?? ''}
               onChange={e => setBullId(e.target.value ? Number(e.target.value) : null)}
               className="w-full border rounded-md px-3 py-3 text-base bg-background">
-              <option value="">Selecciona un toro</option>
+              <option value="">{tCommon("placeholder.selectBull")}</option>
               {(bulls.data ?? []).map(b => (
                 <option key={b.id} value={b.id}>{b.name} ({b.internalCode})</option>
               ))}
@@ -125,7 +130,7 @@ export function ServirFlow() {
             <select id="srv-straw" value={strawId ?? ''}
               onChange={e => setStrawId(e.target.value ? Number(e.target.value) : null)}
               className="w-full border rounded-md px-3 py-3 text-base bg-background">
-              <option value="">Selecciona una pajilla</option>
+              <option value="">{tCommon("placeholder.selectSemen")}</option>
               {(straws.data ?? []).filter(s => s.availableQuantity > 0 && (!bullId || s.bullId === bullId)).map(s => (
                 <option key={s.id} value={s.id}>
                   {s.batchNumber ?? `Pajilla #${s.id}`} ({s.availableQuantity} disp.)

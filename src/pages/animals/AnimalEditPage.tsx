@@ -1,3 +1,6 @@
+/**
+ * Esta pagina contiene el formulario para crear o editar un animal.
+ */
 import { useNavigate, useParams } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { animalsApi } from '@/features/animals/api';

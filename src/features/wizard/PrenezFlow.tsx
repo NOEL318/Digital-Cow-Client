@@ -1,3 +1,6 @@
+/**
+ * Este wizard guia al usuario para registrar un chequeo de prenez.
+ */
 import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Baby, Calendar, Check, X, HelpCircle, Hand, Activity, Droplet, Milk } from 'lucide-react';

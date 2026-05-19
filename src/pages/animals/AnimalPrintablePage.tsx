@@ -1,3 +1,6 @@
+/**
+ * Esta pagina muestra la ficha imprimible de un animal optimizada para papel A4.
+ */
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
