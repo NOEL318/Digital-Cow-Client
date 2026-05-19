@@ -13,9 +13,12 @@ export const http = axios.create({
 });
 
 // Request: anexa Authorization si hay token.
+// El header ngrok-skip-browser-warning evita la pagina HTML interstitial que
+// muestra ngrok free a peticiones de navegador (harmless si la URL no es ngrok).
 http.interceptors.request.use(config => {
   const token = AuthStorage.getAccess();
   if (token) config.headers.Authorization = `Bearer ${token}`;
+  config.headers['ngrok-skip-browser-warning'] = 'true';
   return config;
 });
 
