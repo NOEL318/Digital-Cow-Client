@@ -30,10 +30,13 @@ export function useCreateWeighing() {
   return useMutation({
     mutationFn: async (body: WeighingCreate) =>
       (await http.post<Weighing>('/production/weighings', body)).data,
-    onSuccess: () => {
+    onSuccess: (_data, body) => {
       qc.invalidateQueries({ queryKey: QK });
       qc.invalidateQueries({ queryKey: ['dashboard', 'production'] });
       qc.invalidateQueries({ queryKey: ['production', 'growth-curve'] });
+      if (body.animalId) {
+        qc.invalidateQueries({ queryKey: ['animal', body.animalId] });
+      }
     }
   });
 }
@@ -44,7 +47,12 @@ export function useUpdateWeighing() {
   return useMutation({
     mutationFn: async ({ id, body }: { id: number; body: Partial<WeighingCreate> }) =>
       (await http.patch<Weighing>(`/production/weighings/${id}`, body)).data,
-    onSuccess: () => qc.invalidateQueries({ queryKey: QK })
+    onSuccess: (_data, vars) => {
+      qc.invalidateQueries({ queryKey: QK });
+      if (vars.body.animalId) {
+        qc.invalidateQueries({ queryKey: ['animal', vars.body.animalId] });
+      }
+    }
   });
 }
 
@@ -57,6 +65,7 @@ export function useBulkCreateWeighings() {
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: QK });
       qc.invalidateQueries({ queryKey: ['dashboard', 'production'] });
+      qc.invalidateQueries({ queryKey: ['animal'] });
     }
   });
 }
@@ -67,6 +76,9 @@ export function useDeleteWeighing() {
   return useMutation({
     mutationFn: async (id: number) =>
       (await http.delete(`/production/weighings/${id}`)).data,
-    onSuccess: () => qc.invalidateQueries({ queryKey: QK })
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: QK });
+      qc.invalidateQueries({ queryKey: ['animal'] });
+    }
   });
 }

@@ -30,10 +30,12 @@ export function useCreateServiceEvent() {
   return useMutation({
     mutationFn: async (body: ServiceEventCreate) =>
       (await http.post<ServiceEvent>('/reproduction/services', body)).data,
-    onSuccess: () => {
+    onSuccess: (_data, body) => {
       qc.invalidateQueries({ queryKey: QK });
       qc.invalidateQueries({ queryKey: ['reproduction', 'semen-straws'] });
       qc.invalidateQueries({ queryKey: ['reproduction', 'alerts'] });
+      const aid = (body as { animalId?: number }).animalId;
+      if (aid) qc.invalidateQueries({ queryKey: ['animal', aid] });
     }
   });
 }
@@ -44,7 +46,10 @@ export function useUpdateServiceEvent() {
   return useMutation({
     mutationFn: async ({ id, body }: { id: number; body: Partial<ServiceEventCreate> }) =>
       (await http.patch<ServiceEvent>(`/reproduction/services/${id}`, body)).data,
-    onSuccess: () => qc.invalidateQueries({ queryKey: QK })
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: QK });
+      qc.invalidateQueries({ queryKey: ['animal'] });
+    }
   });
 }
 
@@ -54,6 +59,9 @@ export function useDeleteServiceEvent() {
   return useMutation({
     mutationFn: async (id: number) =>
       (await http.delete(`/reproduction/services/${id}`)).data,
-    onSuccess: () => qc.invalidateQueries({ queryKey: QK })
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: QK });
+      qc.invalidateQueries({ queryKey: ['animal'] });
+    }
   });
 }

@@ -30,9 +30,10 @@ export function useCreateAbortion() {
   return useMutation({
     mutationFn: async (body: AbortionCreate) =>
       (await http.post<Abortion>('/reproduction/abortions', body)).data,
-    onSuccess: () => {
+    onSuccess: (_data, body) => {
       qc.invalidateQueries({ queryKey: QK });
       qc.invalidateQueries({ queryKey: ['reproduction', 'alerts'] });
+      if (body.animalId) qc.invalidateQueries({ queryKey: ['animal', body.animalId] });
     }
   });
 }
@@ -43,7 +44,10 @@ export function useUpdateAbortion() {
   return useMutation({
     mutationFn: async ({ id, body }: { id: number; body: Partial<AbortionCreate> }) =>
       (await http.patch<Abortion>(`/reproduction/abortions/${id}`, body)).data,
-    onSuccess: () => qc.invalidateQueries({ queryKey: QK })
+    onSuccess: (_data, vars) => {
+      qc.invalidateQueries({ queryKey: QK });
+      if (vars.body.animalId) qc.invalidateQueries({ queryKey: ['animal', vars.body.animalId] });
+    }
   });
 }
 
@@ -53,6 +57,9 @@ export function useDeleteAbortion() {
   return useMutation({
     mutationFn: async (id: number) =>
       (await http.delete(`/reproduction/abortions/${id}`)).data,
-    onSuccess: () => qc.invalidateQueries({ queryKey: QK })
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: QK });
+      qc.invalidateQueries({ queryKey: ['animal'] });
+    }
   });
 }

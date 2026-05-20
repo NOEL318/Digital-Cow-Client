@@ -30,9 +30,10 @@ export function useCreateDryOff() {
   return useMutation({
     mutationFn: async (body: DryOffCreate) =>
       (await http.post<DryOff>('/reproduction/dry-offs', body)).data,
-    onSuccess: () => {
+    onSuccess: (_data, body) => {
       qc.invalidateQueries({ queryKey: QK });
       qc.invalidateQueries({ queryKey: ['reproduction', 'alerts'] });
+      if (body.animalId) qc.invalidateQueries({ queryKey: ['animal', body.animalId] });
     }
   });
 }
@@ -43,7 +44,10 @@ export function useUpdateDryOff() {
   return useMutation({
     mutationFn: async ({ id, body }: { id: number; body: Partial<DryOffCreate> }) =>
       (await http.patch<DryOff>(`/reproduction/dry-offs/${id}`, body)).data,
-    onSuccess: () => qc.invalidateQueries({ queryKey: QK })
+    onSuccess: (_data, vars) => {
+      qc.invalidateQueries({ queryKey: QK });
+      if (vars.body.animalId) qc.invalidateQueries({ queryKey: ['animal', vars.body.animalId] });
+    }
   });
 }
 
@@ -53,6 +57,9 @@ export function useDeleteDryOff() {
   return useMutation({
     mutationFn: async (id: number) =>
       (await http.delete(`/reproduction/dry-offs/${id}`)).data,
-    onSuccess: () => qc.invalidateQueries({ queryKey: QK })
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: QK });
+      qc.invalidateQueries({ queryKey: ['animal'] });
+    }
   });
 }

@@ -30,9 +30,11 @@ export function useCreatePregnancyCheck() {
   return useMutation({
     mutationFn: async (body: PregnancyCheckCreate) =>
       (await http.post<PregnancyCheck>('/reproduction/pregnancy-checks', body)).data,
-    onSuccess: () => {
+    onSuccess: (_data, body) => {
       qc.invalidateQueries({ queryKey: QK });
       qc.invalidateQueries({ queryKey: ['reproduction', 'alerts'] });
+      const aid = (body as { animalId?: number }).animalId;
+      if (aid) qc.invalidateQueries({ queryKey: ['animal', aid] });
     }
   });
 }
@@ -43,7 +45,10 @@ export function useUpdatePregnancyCheck() {
   return useMutation({
     mutationFn: async ({ id, body }: { id: number; body: Partial<PregnancyCheckCreate> }) =>
       (await http.patch<PregnancyCheck>(`/reproduction/pregnancy-checks/${id}`, body)).data,
-    onSuccess: () => qc.invalidateQueries({ queryKey: QK })
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: QK });
+      qc.invalidateQueries({ queryKey: ['animal'] });
+    }
   });
 }
 
@@ -53,6 +58,9 @@ export function useDeletePregnancyCheck() {
   return useMutation({
     mutationFn: async (id: number) =>
       (await http.delete(`/reproduction/pregnancy-checks/${id}`)).data,
-    onSuccess: () => qc.invalidateQueries({ queryKey: QK })
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: QK });
+      qc.invalidateQueries({ queryKey: ['animal'] });
+    }
   });
 }

@@ -30,10 +30,13 @@ export function useCreateMilking() {
   return useMutation({
     mutationFn: async (body: MilkingCreate) =>
       (await http.post<Milking>('/production/milkings', body)).data,
-    onSuccess: () => {
+    onSuccess: (_data, body) => {
       qc.invalidateQueries({ queryKey: QK });
       qc.invalidateQueries({ queryKey: ['dashboard', 'production'] });
       qc.invalidateQueries({ queryKey: ['production', 'lactation-curve'] });
+      if (body.animalId) {
+        qc.invalidateQueries({ queryKey: ['animal', body.animalId] });
+      }
     }
   });
 }
@@ -48,6 +51,7 @@ export function useCreateMilkingBulk() {
       qc.invalidateQueries({ queryKey: QK });
       qc.invalidateQueries({ queryKey: ['dashboard', 'production'] });
       qc.invalidateQueries({ queryKey: ['production', 'lactation-curve'] });
+      qc.invalidateQueries({ queryKey: ['animal'] });
     }
   });
 }
@@ -58,7 +62,12 @@ export function useUpdateMilking() {
   return useMutation({
     mutationFn: async ({ id, body }: { id: number; body: Partial<MilkingCreate> }) =>
       (await http.patch<Milking>(`/production/milkings/${id}`, body)).data,
-    onSuccess: () => qc.invalidateQueries({ queryKey: QK })
+    onSuccess: (_data, vars) => {
+      qc.invalidateQueries({ queryKey: QK });
+      if (vars.body.animalId) {
+        qc.invalidateQueries({ queryKey: ['animal', vars.body.animalId] });
+      }
+    }
   });
 }
 
@@ -68,6 +77,9 @@ export function useDeleteMilking() {
   return useMutation({
     mutationFn: async (id: number) =>
       (await http.delete(`/production/milkings/${id}`)).data,
-    onSuccess: () => qc.invalidateQueries({ queryKey: QK })
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: QK });
+      qc.invalidateQueries({ queryKey: ['animal'] });
+    }
   });
 }

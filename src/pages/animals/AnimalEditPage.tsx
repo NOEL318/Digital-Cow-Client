@@ -21,7 +21,11 @@ export default function AnimalEditPage() {
   const m = useMutation({
     mutationFn: (v: Parameters<typeof animalsApi.create>[0]) =>
       editing ? animalsApi.update(Number(id), v) : animalsApi.create(v),
-    onSuccess: r => { qc.invalidateQueries({ queryKey: ['animals'] }); nav(`/animals/${r.id}`); }
+    onSuccess: r => {
+      qc.invalidateQueries({ queryKey: ['animals'] });
+      qc.invalidateQueries({ queryKey: ['animal', r.id] });
+      nav(`/animales/${r.id}`);
+    }
   });
 
   if (editing && !existing.data) return <div>...</div>;

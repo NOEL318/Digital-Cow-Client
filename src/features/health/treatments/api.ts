@@ -41,9 +41,12 @@ export function useCreateTreatment() {
   return useMutation({
     mutationFn: async (body: TreatmentCreate) =>
       (await http.post<Treatment>('/health/treatments', body)).data,
-    onSuccess: () => {
+    onSuccess: (_data, body) => {
       qc.invalidateQueries({ queryKey: QK });
       qc.invalidateQueries({ queryKey: ['health', 'alerts'] });
+      if (body.animalId) {
+        qc.invalidateQueries({ queryKey: ['animal', body.animalId] });
+      }
     }
   });
 }
@@ -54,7 +57,12 @@ export function useUpdateTreatment() {
   return useMutation({
     mutationFn: async ({ id, body }: { id: number; body: Partial<TreatmentCreate> }) =>
       (await http.patch<Treatment>(`/health/treatments/${id}`, body)).data,
-    onSuccess: () => qc.invalidateQueries({ queryKey: QK })
+    onSuccess: (_data, vars) => {
+      qc.invalidateQueries({ queryKey: QK });
+      if (vars.body.animalId) {
+        qc.invalidateQueries({ queryKey: ['animal', vars.body.animalId] });
+      }
+    }
   });
 }
 
@@ -64,6 +72,9 @@ export function useDeleteTreatment() {
   return useMutation({
     mutationFn: async (id: number) =>
       (await http.delete(`/health/treatments/${id}`)).data,
-    onSuccess: () => qc.invalidateQueries({ queryKey: QK })
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: QK });
+      qc.invalidateQueries({ queryKey: ['animal'] });
+    }
   });
 }

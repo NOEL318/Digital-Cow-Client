@@ -30,10 +30,13 @@ export function useCreateCalving() {
   return useMutation({
     mutationFn: async (body: CalvingCreate) =>
       (await http.post<Calving>('/reproduction/calvings', body)).data,
-    onSuccess: () => {
+    onSuccess: (_data, body) => {
       qc.invalidateQueries({ queryKey: QK });
       qc.invalidateQueries({ queryKey: ['animals'] });
       qc.invalidateQueries({ queryKey: ['reproduction', 'alerts'] });
+      if (body.animalId) {
+        qc.invalidateQueries({ queryKey: ['animal', body.animalId] });
+      }
     }
   });
 }
@@ -44,7 +47,12 @@ export function useUpdateCalving() {
   return useMutation({
     mutationFn: async ({ id, body }: { id: number; body: Partial<CalvingCreate> }) =>
       (await http.patch<Calving>(`/reproduction/calvings/${id}`, body)).data,
-    onSuccess: () => qc.invalidateQueries({ queryKey: QK })
+    onSuccess: (_data, vars) => {
+      qc.invalidateQueries({ queryKey: QK });
+      if (vars.body.animalId) {
+        qc.invalidateQueries({ queryKey: ['animal', vars.body.animalId] });
+      }
+    }
   });
 }
 
@@ -54,6 +62,9 @@ export function useDeleteCalving() {
   return useMutation({
     mutationFn: async (id: number) =>
       (await http.delete(`/reproduction/calvings/${id}`)).data,
-    onSuccess: () => qc.invalidateQueries({ queryKey: QK })
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: QK });
+      qc.invalidateQueries({ queryKey: ['animal'] });
+    }
   });
 }

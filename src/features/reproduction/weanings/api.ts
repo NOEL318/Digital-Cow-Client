@@ -30,7 +30,12 @@ export function useCreateWeaning() {
   return useMutation({
     mutationFn: async (body: WeaningCreate) =>
       (await http.post<Weaning>('/reproduction/weanings', body)).data,
-    onSuccess: () => qc.invalidateQueries({ queryKey: QK })
+    onSuccess: (_data, body) => {
+      qc.invalidateQueries({ queryKey: QK });
+      if ((body as { animalId?: number }).animalId) {
+        qc.invalidateQueries({ queryKey: ['animal', (body as { animalId?: number }).animalId] });
+      }
+    }
   });
 }
 
@@ -40,7 +45,10 @@ export function useUpdateWeaning() {
   return useMutation({
     mutationFn: async ({ id, body }: { id: number; body: Partial<WeaningCreate> }) =>
       (await http.patch<Weaning>(`/reproduction/weanings/${id}`, body)).data,
-    onSuccess: () => qc.invalidateQueries({ queryKey: QK })
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: QK });
+      qc.invalidateQueries({ queryKey: ['animal'] });
+    }
   });
 }
 
@@ -50,6 +58,9 @@ export function useDeleteWeaning() {
   return useMutation({
     mutationFn: async (id: number) =>
       (await http.delete(`/reproduction/weanings/${id}`)).data,
-    onSuccess: () => qc.invalidateQueries({ queryKey: QK })
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: QK });
+      qc.invalidateQueries({ queryKey: ['animal'] });
+    }
   });
 }

@@ -30,7 +30,10 @@ export function useCreateHeat() {
   return useMutation({
     mutationFn: async (body: HeatCreate) =>
       (await http.post<Heat>('/reproduction/heats', body)).data,
-    onSuccess: () => qc.invalidateQueries({ queryKey: QK })
+    onSuccess: (_data, body) => {
+      qc.invalidateQueries({ queryKey: QK });
+      if (body.animalId) qc.invalidateQueries({ queryKey: ['animal', body.animalId] });
+    }
   });
 }
 
@@ -40,7 +43,10 @@ export function useUpdateHeat() {
   return useMutation({
     mutationFn: async ({ id, body }: { id: number; body: Partial<HeatCreate> }) =>
       (await http.patch<Heat>(`/reproduction/heats/${id}`, body)).data,
-    onSuccess: () => qc.invalidateQueries({ queryKey: QK })
+    onSuccess: (_data, vars) => {
+      qc.invalidateQueries({ queryKey: QK });
+      if (vars.body.animalId) qc.invalidateQueries({ queryKey: ['animal', vars.body.animalId] });
+    }
   });
 }
 
@@ -50,6 +56,9 @@ export function useDeleteHeat() {
   return useMutation({
     mutationFn: async (id: number) =>
       (await http.delete(`/reproduction/heats/${id}`)).data,
-    onSuccess: () => qc.invalidateQueries({ queryKey: QK })
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: QK });
+      qc.invalidateQueries({ queryKey: ['animal'] });
+    }
   });
 }

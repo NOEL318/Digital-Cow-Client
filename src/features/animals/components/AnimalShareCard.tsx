@@ -1,12 +1,13 @@
 /**
  * Este componente muestra una tarjeta resumen del modulo animals.
  */
-import { useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { QRCodeSVG } from 'qrcode.react';
 import { Share2, Printer, MessageCircle, X } from 'lucide-react';
 import type { AnimalResponse } from '@/features/animals/types';
 import { AnimalAvatar } from '@/components/ui/animal-avatar';
 import { BigButton } from '@/components/ui/big-button';
+import { useShareToken } from '@/features/animals/share/api';
 
 interface AnimalShareCardProps {
   open: boolean;
@@ -27,12 +28,33 @@ export function AnimalShareCard({
   open, animal, coverPhotoUrl, daysInMilk, lastCalving, onClose
 }: AnimalShareCardProps) {
   const cardRef = useRef<HTMLDivElement>(null);
+  const tokenMutation = useShareToken();
+  const [publicUrl, setPublicUrl] = useState<string | null>(null);
+  const [tokenError, setTokenError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!open) {
+      setPublicUrl(null);
+      setTokenError(null);
+      return;
+    }
+    let cancelled = false;
+    tokenMutation.mutateAsync(animal.id)
+      .then(r => {
+        if (cancelled) return;
+        setPublicUrl(`${window.location.origin}/compartir/animal/${r.shareToken}`);
+      })
+      .catch(() => {
+        if (!cancelled) setTokenError('No pudimos generar el enlace.');
+      });
+    return () => { cancelled = true; };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open, animal.id]);
 
   if (!open) return null;
 
-  const detailUrl = `${window.location.origin}/animales/${animal.id}`;
-
   function shareWhatsApp() {
+    if (!publicUrl) return;
     const lines = [
       `*${animal.internalTag}* ${animal.name ? `· ${animal.name}` : ''}`.trim(),
       `Sexo: ${animal.sex === 'FEMALE' ? 'Hembra' : 'Macho'}`,
@@ -41,7 +63,7 @@ export function AnimalShareCard({
     if (animal.birthDate) lines.push(`Nació: ${animal.birthDate}`);
     if (daysInMilk != null) lines.push(`Días en leche: ${daysInMilk}`);
     if (lastCalving) lines.push(`Último parto: ${lastCalving}`);
-    lines.push('', `Más info: ${detailUrl}`);
+    lines.push('', `Ve sus estadísticas: ${publicUrl}`);
     const url = `https://wa.me/?text=${encodeURIComponent(lines.join('\n'))}`;
     window.open(url, '_blank');
   }
@@ -98,14 +120,28 @@ export function AnimalShareCard({
           </div>
 
           <div className="flex justify-center pt-2">
-            <QRCodeSVG value={detailUrl} size={140} includeMargin />
+            {publicUrl ? (
+              <QRCodeSVG value={publicUrl} size={140} includeMargin />
+            ) : (
+              <div className="h-[140px] w-[140px] flex items-center justify-center text-xs text-muted-foreground">
+                Generando enlace...
+              </div>
+            )}
           </div>
-          <p className="text-xs text-center text-muted-foreground break-all">{detailUrl}</p>
+          {publicUrl ? (
+            <p className="text-xs text-center text-muted-foreground break-all">{publicUrl}</p>
+          ) : null}
+          {tokenError ? (
+            <p role="alert" className="text-xs text-center text-destructive">{tokenError}</p>
+          ) : null}
+          <p className="text-[11px] text-center text-muted-foreground italic">
+            Quien reciba el enlace verá solo las estadísticas del animal, sin poder modificar nada.
+          </p>
         </div>
 
         <div className="flex justify-between gap-3 print:hidden">
           <BigButton label="Imprimir PDF" icon={Printer} variant="outline" onClick={printCard} />
-          <BigButton label="WhatsApp" icon={MessageCircle} onClick={shareWhatsApp} />
+          <BigButton label="WhatsApp" icon={MessageCircle} onClick={shareWhatsApp} disabled={!publicUrl} />
         </div>
       </div>
     </div>

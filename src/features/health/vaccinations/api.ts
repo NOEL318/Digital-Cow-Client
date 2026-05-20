@@ -40,9 +40,12 @@ export function useCreateVaccination() {
   return useMutation({
     mutationFn: async (body: VaccinationCreate) =>
       (await http.post<Vaccination>('/health/vaccinations', body)).data,
-    onSuccess: () => {
+    onSuccess: (_data, body) => {
       qc.invalidateQueries({ queryKey: QK });
       qc.invalidateQueries({ queryKey: ['health', 'alerts'] });
+      if (body.animalId) {
+        qc.invalidateQueries({ queryKey: ['animal', body.animalId] });
+      }
     }
   });
 }
@@ -59,6 +62,7 @@ export function useCreateVaccinationBulk() {
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: QK });
       qc.invalidateQueries({ queryKey: ['health', 'alerts'] });
+      qc.invalidateQueries({ queryKey: ['animal'] });
     }
   });
 }
@@ -69,7 +73,12 @@ export function useUpdateVaccination() {
   return useMutation({
     mutationFn: async ({ id, body }: { id: number; body: Partial<VaccinationCreate> }) =>
       (await http.patch<Vaccination>(`/health/vaccinations/${id}`, body)).data,
-    onSuccess: () => qc.invalidateQueries({ queryKey: QK })
+    onSuccess: (_data, vars) => {
+      qc.invalidateQueries({ queryKey: QK });
+      if (vars.body.animalId) {
+        qc.invalidateQueries({ queryKey: ['animal', vars.body.animalId] });
+      }
+    }
   });
 }
 
@@ -79,6 +88,9 @@ export function useDeleteVaccination() {
   return useMutation({
     mutationFn: async (id: number) =>
       (await http.delete(`/health/vaccinations/${id}`)).data,
-    onSuccess: () => qc.invalidateQueries({ queryKey: QK })
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: QK });
+      qc.invalidateQueries({ queryKey: ['animal'] });
+    }
   });
 }

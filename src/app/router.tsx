@@ -21,6 +21,7 @@ import AnimalEditPage from '@/pages/animals/AnimalEditPage';
 import AnimalPrintablePage from '@/pages/animals/AnimalPrintablePage';
 import AdminLoginPage from '@/pages/admin/AdminLoginPage';
 import AdminAccountsPage from '@/pages/admin/AdminAccountsPage';
+import PublicAnimalSharePage from '@/pages/animals/PublicAnimalSharePage';
 import HealthPanelPage from '@/pages/health/HealthPanelPage';
 import HealthPlanDetailPage from '@/pages/health/HealthPlanDetailPage';
 import VaccinationsPage from '@/pages/health/VaccinationsPage';
@@ -88,6 +89,8 @@ export function AppRouter() {
 
         <Route path="/admin/login" element={<AdminLoginPage />} />
         <Route path="/admin/accounts" element={<AdminAccountsPage />} />
+
+        <Route path="/compartir/animal/:token" element={<PublicAnimalSharePage />} />
 
         <Route element={<ProtectedRoute><AppLayout /></ProtectedRoute>}>
           <Route path="/inicio" element={<InicioPage />} />

@@ -29,7 +29,10 @@ export function PhotoGallery({ animalId }: { animalId: number }) {
   });
   const cover = useMutation({
     mutationFn: (id: number) => http.patch(`/animals/${animalId}/cover-photo/${id}`),
-    onSuccess: () => qc.invalidateQueries({ queryKey: ['animal', animalId] })
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['animal', animalId] });
+      qc.invalidateQueries({ queryKey: ['animals'] });
+    }
   });
 
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
