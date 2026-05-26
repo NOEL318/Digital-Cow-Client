@@ -43,6 +43,7 @@ export function useCreateDiagnosis() {
     onSuccess: (_data, body) => {
       qc.invalidateQueries({ queryKey: QK });
       qc.invalidateQueries({ queryKey: ['health', 'alerts'] });
+      qc.invalidateQueries({ queryKey: ['dashboard', 'health'] });
       if (body.animalId) {
         qc.invalidateQueries({ queryKey: ['animal', body.animalId] });
       }
@@ -58,6 +59,8 @@ export function useUpdateDiagnosis() {
       (await http.patch<Diagnosis>(`/health/diagnoses/${id}`, body)).data,
     onSuccess: (_data, vars) => {
       qc.invalidateQueries({ queryKey: QK });
+      qc.invalidateQueries({ queryKey: ['health', 'alerts'] });
+      qc.invalidateQueries({ queryKey: ['dashboard', 'health'] });
       if (vars.body.animalId) {
         qc.invalidateQueries({ queryKey: ['animal', vars.body.animalId] });
       }
@@ -73,6 +76,8 @@ export function useDeleteDiagnosis() {
       (await http.delete(`/health/diagnoses/${id}`)).data,
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: QK });
+      qc.invalidateQueries({ queryKey: ['health', 'alerts'] });
+      qc.invalidateQueries({ queryKey: ['dashboard', 'health'] });
       qc.invalidateQueries({ queryKey: ['animal'] });
     }
   });

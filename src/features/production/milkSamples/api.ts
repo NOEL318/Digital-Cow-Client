@@ -30,7 +30,12 @@ export function useCreateMilkSample() {
   return useMutation({
     mutationFn: async (body: MilkSampleCreate) =>
       (await http.post<MilkSample>('/production/milk-samples', body)).data,
-    onSuccess: () => qc.invalidateQueries({ queryKey: QK })
+    onSuccess: (_data, body) => {
+      qc.invalidateQueries({ queryKey: QK });
+      if (body.animalId) {
+        qc.invalidateQueries({ queryKey: ['animal', body.animalId] });
+      }
+    }
   });
 }
 
@@ -40,7 +45,12 @@ export function useUpdateMilkSample() {
   return useMutation({
     mutationFn: async ({ id, body }: { id: number; body: Partial<MilkSampleCreate> }) =>
       (await http.patch<MilkSample>(`/production/milk-samples/${id}`, body)).data,
-    onSuccess: () => qc.invalidateQueries({ queryKey: QK })
+    onSuccess: (_data, vars) => {
+      qc.invalidateQueries({ queryKey: QK });
+      if (vars.body.animalId) {
+        qc.invalidateQueries({ queryKey: ['animal', vars.body.animalId] });
+      }
+    }
   });
 }
 
@@ -50,6 +60,9 @@ export function useDeleteMilkSample() {
   return useMutation({
     mutationFn: async (id: number) =>
       (await http.delete(`/production/milk-samples/${id}`)).data,
-    onSuccess: () => qc.invalidateQueries({ queryKey: QK })
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: QK });
+      qc.invalidateQueries({ queryKey: ['animal'] });
+    }
   });
 }

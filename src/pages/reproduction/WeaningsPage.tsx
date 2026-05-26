@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/ui/table';
 import { useWeanings, useCreateWeaning } from '@/features/reproduction/weanings/api';
 import { WeaningForm } from '@/features/reproduction/weanings/components/WeaningForm';
 
@@ -33,24 +34,24 @@ export default function WeaningsPage() {
           </DialogContent>
         </Dialog>
       </div>
-      <table className="w-full border rounded">
-        <thead>
-          <tr className="bg-muted">
-            <th className="p-2 text-left">{t('reproduction:weaning.weanedAt')}</th>
-            <th className="p-2 text-left">{t('reproduction:weaning.animal')}</th>
-            <th className="p-2 text-right">{t('reproduction:weaning.weightKg')}</th>
-          </tr>
-        </thead>
-        <tbody>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>{t('reproduction:weaning.weanedAt')}</TableHead>
+            <TableHead>{t('reproduction:weaning.animal')}</TableHead>
+            <TableHead className="text-right">{t('reproduction:weaning.weightKg')}</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
           {weanings.data?.map(w => (
-            <tr key={w.id} className="border-t">
-              <td className="p-2">{w.weanedAt}</td>
-              <td className="p-2">{w.animalId}</td>
-              <td className="p-2 text-right">{w.weightKg ?? '-'}</td>
-            </tr>
+            <TableRow key={w.id}>
+              <TableCell>{w.weanedAt}</TableCell>
+              <TableCell>{w.animalId}</TableCell>
+              <TableCell className="text-right">{w.weightKg ?? '-'}</TableCell>
+            </TableRow>
           ))}
-        </tbody>
-      </table>
+        </TableBody>
+      </Table>
     </div>
   );
 }

@@ -9,6 +9,9 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import {
+  Table, TableHeader, TableBody, TableRow, TableHead, TableCell
+} from '@/components/ui/table';
 import { localizedName } from '@/lib/catalog';
 import { toArray } from '@/lib/page';
 import { useExpenses, useCreateExpense, type ExpenseFilters } from '@/features/finance/expenses/api';
@@ -77,30 +80,34 @@ export default function ExpensesPage() {
         </div>
       </div>
 
-      <div className="text-sm text-muted-foreground">{t('finance:expense.total')}: <span className="font-semibold">{total.toFixed(2)}</span></div>
+      <div className="text-sm text-muted-foreground">
+        {t('finance:expense.total')}: <span className="font-semibold text-red-700 dark:text-red-400">{total.toFixed(2)}</span>
+      </div>
 
-      <table className="w-full border rounded">
-        <thead>
-          <tr className="bg-muted">
-            <th className="p-2 text-left">{t('finance:expense.incurredAt')}</th>
-            <th className="p-2 text-left">{t('finance:expense.category')}</th>
-            <th className="p-2 text-left">{t('finance:expense.description')}</th>
-            <th className="p-2 text-left">{t('finance:expense.vendor')}</th>
-            <th className="p-2 text-right">{t('finance:expense.amount')}</th>
-          </tr>
-        </thead>
-        <tbody>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>{t('finance:expense.incurredAt')}</TableHead>
+            <TableHead>{t('finance:expense.category')}</TableHead>
+            <TableHead>{t('finance:expense.description')}</TableHead>
+            <TableHead>{t('finance:expense.vendor')}</TableHead>
+            <TableHead className="text-right">{t('finance:expense.amount')}</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
           {expenseRows.map(e => (
-            <tr key={e.id} className="border-t">
-              <td className="p-2">{e.incurredAt}</td>
-              <td className="p-2">{categoryName(e.expenseCategoryId)}</td>
-              <td className="p-2">{e.description ?? '-'}</td>
-              <td className="p-2">{e.vendor ?? '-'}</td>
-              <td className="p-2 text-right">{Number(e.amount).toFixed(2)} {e.currency}</td>
-            </tr>
+            <TableRow key={e.id}>
+              <TableCell>{e.incurredAt}</TableCell>
+              <TableCell>{categoryName(e.expenseCategoryId)}</TableCell>
+              <TableCell>{e.description ?? '-'}</TableCell>
+              <TableCell>{e.vendor ?? '-'}</TableCell>
+              <TableCell className="text-right font-semibold text-red-700 dark:text-red-400">
+                {Number(e.amount).toFixed(2)} {e.currency}
+              </TableCell>
+            </TableRow>
           ))}
-        </tbody>
-      </table>
+        </TableBody>
+      </Table>
     </div>
   );
 }

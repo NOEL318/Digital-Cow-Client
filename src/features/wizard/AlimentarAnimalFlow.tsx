@@ -3,7 +3,7 @@
  */
 import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { Wheat, Calendar, Package } from 'lucide-react';
 import { http } from '@/lib/http';
@@ -18,8 +18,10 @@ const COMMON_KG = [1, 2, 3, 5, 8, 10];
 
 /** Wizard "Alimente" para un solo animal, con selector jerárquico. */
 export function AlimentarAnimalFlow() {
+  const { t } = useTranslation('wizard');
   const { t: tCommon } = useTranslation('common');
   const nav = useNavigate();
+  const qc = useQueryClient();
   const [params] = useSearchParams();
   const prefAnimalId = params.get('animalId') ? Number(params.get('animalId')) : null;
 
@@ -61,10 +63,13 @@ export function AlimentarAnimalFlow() {
       await http.post('/feeding/records', {
         animalId: ctx.animal.id, feedItemId, consumedAt, totalKg: Number(totalKg)
       });
+      qc.invalidateQueries({ queryKey: ['feeding', 'records'] });
+      qc.invalidateQueries({ queryKey: ['feeding', 'cost-summary'] });
+      qc.invalidateQueries({ queryKey: ['animal', ctx.animal.id] });
       nav(`/animales/${ctx.animal.id}`);
     } catch (e) {
       setError((e as { response?: { data?: { error?: { message?: string } } } })
-        ?.response?.data?.error?.message ?? 'No se pudo guardar.');
+        ?.response?.data?.error?.message ?? t('alimentar.saveFailed'));
     } finally {
       setSubmitting(false);
     }
@@ -72,8 +77,8 @@ export function AlimentarAnimalFlow() {
 
   if (step === 1) {
     return (
-      <WizardStep current={1} total={3} title="¿A cuál vaca alimentaste?"
-        subtitle="Cada vaca puede comer distinto aunque esté en el mismo corral."
+      <WizardStep current={1} total={3} title={t('alimentar.step1Title')}
+        subtitle={t('alimentar.step1Subtitle')}
         canAdvance={!!ctx.animal} onNext={() => setStep(2)}>
         <WizardLocationSelector value={ctx} onChange={setCtx} />
       </WizardStep>
@@ -82,10 +87,10 @@ export function AlimentarAnimalFlow() {
 
   if (step === 2) {
     return (
-      <WizardStep current={2} total={3} title="¿Qué le diste y cuánto?"
+      <WizardStep current={2} total={3} title={t('alimentar.step2Title')}
         canAdvance={!!feedItemId && !!totalKg && Number(totalKg) > 0}
         onNext={() => setStep(3)} onBack={() => setStep(1)}>
-        <HelpfulField id="alim-item" label="Alimento" icon={Package} required>
+        <HelpfulField id="alim-item" label={t('alimentar.feedLabel')} icon={Package} required>
           <select id="alim-item" value={feedItemId ?? ''}
             onChange={e => setFeedItemId(e.target.value ? Number(e.target.value) : null)}
             className="w-full border rounded-md px-3 py-2 text-base bg-background">
@@ -93,7 +98,7 @@ export function AlimentarAnimalFlow() {
             {(feedItems.data ?? []).map(f => <option key={f.id} value={f.id}>{f.nameEs}</option>)}
           </select>
         </HelpfulField>
-        <HelpfulField id="alim-kg" label="Kilogramos" icon={Wheat} required example="3.5">
+        <HelpfulField id="alim-kg" label={t('alimentar.kgLabel')} icon={Wheat} required example={t('alimentar.kgExample')}>
           <div className="space-y-2">
             <input id="alim-kg" type="number" inputMode="decimal" min={0} step={0.1}
               value={totalKg} onChange={e => setTotalKg(e.target.value)}
@@ -108,7 +113,7 @@ export function AlimentarAnimalFlow() {
             </div>
           </div>
         </HelpfulField>
-        <HelpfulField id="alim-date" label="Fecha" icon={Calendar} required>
+        <HelpfulField id="alim-date" label={t('alimentar.dateLabel')} icon={Calendar} required>
           <input id="alim-date" type="date" value={consumedAt}
             onChange={e => setConsumedAt(e.target.value)}
             className="w-full border rounded-md px-3 py-2 text-base bg-background" />
@@ -119,7 +124,7 @@ export function AlimentarAnimalFlow() {
 
   const item = feedItems.data?.find(f => f.id === feedItemId);
   return (
-    <WizardStep current={3} total={3} title="¿Listo? Así se guardará"
+    <WizardStep current={3} total={3} title={t('alimentar.step3Title')}
       canAdvance={!submitting} onNext={save} onBack={() => setStep(2)} isLast>
       <div className="rounded-xl border p-4 space-y-3">
         <div className="flex items-center gap-3">
@@ -132,7 +137,7 @@ export function AlimentarAnimalFlow() {
         </div>
         <p className="text-2xl font-bold flex items-center gap-2">
           <Wheat className="h-6 w-6 text-primary" aria-hidden />
-          {totalKg} kg de {item?.nameEs}
+          {totalKg} kg {t('alimentar.summaryOf')} {item?.nameEs}
         </p>
         <p className="text-sm text-muted-foreground">{consumedAt}</p>
       </div>

@@ -37,7 +37,7 @@ export default function AjustesIndexPage() {
   const groups: Group[] = [
     {
       id: 'cuenta',
-      title: 'Mi cuenta',
+      title: t('ajustes.groupAccount'),
       icon: User,
       blocks: [
         { id: 'perfil',  title: t('nav.ajustesPerfil'),  icon: User,        render: () => <ProfileSettingsPage /> },
@@ -46,7 +46,7 @@ export default function AjustesIndexPage() {
     },
     {
       id: 'rancho',
-      title: 'Mi rancho',
+      title: t('ajustes.groupRanch'),
       icon: Map,
       blocks: [
         { id: 'ranchos', title: t('nav.ajustesRanchos'), icon: Map,   render: () => <RanchesPage /> },
@@ -55,7 +55,7 @@ export default function AjustesIndexPage() {
     },
     {
       id: 'catalogos',
-      title: 'Catálogos',
+      title: t('ajustes.groupCatalogs'),
       icon: Tags,
       blocks: [
         { id: 'medicamentos', title: t('nav.ajustesMedicamentos'), icon: Pill, render: () => <AjustesMedicamentosPage /> },
@@ -64,7 +64,7 @@ export default function AjustesIndexPage() {
     },
     {
       id: 'preferencias',
-      title: 'Preferencias',
+      title: t('ajustes.groupPreferences'),
       icon: Palette,
       blocks: [
         { id: 'idioma-tema', title: t('nav.ajustesIdiomaTema'), icon: Palette, render: () => <PreferenciasBlock /> }
@@ -76,12 +76,12 @@ export default function AjustesIndexPage() {
     <div className="space-y-6 max-w-5xl mx-auto pb-12">
       <header className="space-y-1">
         <h1 className="text-2xl font-bold">{t('nav.ajustes')}</h1>
-        <p className="text-muted-foreground">Toda la configuración de tu cuenta y rancho en un solo lugar.</p>
+        <p className="text-muted-foreground">{t('ajustes.subtitle')}</p>
       </header>
 
       {/* Chips de navegacion rapida a categorias */}
       <nav
-        aria-label="Categorías de ajustes"
+        aria-label={t('ajustes.categoriesAria')}
         className="sticky top-0 z-20 -mx-4 px-4 py-2 bg-background border-b flex gap-2 overflow-x-auto print:hidden"
       >
         {groups.map(g => {
@@ -145,7 +145,7 @@ function PreferenciasBlock() {
     const ok = await enablePush();
     setPerm(pushPermission());
     if (!ok && perm !== 'granted') {
-      window.alert('No se activaron las notificaciones. Revisa los permisos del navegador.');
+      window.alert(t('notifications.enableFailed'));
     }
   }
 
@@ -163,23 +163,23 @@ function PreferenciasBlock() {
       </div>
 
       <div className="border-t pt-3 space-y-2">
-        <p className="text-sm font-medium">Notificaciones</p>
+        <p className="text-sm font-medium">{t('notifications.title')}</p>
         {perm === 'unsupported' ? (
           <p className="text-sm text-muted-foreground inline-flex items-center gap-2">
             <BellOff className="h-4 w-4" aria-hidden />
-            Tu navegador no soporta notificaciones.
+            {t('notifications.unsupported')}
           </p>
         ) : perm === 'granted' ? (
-          <p className="text-sm text-green-700 inline-flex items-center gap-2">
+          <p className="text-sm text-success inline-flex items-center gap-2">
             <Bell className="h-4 w-4" aria-hidden />
-            Notificaciones activas.
+            {t('notifications.active')}
           </p>
         ) : (
           <div className="space-y-2">
             <p className="text-sm text-muted-foreground">
-              Te avisamos cuando algo importante pase aunque no tengas la app abierta.
+              {t('notifications.pitch')}
             </p>
-            <BigButton label="Activar notificaciones" icon={Bell} onClick={activar} />
+            <BigButton label={t('notifications.enable')} icon={Bell} onClick={activar} />
           </div>
         )}
       </div>

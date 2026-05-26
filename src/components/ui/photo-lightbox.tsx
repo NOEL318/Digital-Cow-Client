@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { ChevronLeft, ChevronRight, X, Download } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 export interface LightboxPhoto {
   id: number | string;
@@ -25,6 +26,7 @@ interface PhotoLightboxProps {
  * los lados que avanzan o retroceden.
  */
 export function PhotoLightbox({ photos, initialIndex, open, onClose }: PhotoLightboxProps) {
+  const { t } = useTranslation('common');
   const [index, setIndex] = useState(initialIndex);
 
   useEffect(() => {
@@ -53,14 +55,14 @@ export function PhotoLightbox({ photos, initialIndex, open, onClose }: PhotoLigh
     <div
       role="dialog"
       aria-modal="true"
-      aria-label="Visor de fotos"
+      aria-label={t('lightbox.ariaLabel')}
       className="fixed inset-0 z-50 bg-black/95 flex items-center justify-center"
       onClick={onClose}
     >
       <button
         type="button"
         onClick={onClose}
-        aria-label="Cerrar"
+        aria-label={t('lightbox.close')}
         className="absolute top-3 right-3 z-10 h-12 w-12 rounded-full bg-white/10 text-white flex items-center justify-center hover:bg-white/20"
       >
         <X className="h-6 w-6" aria-hidden />
@@ -72,7 +74,7 @@ export function PhotoLightbox({ photos, initialIndex, open, onClose }: PhotoLigh
         target="_blank"
         rel="noreferrer"
         onClick={e => e.stopPropagation()}
-        aria-label="Descargar foto"
+        aria-label={t('lightbox.download')}
         className="absolute top-3 left-3 z-10 h-12 w-12 rounded-full bg-white/10 text-white flex items-center justify-center hover:bg-white/20"
       >
         <Download className="h-6 w-6" aria-hidden />
@@ -83,7 +85,7 @@ export function PhotoLightbox({ photos, initialIndex, open, onClose }: PhotoLigh
           <button
             type="button"
             onClick={e => { e.stopPropagation(); setIndex(i => Math.max(0, i - 1)); }}
-            aria-label="Anterior"
+            aria-label={t('lightbox.prev')}
             disabled={index === 0}
             className="absolute left-3 top-1/2 -translate-y-1/2 z-10 h-14 w-14 rounded-full bg-white/10 text-white flex items-center justify-center hover:bg-white/20 disabled:opacity-30"
           >
@@ -92,7 +94,7 @@ export function PhotoLightbox({ photos, initialIndex, open, onClose }: PhotoLigh
           <button
             type="button"
             onClick={e => { e.stopPropagation(); setIndex(i => Math.min(photos.length - 1, i + 1)); }}
-            aria-label="Siguiente"
+            aria-label={t('lightbox.next')}
             disabled={index === photos.length - 1}
             className="absolute right-3 top-1/2 -translate-y-1/2 z-10 h-14 w-14 rounded-full bg-white/10 text-white flex items-center justify-center hover:bg-white/20 disabled:opacity-30"
           >
@@ -103,7 +105,7 @@ export function PhotoLightbox({ photos, initialIndex, open, onClose }: PhotoLigh
 
       <img
         src={current.url}
-        alt={current.alt ?? `Foto ${index + 1}`}
+        alt={current.alt ?? t('lightbox.photoAlt', { n: index + 1 })}
         onClick={e => e.stopPropagation()}
         className="max-w-[95vw] max-h-[90vh] object-contain cursor-zoom-out"
       />

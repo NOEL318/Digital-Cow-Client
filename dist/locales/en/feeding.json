@@ -78,5 +78,43 @@
     "label": "Label",
     "totalCost": "Total cost",
     "totalKg": "Total in kilograms"
+  },
+  "panel": {
+    "items": { "title": "Feed items", "desc": "Things you feed them and the cost per kilogram." },
+    "plans": { "title": "Feeding plans", "desc": "What each lot eats and how much." },
+    "records": { "title": "Daily records", "desc": "What was given to each lot each day." },
+    "cost": { "title": "Cost summary", "desc": "How much it costs to feed your ranch." }
+  },
+  "lotConditions": {
+    "title": "Lot conditions today",
+    "addOther": "Other",
+    "hint": "Tap a condition to log it with today's date. It will appear below in the history.",
+    "recentHistory": "Recent history",
+    "loading": "Loading...",
+    "emptyTitle": "No records yet",
+    "emptyDesc": "Start logging what you see in the lot: rain, mud, flies, and more.",
+    "save": "Save",
+    "customPlaceholder": "Example: the road became impassable",
+    "customFallback": "Other condition",
+    "deleteAria": "Delete",
+    "helpText": "Log what happens in the lot day by day: rain, mud, pests, low water, poor pasture. Over time you'll see patterns (always muddy in July? flies hit hard in March?) and can plan ahead: move cattle, buy treatments before the season, reinforce infrastructure. Tap any condition to save it with today's date.",
+    "preset": {
+      "MUD_HIGH": "Heavy mud",
+      "MUD_MEDIUM": "Moderate mud",
+      "MUD_LOW": "Light mud",
+      "RAIN_HEAVY": "Heavy rain",
+      "RAIN_LIGHT": "Light rain",
+      "DROUGHT": "Drought",
+      "HEAT_WAVE": "Heat wave",
+      "COLD": "Cold",
+      "FLIES": "Flies",
+      "TICKS": "Ticks",
+      "OTHER_PEST": "Other pest",
+      "WATER_OUT": "No water",
+      "WATER_LOW": "Low water",
+      "PASTURE_LOW": "Low pasture",
+      "PASTURE_GOOD": "Good pasture",
+      "INFRA_DAMAGE": "Fence damage"
+    }
   }
 }

@@ -49,6 +49,7 @@ export function useUpdateWeighing() {
       (await http.patch<Weighing>(`/production/weighings/${id}`, body)).data,
     onSuccess: (_data, vars) => {
       qc.invalidateQueries({ queryKey: QK });
+      qc.invalidateQueries({ queryKey: ['production', 'growth-curve'] });
       if (vars.body.animalId) {
         qc.invalidateQueries({ queryKey: ['animal', vars.body.animalId] });
       }
@@ -78,6 +79,8 @@ export function useDeleteWeighing() {
       (await http.delete(`/production/weighings/${id}`)).data,
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: QK });
+      qc.invalidateQueries({ queryKey: ['dashboard', 'production'] });
+      qc.invalidateQueries({ queryKey: ['production', 'growth-curve'] });
       qc.invalidateQueries({ queryKey: ['animal'] });
     }
   });

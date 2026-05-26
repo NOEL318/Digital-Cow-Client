@@ -6,6 +6,9 @@ import { useParams } from 'react-router-dom';
 import { Printer } from 'lucide-react';
 import i18n from '@/lib/i18n';
 import { Button } from '@/components/ui/button';
+import {
+  Table, TableHeader, TableBody, TableRow, TableHead, TableCell
+} from '@/components/ui/table';
 import { useAnimalReport } from '@/features/reports/animalReport/api';
 
 /**
@@ -37,122 +40,160 @@ export default function AnimalReportPage() {
       <section className="border rounded p-4">
         <h2 className="font-semibold mb-2">{t('reports:animal.info')}</h2>
         <div className="grid grid-cols-2 md:grid-cols-3 gap-2 text-sm">
-          <div>Tag: {r.animal.internalTag}</div>
-          <div>Sex: {r.animal.sex}</div>
-          <div>Purpose: {r.animal.purpose}</div>
-          <div>Status: {r.animal.status}</div>
-          <div>Birth: {r.animal.birthDate ?? '-'}</div>
-          <div>Ranch: {r.animal.ranchName ?? `#${r.animal.ranchId}`}</div>
-          <div>Lot: {r.animal.lotName ?? (r.animal.lotId != null ? `#${r.animal.lotId}` : '-')}</div>
-          <div>Breed: {pick(r.animal.breedNameEn, r.animal.breedNameEs, r.animal.breedId)}</div>
+          <div>{t('reports:animal.colTag')}: <span className="font-medium">{r.animal.internalTag}</span></div>
+          <div>{t('reports:animal.colSex')}: <span className="font-medium">{r.animal.sex}</span></div>
+          <div>{t('reports:animal.colPurpose')}: <span className="font-medium">{r.animal.purpose}</span></div>
+          <div>Status: <span className="font-medium">{r.animal.status}</span></div>
+          <div>{t('reports:animal.colBirth')}: <span className="font-medium">{r.animal.birthDate ?? '-'}</span></div>
+          <div>{t('reports:animal.colRanch')}: <span className="font-medium">{r.animal.ranchName ?? `#${r.animal.ranchId}`}</span></div>
+          <div>{t('reports:animal.colLot')}: <span className="font-medium">{r.animal.lotName ?? (r.animal.lotId != null ? `#${r.animal.lotId}` : '-')}</span></div>
+          <div>{t('reports:animal.colBreed')}: <span className="font-medium">{pick(r.animal.breedNameEn, r.animal.breedNameEs, r.animal.breedId)}</span></div>
         </div>
       </section>
 
       <section>
         <h2 className="font-semibold mb-2">{t('reports:animal.vaccinations')}</h2>
-        <table className="w-full border rounded">
-          <thead><tr className="bg-muted"><th className="p-2 text-left">Fecha</th><th className="p-2 text-left">Vacuna</th><th className="p-2 text-right">Costo</th></tr></thead>
-          <tbody>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>{t('reports:animal.colDate')}</TableHead>
+              <TableHead>{t('reports:animal.colVaccine')}</TableHead>
+              <TableHead className="text-right">{t('reports:animal.colCost')}</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
             {r.vaccinations.map(v => (
-              <tr key={v.id} className="border-t">
-                <td className="p-2">{v.appliedAt}</td>
-                <td className="p-2">{pick(v.vaccineNameEn, v.vaccineNameEs)}</td>
-                <td className="p-2 text-right">{v.cost ?? '-'}</td>
-              </tr>
+              <TableRow key={v.id}>
+                <TableCell>{v.appliedAt}</TableCell>
+                <TableCell>{pick(v.vaccineNameEn, v.vaccineNameEs)}</TableCell>
+                <TableCell className="text-right text-red-700 dark:text-red-400">{v.cost ?? '-'}</TableCell>
+              </TableRow>
             ))}
-          </tbody>
-        </table>
+          </TableBody>
+        </Table>
       </section>
 
       <section>
         <h2 className="font-semibold mb-2">{t('reports:animal.diagnoses')}</h2>
-        <table className="w-full border rounded">
-          <thead><tr className="bg-muted"><th className="p-2 text-left">Fecha</th><th className="p-2 text-left">Enfermedad</th><th className="p-2 text-left">Severidad</th><th className="p-2 text-left">Estado</th></tr></thead>
-          <tbody>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>{t('reports:animal.colDate')}</TableHead>
+              <TableHead>{t('reports:animal.colDisease')}</TableHead>
+              <TableHead>{t('reports:animal.colSeverity')}</TableHead>
+              <TableHead>{t('reports:animal.colStatus')}</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
             {r.diagnoses.map(d => (
-              <tr key={d.id} className="border-t">
-                <td className="p-2">{d.diagnosedAt}</td>
-                <td className="p-2">{pick(d.diseaseNameEn, d.diseaseNameEs)}</td>
-                <td className="p-2">{d.severity ?? '-'}</td>
-                <td className="p-2">{d.status ?? '-'}</td>
-              </tr>
+              <TableRow key={d.id}>
+                <TableCell>{d.diagnosedAt}</TableCell>
+                <TableCell>{pick(d.diseaseNameEn, d.diseaseNameEs)}</TableCell>
+                <TableCell className={
+                  d.severity === 'SEVERE' ? 'text-red-700 dark:text-red-400 font-semibold' :
+                  d.severity === 'MODERATE' ? 'text-orange-600 dark:text-orange-400' :
+                  'text-amber-600 dark:text-amber-400'
+                }>{d.severity ?? '-'}</TableCell>
+                <TableCell>{d.status ?? '-'}</TableCell>
+              </TableRow>
             ))}
-          </tbody>
-        </table>
+          </TableBody>
+        </Table>
       </section>
 
       <section>
         <h2 className="font-semibold mb-2">{t('reports:animal.treatments')}</h2>
-        <table className="w-full border rounded">
-          <thead><tr className="bg-muted"><th className="p-2 text-left">Inicio</th><th className="p-2 text-left">Medicamento</th><th className="p-2 text-right">Costo</th></tr></thead>
-          <tbody>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>{t('reports:animal.colStart')}</TableHead>
+              <TableHead>{t('reports:animal.colMedication')}</TableHead>
+              <TableHead className="text-right">{t('reports:animal.colCost')}</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
             {r.treatments.map(tr => (
-              <tr key={tr.id} className="border-t">
-                <td className="p-2">{tr.startedAt}</td>
-                <td className="p-2">{pick(tr.medicationNameEn, tr.medicationNameEs)}</td>
-                <td className="p-2 text-right">{tr.cost ?? '-'}</td>
-              </tr>
+              <TableRow key={tr.id}>
+                <TableCell>{tr.startedAt}</TableCell>
+                <TableCell>{pick(tr.medicationNameEn, tr.medicationNameEs)}</TableCell>
+                <TableCell className="text-right text-red-700 dark:text-red-400">{tr.cost ?? '-'}</TableCell>
+              </TableRow>
             ))}
-          </tbody>
-        </table>
+          </TableBody>
+        </Table>
       </section>
 
       <section>
         <h2 className="font-semibold mb-2">{t('reports:animal.weighings')}</h2>
-        <table className="w-full border rounded">
-          <thead><tr className="bg-muted"><th className="p-2 text-left">Fecha</th><th className="p-2 text-right">Peso (kg)</th></tr></thead>
-          <tbody>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>{t('reports:animal.colDate')}</TableHead>
+              <TableHead className="text-right">{t('reports:animal.colWeightKg')}</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
             {r.weighings.map(w => (
-              <tr key={w.id} className="border-t">
-                <td className="p-2">{w.weighedAt}</td>
-                <td className="p-2 text-right">{w.weightKg}</td>
-              </tr>
+              <TableRow key={w.id}>
+                <TableCell>{w.weighedAt}</TableCell>
+                <TableCell className="text-right font-medium text-blue-700 dark:text-blue-400">{w.weightKg}</TableCell>
+              </TableRow>
             ))}
-          </tbody>
-        </table>
+          </TableBody>
+        </Table>
       </section>
 
       {r.milkings.length > 0 && (
         <section>
           <h2 className="font-semibold mb-2">{t('reports:animal.milkings')}</h2>
-          <table className="w-full border rounded">
-            <thead><tr className="bg-muted"><th className="p-2 text-left">Fecha</th><th className="p-2 text-right">Litros</th></tr></thead>
-            <tbody>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>{t('reports:animal.colDate')}</TableHead>
+                <TableHead className="text-right">{t('reports:animal.colLiters')}</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
               {r.milkings.map(m => (
-                <tr key={m.id} className="border-t">
-                  <td className="p-2">{m.milkedAt}</td>
-                  <td className="p-2 text-right">{m.liters}</td>
-                </tr>
+                <TableRow key={m.id}>
+                  <TableCell>{m.milkedAt}</TableCell>
+                  <TableCell className="text-right font-medium text-blue-700 dark:text-blue-400">{m.liters}</TableCell>
+                </TableRow>
               ))}
-            </tbody>
-          </table>
+            </TableBody>
+          </Table>
         </section>
       )}
 
       {r.calvings.length > 0 && (
         <section>
           <h2 className="font-semibold mb-2">{t('reports:animal.calvings')}</h2>
-          <table className="w-full border rounded">
-            <thead><tr className="bg-muted"><th className="p-2 text-left">Fecha</th><th className="p-2 text-left">Resultado</th></tr></thead>
-            <tbody>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>{t('reports:animal.colDate')}</TableHead>
+                <TableHead>{t('reports:animal.colOutcome')}</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
               {r.calvings.map(c => (
-                <tr key={c.id} className="border-t">
-                  <td className="p-2">{c.calvingDate}</td>
-                  <td className="p-2">{c.outcome ?? '-'}</td>
-                </tr>
+                <TableRow key={c.id}>
+                  <TableCell>{c.calvingDate}</TableCell>
+                  <TableCell>{c.outcome ?? '-'}</TableCell>
+                </TableRow>
               ))}
-            </tbody>
-          </table>
+            </TableBody>
+          </Table>
         </section>
       )}
 
       {r.sale && (
         <section className="border rounded p-4">
           <h2 className="font-semibold mb-2">{t('reports:animal.sale')}</h2>
-          <div className="text-sm">
-            <div>Fecha: {r.sale.soldAt}</div>
-            <div>Comprador: {r.sale.buyer ?? '-'}</div>
-            <div>Total: {Number(r.sale.totalPrice).toFixed(2)}</div>
+          <div className="text-sm space-y-1">
+            <div>{t('reports:animal.saleDate')}: <span className="font-medium">{r.sale.soldAt}</span></div>
+            <div>{t('reports:animal.saleBuyer')}: <span className="font-medium">{r.sale.buyer ?? '-'}</span></div>
+            <div>{t('reports:animal.saleTotal')}: <span className="font-semibold text-green-700 dark:text-green-400">{Number(r.sale.totalPrice).toFixed(2)}</span></div>
           </div>
         </section>
       )}

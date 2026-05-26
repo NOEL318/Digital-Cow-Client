@@ -32,6 +32,8 @@ export function useCreateAnimalSale() {
       qc.invalidateQueries({ queryKey: ['animals'] });
       qc.invalidateQueries({ queryKey: ['finance', 'incomes'] });
       qc.invalidateQueries({ queryKey: ['dashboard', 'finance'] });
+      qc.invalidateQueries({ queryKey: ['finance', 'pnl'] });
+      qc.invalidateQueries({ queryKey: ['finance', 'cash-flow'] });
     }
   });
 }
@@ -42,7 +44,13 @@ export function useUpdateAnimalSale() {
   return useMutation({
     mutationFn: async ({ id, body }: { id: number; body: Partial<Omit<AnimalSaleCreate, 'animalId'>> }) =>
       (await http.patch<AnimalSale>(`/finance/animal-sales/${id}`, body)).data,
-    onSuccess: () => qc.invalidateQueries({ queryKey: QK })
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: QK });
+      qc.invalidateQueries({ queryKey: ['finance', 'incomes'] });
+      qc.invalidateQueries({ queryKey: ['dashboard', 'finance'] });
+      qc.invalidateQueries({ queryKey: ['finance', 'pnl'] });
+      qc.invalidateQueries({ queryKey: ['finance', 'cash-flow'] });
+    }
   });
 }
 
@@ -56,6 +64,9 @@ export function useDeleteAnimalSale() {
       qc.invalidateQueries({ queryKey: QK });
       qc.invalidateQueries({ queryKey: ['animals'] });
       qc.invalidateQueries({ queryKey: ['finance', 'incomes'] });
+      qc.invalidateQueries({ queryKey: ['dashboard', 'finance'] });
+      qc.invalidateQueries({ queryKey: ['finance', 'pnl'] });
+      qc.invalidateQueries({ queryKey: ['finance', 'cash-flow'] });
     }
   });
 }

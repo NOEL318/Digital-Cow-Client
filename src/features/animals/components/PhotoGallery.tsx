@@ -17,7 +17,7 @@ interface Photo { id: number; url: string }
  * navegacion por flechas y teclado).
  */
 export function PhotoGallery({ animalId }: { animalId: number }) {
-  const { t } = useTranslation('animals');
+  const { t } = useTranslation(['animals', 'common']);
   const qc = useQueryClient();
   const list = useQuery({
     queryKey: ['animal-photos', animalId],
@@ -46,12 +46,12 @@ export function PhotoGallery({ animalId }: { animalId: number }) {
             <button
               type="button"
               onClick={() => setLightboxIndex(i)}
-              aria-label="Ver foto en grande"
+              aria-label={t('animals:photos.viewLarge')}
               className="block w-full focus:outline-none"
             >
               <img
                 src={p.url}
-                alt={`Foto ${p.id}`}
+                alt={t('animals:photos.photoAlt', { n: p.id })}
                 loading="lazy"
                 className="w-full h-40 object-cover cursor-zoom-in group-hover:opacity-90 transition-opacity"
               />
@@ -68,9 +68,9 @@ export function PhotoGallery({ animalId }: { animalId: number }) {
                 size="sm"
                 variant="ghost"
                 onClick={() => {
-                  if (window.confirm('¿Eliminar esta foto?')) remove.mutate(p.id);
+                  if (window.confirm(t('animals:photos.deleteConfirm'))) remove.mutate(p.id);
                 }}
-                title="Eliminar"
+                title={t('common:actions.delete')}
               >
                 <Trash2 className="h-3 w-3 text-destructive" aria-hidden />
               </Button>

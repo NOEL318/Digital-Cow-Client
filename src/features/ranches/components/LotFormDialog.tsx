@@ -61,7 +61,7 @@ export function LotFormDialog({ open, onClose, ranchId, lot }: Props) {
             <Input {...form.register('notes')} />
           </div>
           <div>
-            <Label>Forma del corral en el mapa</Label>
+            <Label>{t('ranches:lots.lotShapeLabel')}</Label>
             <LotPolygonPicker
               initialPolygon={initialPolygon}
               initialCenter={initialCenter}

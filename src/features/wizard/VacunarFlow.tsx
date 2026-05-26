@@ -4,6 +4,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { useQueryClient } from '@tanstack/react-query';
 import { Syringe, Calendar, Pill } from 'lucide-react';
 import { WizardStep } from '@/components/ui/wizard-step';
 import { HelpfulField } from '@/components/ui/helpful-field';
@@ -15,8 +16,10 @@ import { animalsApi } from '@/features/animals/api';
 
 /** Wizard "Vacune" con selector jerárquico. */
 export function VacunarFlow() {
+  const { t } = useTranslation('wizard');
   const { t: tCommon } = useTranslation('common');
   const nav = useNavigate();
+  const qc = useQueryClient();
   const [params] = useSearchParams();
   const prefAnimalId = params.get('animalId') ? Number(params.get('animalId')) : null;
 
@@ -53,16 +56,19 @@ export function VacunarFlow() {
       await create.mutateAsync({
         animalId: ctx.animal.id, vaccineId, appliedAt, batchNumber: batch || undefined
       });
+      qc.invalidateQueries({ queryKey: ['animal', ctx.animal.id] });
+      qc.invalidateQueries({ queryKey: ['health', 'vaccinations'] });
+      qc.invalidateQueries({ queryKey: ['health', 'alerts'] });
       nav(`/animales/${ctx.animal.id}`);
     } catch (e) {
       setError((e as { response?: { data?: { error?: { message?: string } } } })
-        ?.response?.data?.error?.message ?? 'No pudimos guardar la vacunación.');
+        ?.response?.data?.error?.message ?? t('vacunar.saveFailed'));
     }
   }
 
   if (step === 1) {
     return (
-      <WizardStep current={1} total={3} title="¿A cuál vaca vacunaste?" canAdvance={!!ctx.animal} onNext={() => setStep(2)}>
+      <WizardStep current={1} total={3} title={t('vacunar.step1Title')} canAdvance={!!ctx.animal} onNext={() => setStep(2)}>
         <WizardLocationSelector value={ctx} onChange={setCtx} />
       </WizardStep>
     );
@@ -70,9 +76,9 @@ export function VacunarFlow() {
 
   if (step === 2) {
     return (
-      <WizardStep current={2} total={3} title="¿Qué vacuna le diste?" subtitle="Elige de tu catálogo y pon la fecha."
+      <WizardStep current={2} total={3} title={t('vacunar.step2Title')} subtitle={t('vacunar.step2Subtitle')}
         canAdvance={!!vaccineId && !!appliedAt} onNext={() => setStep(3)} onBack={() => setStep(1)}>
-        <HelpfulField id="vac-vaccine" label="Vacuna" icon={Pill} required>
+        <HelpfulField id="vac-vaccine" label={t('vacunar.vaccineLabel')} icon={Pill} required>
           <select id="vac-vaccine" value={vaccineId ?? ''}
             onChange={e => setVaccineId(e.target.value ? Number(e.target.value) : null)}
             className="w-full border rounded-md px-3 py-2 text-base bg-background">
@@ -80,12 +86,12 @@ export function VacunarFlow() {
             {(vaccines.data ?? []).map(v => <option key={v.id} value={v.id}>{v.nameEs}</option>)}
           </select>
         </HelpfulField>
-        <HelpfulField id="vac-date" label="Fecha de aplicación" icon={Calendar} required>
+        <HelpfulField id="vac-date" label={t('vacunar.dateLabel')} icon={Calendar} required>
           <input id="vac-date" type="date" value={appliedAt}
             onChange={e => setAppliedAt(e.target.value)}
             className="w-full border rounded-md px-3 py-2 text-base bg-background" />
         </HelpfulField>
-        <HelpfulField id="vac-batch" label="Número de lote del frasco" help="Para rastreo si hay reacción." example="L2024-A35">
+        <HelpfulField id="vac-batch" label={t('vacunar.batchLabel')} help={t('vacunar.batchHelp')} example={t('vacunar.batchExample')}>
           <input id="vac-batch" value={batch} onChange={e => setBatch(e.target.value)}
             className="w-full border rounded-md px-3 py-2 text-base bg-background" />
         </HelpfulField>
@@ -95,7 +101,7 @@ export function VacunarFlow() {
 
   const vac = vaccines.data?.find(v => v.id === vaccineId);
   return (
-    <WizardStep current={3} total={3} title="¿Listo? Así se guardará"
+    <WizardStep current={3} total={3} title={t('vacunar.step3Title')}
       canAdvance={!create.isPending} onNext={save} onBack={() => setStep(2)} isLast>
       <div className="rounded-xl border p-4 space-y-3">
         <div className="flex items-center gap-3">
@@ -108,7 +114,7 @@ export function VacunarFlow() {
         </div>
         <p className="flex items-center gap-2"><Syringe className="h-4 w-4 text-primary" aria-hidden /> {vac?.nameEs}</p>
         <p className="flex items-center gap-2"><Calendar className="h-4 w-4 text-primary" aria-hidden /> {appliedAt}</p>
-        {batch ? <p className="text-sm text-muted-foreground">Lote del frasco: {batch}</p> : null}
+        {batch ? <p className="text-sm text-muted-foreground">{t('vacunar.summaryBatch', { batch })}</p> : null}
       </div>
       {error ? <p role="alert" className="text-sm text-destructive">{error}</p> : null}
     </WizardStep>

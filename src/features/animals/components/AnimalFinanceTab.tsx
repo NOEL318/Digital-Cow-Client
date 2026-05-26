@@ -5,6 +5,9 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useAnimalRoi } from '@/features/finance/animalRoi/api';
+import {
+  Table, TableBody, TableCell, TableHead, TableHeader, TableRow
+} from '@/components/ui/table';
 
 /** Tab Finanzas del detalle de animal: ROI + tabla de desglose. */
 export function AnimalFinanceTab() {
@@ -37,22 +40,40 @@ export function AnimalFinanceTab() {
 
       <section>
         <h3 className="font-semibold mb-2">{t('finance:roi.breakdown')}</h3>
-        <table className="w-full border rounded">
-          <thead>
-            <tr className="bg-muted">
-              <th className="p-2 text-left">{t('finance:roi.breakdown')}</th>
-              <th className="p-2 text-right">{t('finance:expense.amount')}</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr className="border-t"><td className="p-2">{t('finance:roi.treatments')}</td><td className="p-2 text-right">{Number(r.costs.treatments).toFixed(2)}</td></tr>
-            <tr className="border-t"><td className="p-2">{t('finance:roi.vaccinationsIndividual')}</td><td className="p-2 text-right">{Number(r.costs.vaccinationsIndividual).toFixed(2)}</td></tr>
-            <tr className="border-t"><td className="p-2">{t('finance:roi.vaccinationsProportionalLot')}</td><td className="p-2 text-right">{Number(r.costs.vaccinationsProportionalLot).toFixed(2)}</td></tr>
-            <tr className="border-t"><td className="p-2">{t('finance:roi.services')}</td><td className="p-2 text-right">{Number(r.costs.services).toFixed(2)}</td></tr>
-            <tr className="border-t"><td className="p-2">{t('finance:roi.manualExpenses')}</td><td className="p-2 text-right">{Number(r.costs.manualExpenses).toFixed(2)}</td></tr>
-            <tr className="border-t"><td className="p-2">{t('finance:roi.feedingProportional')}</td><td className="p-2 text-right">{Number(r.costs.feedingProportional).toFixed(2)}</td></tr>
-          </tbody>
-        </table>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>{t('finance:roi.breakdown')}</TableHead>
+              <TableHead className="text-right">{t('finance:expense.amount')}</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            <TableRow>
+              <TableCell>{t('finance:roi.treatments')}</TableCell>
+              <TableCell className="text-right">{Number(r.costs.treatments).toFixed(2)}</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell>{t('finance:roi.vaccinationsIndividual')}</TableCell>
+              <TableCell className="text-right">{Number(r.costs.vaccinationsIndividual).toFixed(2)}</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell>{t('finance:roi.vaccinationsProportionalLot')}</TableCell>
+              <TableCell className="text-right">{Number(r.costs.vaccinationsProportionalLot).toFixed(2)}</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell>{t('finance:roi.services')}</TableCell>
+              <TableCell className="text-right">{Number(r.costs.services).toFixed(2)}</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell>{t('finance:roi.manualExpenses')}</TableCell>
+              <TableCell className="text-right">{Number(r.costs.manualExpenses).toFixed(2)}</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell>{t('finance:roi.feedingProportional')}</TableCell>
+              <TableCell className="text-right">{Number(r.costs.feedingProportional).toFixed(2)}</TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
       </section>
     </div>
   );

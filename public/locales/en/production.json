@@ -119,5 +119,19 @@
     "slaughter": "Slaughter",
     "growthChart": "Growth curve",
     "empty": "No records"
+  },
+  "milkingRow": {
+    "morning": "Morning",
+    "afternoon": "Afternoon",
+    "day": "Day",
+    "liters": "liters"
+  },
+  "csvImport": {
+    "importCsv": "Import CSV",
+    "importWeighings": "Import weighings from CSV",
+    "weighingsHelp": "Required columns: animalId, weighedAt (YYYY-MM-DD), weightKg. Optional: method, bodyConditionScore, notes.",
+    "invalidAnimalId": "invalid animalId",
+    "invalidWeightKg": "invalid weightKg",
+    "invalidWeighedAt": "weighedAt must be YYYY-MM-DD"
   }
 }

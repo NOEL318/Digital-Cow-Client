@@ -3,6 +3,7 @@
  */
 import { useState } from 'react';
 import { Handshake, X, Calendar, DollarSign, Weight, User } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { useCreateAnimalSale } from '@/features/finance/animalSales/api';
 import { BigButton } from '@/components/ui/big-button';
 import { HelpfulField } from '@/components/ui/helpful-field';
@@ -21,6 +22,7 @@ interface SellAnimalDialogProps {
  * crea el ingreso asociado en una sola transaccion del backend.
  */
 export function SellAnimalDialog({ open, animalId, internalTag, onClose, onSold }: SellAnimalDialogProps) {
+  const { t } = useTranslation('animals');
   const [soldAt, setSoldAt] = useState(() => new Date().toISOString().slice(0, 10));
   const [buyer, setBuyer] = useState('');
   const [liveWeightKg, setLiveWeightKg] = useState<string>('');
@@ -35,7 +37,7 @@ export function SellAnimalDialog({ open, animalId, internalTag, onClose, onSold 
     setError(null);
     const total = Number(totalPrice);
     if (!Number.isFinite(total) || total <= 0) {
-      setError('Pon el precio total de la venta.');
+      setError(t('sell.totalRequired'));
       return;
     }
     try {
@@ -51,7 +53,7 @@ export function SellAnimalDialog({ open, animalId, internalTag, onClose, onSold 
       onClose();
     } catch (e) {
       const msg = (e as { response?: { data?: { message?: string } } })?.response?.data?.message
-        ?? 'No pudimos guardar la venta. Intenta de nuevo.';
+        ?? t('sell.saveError');
       setError(msg);
     }
   }
@@ -60,19 +62,19 @@ export function SellAnimalDialog({ open, animalId, internalTag, onClose, onSold 
     <div
       role="dialog"
       aria-modal="true"
-      aria-label={`Vender ${internalTag}`}
+      aria-label={t('sell.title', { tag: internalTag })}
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4"
     >
       <div className="bg-background rounded-2xl shadow-xl w-full max-w-md p-5 space-y-4 max-h-[90vh] overflow-y-auto">
         <header className="flex items-center justify-between">
           <h2 className="text-lg font-bold flex items-center gap-2">
             <Handshake className="h-5 w-5 text-primary" aria-hidden />
-            Vender {internalTag}
+            {t('sell.title', { tag: internalTag })}
           </h2>
           <button
             type="button"
             onClick={onClose}
-            aria-label="Cerrar"
+            aria-label={t('sell.close')}
             className="p-2 rounded-full hover:bg-accent"
           >
             <X className="h-5 w-5" aria-hidden />
@@ -81,8 +83,8 @@ export function SellAnimalDialog({ open, animalId, internalTag, onClose, onSold 
 
         <HelpfulField
           id="sell-date"
-          label="Fecha de la venta"
-          help="El dia en que se entrego el animal."
+          label={t('sell.dateLabel')}
+          help={t('sell.dateHelp')}
           icon={Calendar}
           required
         >
@@ -97,10 +99,10 @@ export function SellAnimalDialog({ open, animalId, internalTag, onClose, onSold 
 
         <HelpfulField
           id="sell-buyer"
-          label="Comprador"
-          help="Nombre o empresa. Te ayuda a buscarlo despues."
+          label={t('sell.buyerLabel')}
+          help={t('sell.buyerHelp')}
           icon={User}
-          example="Don Manuel - Carniceria El Llano"
+          example={t('sell.buyerExample')}
         >
           <input
             id="sell-buyer"
@@ -112,10 +114,10 @@ export function SellAnimalDialog({ open, animalId, internalTag, onClose, onSold 
 
         <HelpfulField
           id="sell-weight"
-          label="Peso vivo en kilogramos"
-          help="Peso del animal al momento de la venta."
+          label={t('sell.weightLabel')}
+          help={t('sell.weightHelp')}
           icon={Weight}
-          example="420"
+          example={t('sell.weightExample')}
         >
           <input
             id="sell-weight"
@@ -131,10 +133,10 @@ export function SellAnimalDialog({ open, animalId, internalTag, onClose, onSold 
 
         <HelpfulField
           id="sell-price-kg"
-          label="Precio por kilogramo"
-          help="Si lo vendiste por kilo, ponelo aqui."
+          label={t('sell.priceKgLabel')}
+          help={t('sell.priceKgHelp')}
           icon={DollarSign}
-          example="38"
+          example={t('sell.priceKgExample')}
         >
           <input
             id="sell-price-kg"
@@ -150,10 +152,10 @@ export function SellAnimalDialog({ open, animalId, internalTag, onClose, onSold 
 
         <HelpfulField
           id="sell-total"
-          label="Precio total de la venta"
-          help="Cuanto dinero recibiste por el animal."
+          label={t('sell.totalLabel')}
+          help={t('sell.totalHelp')}
           icon={DollarSign}
-          example="16800"
+          example={t('sell.totalExample')}
           required
         >
           <input
@@ -175,9 +177,9 @@ export function SellAnimalDialog({ open, animalId, internalTag, onClose, onSold 
         ) : null}
 
         <div className="flex justify-between gap-3 pt-2">
-          <BigButton label="Cancelar" variant="outline" onClick={onClose} />
+          <BigButton label={t('sell.cancel')} variant="outline" onClick={onClose} />
           <BigButton
-            label="Guardar venta"
+            label={t('sell.submit')}
             icon={Handshake}
             onClick={handleSubmit}
             disabled={create.isPending}

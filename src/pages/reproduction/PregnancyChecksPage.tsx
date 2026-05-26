@@ -5,9 +5,18 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/ui/table';
 import { usePregnancyChecks, useCreatePregnancyCheck } from '@/features/reproduction/pregnancyChecks/api';
 import { PregnancyCheckForm } from '@/features/reproduction/pregnancyChecks/components/PregnancyCheckForm';
+import type { PregnancyResult } from '@/features/reproduction/pregnancyChecks/types';
+
+function resultTone(result: PregnancyResult): 'success' | 'danger' | 'warning' {
+  if (result === 'POSITIVE') return 'success';
+  if (result === 'NEGATIVE') return 'danger';
+  return 'warning';
+}
 
 /** Pagina de listado de diagnosticos de gestacion. */
 export default function PregnancyChecksPage() {
@@ -33,28 +42,32 @@ export default function PregnancyChecksPage() {
           </DialogContent>
         </Dialog>
       </div>
-      <table className="w-full border rounded">
-        <thead>
-          <tr className="bg-muted">
-            <th className="p-2 text-left">{t('reproduction:pregnancy.animal')}</th>
-            <th className="p-2 text-left">{t('reproduction:pregnancy.checkedAt')}</th>
-            <th className="p-2 text-left">{t('reproduction:pregnancy.method')}</th>
-            <th className="p-2 text-left">{t('reproduction:pregnancy.result')}</th>
-            <th className="p-2 text-left">{t('reproduction:pregnancy.estimatedCalvingDate')}</th>
-          </tr>
-        </thead>
-        <tbody>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>{t('reproduction:pregnancy.animal')}</TableHead>
+            <TableHead>{t('reproduction:pregnancy.checkedAt')}</TableHead>
+            <TableHead>{t('reproduction:pregnancy.method')}</TableHead>
+            <TableHead>{t('reproduction:pregnancy.result')}</TableHead>
+            <TableHead>{t('reproduction:pregnancy.estimatedCalvingDate')}</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
           {checks.data?.map(c => (
-            <tr key={c.id} className="border-t">
-              <td className="p-2">#{c.animalId}</td>
-              <td className="p-2">{c.checkedAt}</td>
-              <td className="p-2">{c.method ? t(`reproduction:pregnancy.methodValue.${c.method}`) : '-'}</td>
-              <td className="p-2">{t(`reproduction:pregnancy.resultValue.${c.result}`)}</td>
-              <td className="p-2">{c.estimatedCalvingDate ?? '-'}</td>
-            </tr>
+            <TableRow key={c.id}>
+              <TableCell>#{c.animalId}</TableCell>
+              <TableCell>{c.checkedAt}</TableCell>
+              <TableCell>{c.method ? t(`reproduction:pregnancy.methodValue.${c.method}`) : '-'}</TableCell>
+              <TableCell>
+                <Badge tone={resultTone(c.result)}>
+                  {t(`reproduction:pregnancy.resultValue.${c.result}`)}
+                </Badge>
+              </TableCell>
+              <TableCell>{c.estimatedCalvingDate ?? '-'}</TableCell>
+            </TableRow>
           ))}
-        </tbody>
-      </table>
+        </TableBody>
+      </Table>
     </div>
   );
 }

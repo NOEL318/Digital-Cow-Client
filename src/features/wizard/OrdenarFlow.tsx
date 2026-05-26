@@ -3,6 +3,8 @@
  */
 import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useQueryClient } from '@tanstack/react-query';
+import { useTranslation } from 'react-i18next';
 import { Milk, Calendar, Sun, Moon } from 'lucide-react';
 import { WizardStep } from '@/components/ui/wizard-step';
 import { HelpfulField } from '@/components/ui/helpful-field';
@@ -20,7 +22,9 @@ const COMMON_LITERS = [5, 8, 10, 12, 15, 20];
  * Soporta preseleccion via ?animalId=N para saltar al paso 2.
  */
 export function OrdenarFlow() {
+  const { t } = useTranslation('wizard');
   const nav = useNavigate();
+  const qc = useQueryClient();
   const [params] = useSearchParams();
   const prefAnimalId = params.get('animalId') ? Number(params.get('animalId')) : null;
 
@@ -58,16 +62,20 @@ export function OrdenarFlow() {
         animalId: ctx.animal.id,
         milkingDate, session, liters: Number(liters)
       });
+      qc.invalidateQueries({ queryKey: ['animal', ctx.animal.id] });
+      qc.invalidateQueries({ queryKey: ['production', 'milkings'] });
+      qc.invalidateQueries({ queryKey: ['dashboard', 'production'] });
+      qc.invalidateQueries({ queryKey: ['production', 'lactation-curve'] });
       nav('/inicio');
     } catch (e) {
       setError((e as { response?: { data?: { error?: { message?: string } } } })
-        ?.response?.data?.error?.message ?? 'No pudimos guardar el ordeño.');
+        ?.response?.data?.error?.message ?? t('ordenar.saveFailed'));
     }
   }
 
   if (step === 1) {
     return (
-      <WizardStep current={1} total={3} title="¿A cuál vaca ordeñaste?" canAdvance={!!ctx.animal} onNext={() => setStep(2)}>
+      <WizardStep current={1} total={3} title={t('ordenar.step1Title')} canAdvance={!!ctx.animal} onNext={() => setStep(2)}>
         <WizardLocationSelector value={ctx} onChange={setCtx} />
       </WizardStep>
     );
@@ -77,27 +85,27 @@ export function OrdenarFlow() {
     return (
       <WizardStep
         current={2} total={3}
-        title="¿Cuánta leche y cuándo?"
-        subtitle="Toca un valor común o escribe el exacto."
+        title={t('ordenar.step2Title')}
+        subtitle={t('ordenar.step2Subtitle')}
         canAdvance={!!liters && Number(liters) > 0}
         onNext={() => setStep(3)}
         onBack={() => setStep(1)}
       >
         <div className="space-y-2">
-          <p className="text-sm font-semibold">Sesión</p>
+          <p className="text-sm font-semibold">{t('ordenar.sessionLabel')}</p>
           <BigPicker<MilkingSession>
             options={[
-              { value: 'AM', label: 'Mañana', icon: Sun, description: 'Ordeño matutino.' },
-              { value: 'PM', label: 'Tarde', icon: Moon, description: 'Ordeño vespertino.' },
-              { value: 'TOTAL', label: 'Total del día', icon: Milk, description: 'Suma de mañana y tarde.' }
+              { value: 'AM', label: t('ordenar.session.AM'), icon: Sun, description: t('ordenar.sessionDesc.AM') },
+              { value: 'PM', label: t('ordenar.session.PM'), icon: Moon, description: t('ordenar.sessionDesc.PM') },
+              { value: 'TOTAL', label: t('ordenar.session.TOTAL'), icon: Milk, description: t('ordenar.sessionDesc.TOTAL') }
             ]}
             value={session}
             onChange={setSession}
-            ariaLabel="Sesión de ordeño"
+            ariaLabel={t('ordenar.sessionLabel')}
           />
         </div>
 
-        <HelpfulField id="m-liters" label="Litros" icon={Milk} required example="12.5">
+        <HelpfulField id="m-liters" label={t('ordenar.litersLabel')} icon={Milk} required example={t('ordenar.litersExample')}>
           <div className="space-y-2">
             <input
               id="m-liters" type="number" inputMode="decimal" min={0} step={0.1}
@@ -109,14 +117,14 @@ export function OrdenarFlow() {
               {COMMON_LITERS.map(v => (
                 <button key={v} type="button" onClick={() => setLiters(String(v))}
                   className="px-3 py-2 rounded-full border text-sm hover:bg-accent">
-                  {v} litros
+                  {v} {t('ordenar.litersUnit')}
                 </button>
               ))}
             </div>
           </div>
         </HelpfulField>
 
-        <HelpfulField id="m-date" label="Fecha" icon={Calendar} required>
+        <HelpfulField id="m-date" label={t('ordenar.dateLabel')} icon={Calendar} required>
           <input id="m-date" type="date" value={milkingDate}
             onChange={e => setMilkingDate(e.target.value)}
             className="w-full border rounded-md px-3 py-2 text-base bg-background" />
@@ -125,9 +133,9 @@ export function OrdenarFlow() {
     );
   }
 
-  const sessionLabel = session === 'AM' ? 'Mañana' : session === 'PM' ? 'Tarde' : 'Total del día';
+  const sessionLabel = t(`ordenar.session.${session}` as const);
   return (
-    <WizardStep current={3} total={3} title="Listo? Así se guardará"
+    <WizardStep current={3} total={3} title={t('ordenar.step3Title')}
       canAdvance={!create.isPending} onNext={save} onBack={() => setStep(2)} isLast>
       <div className="rounded-xl border p-4 space-y-3">
         <div className="flex items-center gap-3">
@@ -141,7 +149,7 @@ export function OrdenarFlow() {
         </div>
         <p className="text-3xl font-bold flex items-center gap-2">
           <Milk className="h-7 w-7 text-primary" aria-hidden />
-          {liters} litros
+          {liters} {t('ordenar.litersUnit')}
         </p>
         <p className="text-sm text-muted-foreground">{sessionLabel} · {milkingDate}</p>
       </div>

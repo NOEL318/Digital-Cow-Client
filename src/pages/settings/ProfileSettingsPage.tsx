@@ -31,12 +31,12 @@ export default function ProfileSettingsPage() {
   return (
     <form onSubmit={onSubmit} className="max-w-md space-y-4">
       <div>
-        <Label htmlFor="fullName">Nombre</Label>
+        <Label htmlFor="fullName">{t('profile.yourName')}</Label>
         <Input id="fullName" {...form.register('fullName')} />
       </div>
       {user?.email ? (
         <div className="text-sm text-muted-foreground">
-          Correo: <span className="font-medium text-foreground">{user.email}</span>
+          {t('profile.email')}: <span className="font-medium text-foreground">{user.email}</span>
         </div>
       ) : null}
       <Button type="submit">{t('actions.save')}</Button>

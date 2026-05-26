@@ -4,6 +4,9 @@
 import { useTranslation } from 'react-i18next';
 import { Download } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import {
+  Table, TableHeader, TableBody, TableRow, TableHead, TableCell
+} from '@/components/ui/table';
 import { useInventoryReport } from '@/features/reports/inventoryReport/api';
 import { downloadCsv } from '@/lib/csv';
 
@@ -36,34 +39,34 @@ export default function InventoryReportPage() {
         </Button>
       </div>
       {report.data && (
-        <table className="w-full border rounded">
-          <thead>
-            <tr className="bg-muted">
-              <th className="p-2 text-left">{t('reports:inventory.internalTag')}</th>
-              <th className="p-2 text-left">{t('reports:inventory.breed')}</th>
-              <th className="p-2 text-left">{t('reports:inventory.sex')}</th>
-              <th className="p-2 text-left">{t('reports:inventory.purpose')}</th>
-              <th className="p-2 text-right">{t('reports:inventory.ageDays')}</th>
-              <th className="p-2 text-left">{t('reports:inventory.currentLot')}</th>
-              <th className="p-2 text-left">{t('reports:inventory.currentRanch')}</th>
-              <th className="p-2 text-right">{t('reports:inventory.lastWeightKg')}</th>
-            </tr>
-          </thead>
-          <tbody>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>{t('reports:inventory.internalTag')}</TableHead>
+              <TableHead>{t('reports:inventory.breed')}</TableHead>
+              <TableHead>{t('reports:inventory.sex')}</TableHead>
+              <TableHead>{t('reports:inventory.purpose')}</TableHead>
+              <TableHead className="text-right">{t('reports:inventory.ageDays')}</TableHead>
+              <TableHead>{t('reports:inventory.currentLot')}</TableHead>
+              <TableHead>{t('reports:inventory.currentRanch')}</TableHead>
+              <TableHead className="text-right">{t('reports:inventory.lastWeightKg')}</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
             {report.data.rows.map(r => (
-              <tr key={r.id} className="border-t">
-                <td className="p-2">{r.internalTag}</td>
-                <td className="p-2">{r.breed ?? '-'}</td>
-                <td className="p-2">{r.sex}</td>
-                <td className="p-2">{r.purpose}</td>
-                <td className="p-2 text-right">{r.ageDays ?? '-'}</td>
-                <td className="p-2">{r.currentLot ?? '-'}</td>
-                <td className="p-2">{r.currentRanch ?? '-'}</td>
-                <td className="p-2 text-right">{r.lastWeightKg ?? '-'}</td>
-              </tr>
+              <TableRow key={r.id}>
+                <TableCell className="font-medium">{r.internalTag}</TableCell>
+                <TableCell>{r.breed ?? '-'}</TableCell>
+                <TableCell>{r.sex}</TableCell>
+                <TableCell>{r.purpose}</TableCell>
+                <TableCell className="text-right text-info">{r.ageDays ?? '-'}</TableCell>
+                <TableCell>{r.currentLot ?? '-'}</TableCell>
+                <TableCell>{r.currentRanch ?? '-'}</TableCell>
+                <TableCell className="text-right font-medium text-info">{r.lastWeightKg ?? '-'}</TableCell>
+              </TableRow>
             ))}
-          </tbody>
-        </table>
+          </TableBody>
+        </Table>
       )}
     </div>
   );

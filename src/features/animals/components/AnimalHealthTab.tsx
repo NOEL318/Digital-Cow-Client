@@ -7,6 +7,10 @@ import i18n from '@/lib/i18n';
 import { useAnimalVaccinations } from '@/features/health/vaccinations/api';
 import { useAnimalDiagnoses } from '@/features/health/diagnoses/api';
 import { useAnimalTreatments } from '@/features/health/treatments/api';
+import { Badge } from '@/components/ui/badge';
+import {
+  Table, TableBody, TableCell, TableHead, TableHeader, TableRow
+} from '@/components/ui/table';
 
 /**
  * Tab Salud del detalle de animal: vacunas, diagnosticos, tratamientos.
@@ -29,70 +33,72 @@ export function AnimalHealthTab() {
     <div className="space-y-6">
       <section>
         <h3 className="font-semibold mb-2">{t('health:vaccination.title')}</h3>
-        <table className="w-full border rounded">
-          <thead>
-            <tr className="bg-muted">
-              <th className="p-2 text-left">{t('health:vaccination.appliedAt')}</th>
-              <th className="p-2 text-left">{t('health:vaccination.vaccine')}</th>
-              <th className="p-2 text-left">{t('health:vaccination.nextDose')}</th>
-            </tr>
-          </thead>
-          <tbody>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>{t('health:vaccination.appliedAt')}</TableHead>
+              <TableHead>{t('health:vaccination.vaccine')}</TableHead>
+              <TableHead>{t('health:vaccination.nextDose')}</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
             {vaccinations.data?.map(v => (
-              <tr key={v.id} className="border-t">
-                <td className="p-2">{v.appliedAt}</td>
-                <td className="p-2">{pickName(v.vaccineNameEn, v.vaccineNameEs, v.vaccineId)}</td>
-                <td className="p-2">{v.nextDoseDue ?? '-'}</td>
-              </tr>
+              <TableRow key={v.id}>
+                <TableCell>{v.appliedAt}</TableCell>
+                <TableCell>{pickName(v.vaccineNameEn, v.vaccineNameEs, v.vaccineId)}</TableCell>
+                <TableCell>{v.nextDoseDue ?? '-'}</TableCell>
+              </TableRow>
             ))}
-          </tbody>
-        </table>
+          </TableBody>
+        </Table>
       </section>
 
       <section>
         <h3 className="font-semibold mb-2">{t('health:diagnosis.title')}</h3>
-        <table className="w-full border rounded">
-          <thead>
-            <tr className="bg-muted">
-              <th className="p-2 text-left">{t('health:diagnosis.diagnosedAt')}</th>
-              <th className="p-2 text-left">{t('health:diagnosis.disease')}</th>
-              <th className="p-2 text-left">{t('health:diagnosis.status')}</th>
-            </tr>
-          </thead>
-          <tbody>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>{t('health:diagnosis.diagnosedAt')}</TableHead>
+              <TableHead>{t('health:diagnosis.disease')}</TableHead>
+              <TableHead>{t('health:diagnosis.status')}</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
             {diagnoses.data?.map(d => (
-              <tr key={d.id} className="border-t">
-                <td className="p-2">{d.diagnosedAt}</td>
-                <td className="p-2">{pickName(d.diseaseNameEn, d.diseaseNameEs, d.diseaseId)}</td>
-                <td className="p-2">{d.status}</td>
-              </tr>
+              <TableRow key={d.id}>
+                <TableCell>{d.diagnosedAt}</TableCell>
+                <TableCell>{pickName(d.diseaseNameEn, d.diseaseNameEs, d.diseaseId)}</TableCell>
+                <TableCell>
+                  <Badge tone="info">{d.status}</Badge>
+                </TableCell>
+              </TableRow>
             ))}
-          </tbody>
-        </table>
+          </TableBody>
+        </Table>
       </section>
 
       <section>
         <h3 className="font-semibold mb-2">{t('health:treatment.title')}</h3>
-        <table className="w-full border rounded">
-          <thead>
-            <tr className="bg-muted">
-              <th className="p-2 text-left">{t('health:treatment.startedAt')}</th>
-              <th className="p-2 text-left">{t('health:treatment.medication')}</th>
-              <th className="p-2 text-left">{t('health:treatment.withdrawalMilk')}</th>
-              <th className="p-2 text-left">{t('health:treatment.withdrawalMeat')}</th>
-            </tr>
-          </thead>
-          <tbody>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>{t('health:treatment.startedAt')}</TableHead>
+              <TableHead>{t('health:treatment.medication')}</TableHead>
+              <TableHead>{t('health:treatment.withdrawalMilk')}</TableHead>
+              <TableHead>{t('health:treatment.withdrawalMeat')}</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
             {treatments.data?.map(tr => (
-              <tr key={tr.id} className="border-t">
-                <td className="p-2">{tr.startedAt}</td>
-                <td className="p-2">{pickName(tr.medicationNameEn, tr.medicationNameEs, tr.medicationId)}</td>
-                <td className="p-2">{tr.withdrawalMilkUntil ?? '-'}</td>
-                <td className="p-2">{tr.withdrawalMeatUntil ?? '-'}</td>
-              </tr>
+              <TableRow key={tr.id}>
+                <TableCell>{tr.startedAt}</TableCell>
+                <TableCell>{pickName(tr.medicationNameEn, tr.medicationNameEs, tr.medicationId)}</TableCell>
+                <TableCell>{tr.withdrawalMilkUntil ?? '-'}</TableCell>
+                <TableCell>{tr.withdrawalMeatUntil ?? '-'}</TableCell>
+              </TableRow>
             ))}
-          </tbody>
-        </table>
+          </TableBody>
+        </Table>
       </section>
     </div>
   );

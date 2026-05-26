@@ -31,7 +31,15 @@ export function RanchFormDialog({ open, onClose, ranch }: Props) {
 
   const m = useMutation({
     mutationFn: (v: RanchValues) => ranch ? ranchApi.update(ranch.id, v) : ranchApi.create(v),
-    onSuccess: () => { qc.invalidateQueries({ queryKey: ['ranches'] }); onClose(); }
+    onSuccess: (data) => {
+      qc.invalidateQueries({ queryKey: ['ranches'] });
+      if (ranch) {
+        qc.invalidateQueries({ queryKey: ['ranch', ranch.id] });
+      } else if (data && typeof (data as Ranch).id === 'number') {
+        qc.invalidateQueries({ queryKey: ['ranch', (data as Ranch).id] });
+      }
+      onClose();
+    }
   });
 
   const latitude = form.watch('latitude');
@@ -53,11 +61,11 @@ export function RanchFormDialog({ open, onClose, ranch }: Props) {
             <Label>{t('ranches:fields.location')}</Label>
             <Input
               {...form.register('location')}
-              placeholder="Ejemplo: Carretera Federal kilómetro 12, El Llano"
+              placeholder={t('ranches:locationExample')}
             />
           </div>
           <div>
-            <Label>Ubicación en el mapa</Label>
+            <Label>{t('ranches:mapLocation')}</Label>
             <RanchLocationPicker
               initial={initial}
               onChange={({ lat, lng }) => {

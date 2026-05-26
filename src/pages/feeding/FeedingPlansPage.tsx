@@ -7,6 +7,10 @@ import { useTranslation } from 'react-i18next';
 import { Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import {
+  Table, TableHeader, TableBody, TableRow, TableHead, TableCell
+} from '@/components/ui/table';
+import { Badge } from '@/components/ui/badge';
 import { useFeedingPlans, useCreateFeedingPlan } from '@/features/feeding/plans/api';
 import { FeedingPlanForm } from '@/features/feeding/plans/components/FeedingPlanForm';
 
@@ -34,26 +38,31 @@ export default function FeedingPlansPage() {
           </DialogContent>
         </Dialog>
       </div>
-      <table className="w-full border rounded">
-        <thead>
-          <tr className="bg-muted">
-            <th className="p-2 text-left">{t('feeding:plan.name')}</th>
-            <th className="p-2 text-left">{t('feeding:plan.category')}</th>
-            <th className="p-2 text-left">{t('feeding:plan.description')}</th>
-          </tr>
-        </thead>
-        <tbody>
+
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>{t('feeding:plan.name')}</TableHead>
+            <TableHead>{t('feeding:plan.category')}</TableHead>
+            <TableHead>{t('feeding:plan.description')}</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
           {plans.data?.map(p => (
-            <tr key={p.id} className="border-t">
-              <td className="p-2">
-                <Link to={`/feeding/plans/${p.id}`} className="underline">{p.name}</Link>
-              </td>
-              <td className="p-2">{t(`feeding:plan.categoryValue.${p.category}`)}</td>
-              <td className="p-2">{p.description ?? '-'}</td>
-            </tr>
+            <TableRow key={p.id}>
+              <TableCell>
+                <Link to={`/feeding/plans/${p.id}`} className="underline font-medium">
+                  {p.name}
+                </Link>
+              </TableCell>
+              <TableCell>
+                <Badge tone="info">{t(`feeding:plan.categoryValue.${p.category}`)}</Badge>
+              </TableCell>
+              <TableCell>{p.description ?? '-'}</TableCell>
+            </TableRow>
           ))}
-        </tbody>
-      </table>
+        </TableBody>
+      </Table>
     </div>
   );
 }

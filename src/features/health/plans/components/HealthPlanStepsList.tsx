@@ -8,6 +8,14 @@ import i18n from '@/lib/i18n';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import {
+  Table,
+  TableHeader,
+  TableBody,
+  TableRow,
+  TableHead,
+  TableCell
+} from '@/components/ui/table';
 import { useVaccines } from '@/features/catalog/api/vaccines';
 import { localizedName } from '@/lib/catalog';
 import { useCreatePlanStep, useUpdatePlanStep, useDeletePlanStep } from '../api';
@@ -66,28 +74,30 @@ export function HealthPlanStepsList({ planId, steps, readOnly }: Props) {
   return (
     <div className="space-y-3">
       <h3 className="font-semibold">{t('health:plan.steps')}</h3>
-      <table className="w-full border rounded">
-        <thead>
-          <tr className="bg-muted text-sm">
-            <th className="p-2 text-left w-12">#</th>
-            <th className="p-2 text-left">{t('health:vaccination.vaccine')}</th>
-            <th className="p-2 text-left">{t('health:plan.ageMonthsMin')}</th>
-            <th className="p-2 text-left">{t('health:plan.recurrenceMonths')}</th>
-            <th className="p-2 w-32" />
-          </tr>
-        </thead>
-        <tbody>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead className="w-12">#</TableHead>
+            <TableHead>{t('health:plan.name')}</TableHead>
+            <TableHead>{t('health:vaccination.vaccine')}</TableHead>
+            <TableHead>{t('health:plan.ageMonthsMin')}</TableHead>
+            <TableHead>{t('health:plan.recurrenceMonths')}</TableHead>
+            <TableHead className="w-32" />
+          </TableRow>
+        </TableHeader>
+        <TableBody>
           {ordered.map((s, idx) => {
             const v = vaccines.data?.find(x => x.id === s.vaccineId);
             return (
-              <tr key={s.id} className="border-t text-sm">
-                <td className="p-2">{s.stepOrder}</td>
-                <td className="p-2">{s.name} {v ? `(${localizedName(v, locale)})` : ''}</td>
-                <td className="p-2">{s.ageMonthsMin ?? '-'}</td>
-                <td className="p-2">{s.recurrenceMonths ?? '-'}</td>
-                <td className="p-2 flex gap-1 justify-end">
+              <TableRow key={s.id}>
+                <TableCell>{s.stepOrder}</TableCell>
+                <TableCell>{s.name}</TableCell>
+                <TableCell>{v ? localizedName(v, locale) : '-'}</TableCell>
+                <TableCell>{s.ageMonthsMin ?? '-'}</TableCell>
+                <TableCell>{s.recurrenceMonths ?? '-'}</TableCell>
+                <TableCell>
                   {!readOnly && (
-                    <>
+                    <div className="flex gap-1 justify-end">
                       <Button size="sm" variant="ghost" onClick={() => move(s, -1)} disabled={idx === 0}>
                         <ArrowUp className="h-3 w-3" />
                       </Button>
@@ -102,14 +112,14 @@ export function HealthPlanStepsList({ planId, steps, readOnly }: Props) {
                       <Button size="sm" variant="ghost" onClick={() => del.mutate(s.id)}>
                         <Trash2 className="h-3 w-3" />
                       </Button>
-                    </>
+                    </div>
                   )}
-                </td>
-              </tr>
+                </TableCell>
+              </TableRow>
             );
           })}
-        </tbody>
-      </table>
+        </TableBody>
+      </Table>
 
       {!readOnly && (
         adding ? (
@@ -128,7 +138,7 @@ export function HealthPlanStepsList({ planId, steps, readOnly }: Props) {
               </select>
             </div>
             <div>
-              <Label>Name</Label>
+              <Label>{t('health:plan.name')}</Label>
               <Input value={draftName} onChange={e => setDraftName(e.target.value)} />
             </div>
             <div>

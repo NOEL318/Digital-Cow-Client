@@ -6,6 +6,9 @@ import { useTranslation } from 'react-i18next';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import {
+  Table, TableHeader, TableBody, TableRow, TableHead, TableCell
+} from '@/components/ui/table';
 import { useProductionKpis } from '@/features/production/kpis/api';
 
 /** Devuelve ISO YYYY-MM-DD para una fecha. */
@@ -66,23 +69,25 @@ export default function ProductionKpisPage() {
 
           <Card>
             <CardHeader><CardTitle>{t('production:kpis.topProducers')}</CardTitle></CardHeader>
-            <CardContent>
-              <table className="w-full">
-                <thead>
-                  <tr className="bg-muted">
-                    <th className="p-2 text-left">{t('production:kpis.tag')}</th>
-                    <th className="p-2 text-left">{t('production:kpis.liters')}</th>
-                  </tr>
-                </thead>
-                <tbody>
+            <CardContent className="p-0">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>{t('production:kpis.tag')}</TableHead>
+                    <TableHead>{t('production:kpis.liters')}</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
                   {kpis.data.topProducers.map(p => (
-                    <tr key={p.animalId} className="border-t">
-                      <td className="p-2">{p.internalTag}</td>
-                      <td className="p-2">{fmt(p.liters)}</td>
-                    </tr>
+                    <TableRow key={p.animalId}>
+                      <TableCell>{p.internalTag}</TableCell>
+                      <TableCell className="font-semibold text-green-700 dark:text-green-400">
+                        {fmt(p.liters)}
+                      </TableCell>
+                    </TableRow>
                   ))}
-                </tbody>
-              </table>
+                </TableBody>
+              </Table>
             </CardContent>
           </Card>
         </>

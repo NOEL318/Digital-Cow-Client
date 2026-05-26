@@ -2,6 +2,7 @@
  * Este componente es el paso de seleccion de animal reutilizado por varios wizards.
  */
 import { useState, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useAnimals } from '@/features/animals/api';
 import type { AnimalListItem } from '@/features/animals/types';
 import { AnimalAvatar } from '@/components/ui/animal-avatar';
@@ -20,6 +21,7 @@ interface AnimalPickerStepProps {
  * wizard. Muestra foto, marca y nombre. Limita a 20 resultados visibles.
  */
 export function AnimalPickerStep({ value, onChange }: AnimalPickerStepProps) {
+  const { t } = useTranslation('wizard');
   const [q, setQ] = useState('');
   const filters = useMemo(() => ({ search: q || undefined, size: 20 }), [q]);
   const animals = useAnimals(filters);
@@ -31,7 +33,7 @@ export function AnimalPickerStep({ value, onChange }: AnimalPickerStepProps) {
         <Input
           value={q}
           onChange={e => setQ(e.target.value)}
-          placeholder="Marca o nombre del animal"
+          placeholder={t('animalPicker.placeholder')}
           className="pl-9"
           autoFocus
         />

@@ -9,6 +9,9 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import {
+  Table, TableHeader, TableBody, TableRow, TableHead, TableCell
+} from '@/components/ui/table';
 import { useFeedingCostSummary, type CostGroupBy } from '@/features/feeding/costSummary/api';
 
 /** Devuelve ISO YYYY-MM-DD para una fecha. */
@@ -87,26 +90,26 @@ export default function FeedingCostSummaryPage() {
             </CardContent>
           </Card>
 
-          <table className="w-full border rounded">
-            <thead>
-              <tr className="bg-muted">
-                <th className="p-2 text-left">{t('feeding:costSummary.key')}</th>
-                <th className="p-2 text-left">{t('feeding:costSummary.label')}</th>
-                <th className="p-2 text-left">{t('feeding:costSummary.totalCost')}</th>
-                <th className="p-2 text-left">{t('feeding:costSummary.totalKg')}</th>
-              </tr>
-            </thead>
-            <tbody>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>{t('feeding:costSummary.key')}</TableHead>
+                <TableHead>{t('feeding:costSummary.label')}</TableHead>
+                <TableHead>{t('feeding:costSummary.totalCost')}</TableHead>
+                <TableHead>{t('feeding:costSummary.totalKg')}</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
               {summary.data.buckets.map(b => (
-                <tr key={b.key} className="border-t">
-                  <td className="p-2">{b.key}</td>
-                  <td className="p-2">{b.label}</td>
-                  <td className="p-2">{b.totalCost}</td>
-                  <td className="p-2">{b.totalKg}</td>
-                </tr>
+                <TableRow key={b.key}>
+                  <TableCell>{b.key}</TableCell>
+                  <TableCell>{b.label}</TableCell>
+                  <TableCell className="font-semibold">{b.totalCost}</TableCell>
+                  <TableCell>{b.totalKg}</TableCell>
+                </TableRow>
               ))}
-            </tbody>
-          </table>
+            </TableBody>
+          </Table>
         </>
       ) : null}
     </div>

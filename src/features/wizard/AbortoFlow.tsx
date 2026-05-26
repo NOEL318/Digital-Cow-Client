@@ -3,6 +3,8 @@
  */
 import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useQueryClient } from '@tanstack/react-query';
+import { useTranslation } from 'react-i18next';
 import { HeartCrack, Calendar, Baby, MessageSquare } from 'lucide-react';
 import { WizardStep } from '@/components/ui/wizard-step';
 import { HelpfulField } from '@/components/ui/helpful-field';
@@ -13,7 +15,9 @@ import { animalsApi } from '@/features/animals/api';
 
 /** Wizard "Aborto". Pasos: vaca, fecha+causa+gestación, confirmar. */
 export function AbortoFlow() {
+  const { t } = useTranslation('wizard');
   const nav = useNavigate();
+  const qc = useQueryClient();
   const [params] = useSearchParams();
   const prefAnimalId = params.get('animalId') ? Number(params.get('animalId')) : null;
 
@@ -52,16 +56,19 @@ export function AbortoFlow() {
         estimatedGestationDays: gestationDays ? Number(gestationDays) : undefined,
         cause: cause.trim() || undefined
       });
+      qc.invalidateQueries({ queryKey: ['animal', ctx.animal.id] });
+      qc.invalidateQueries({ queryKey: ['reproduction', 'abortions'] });
+      qc.invalidateQueries({ queryKey: ['reproduction', 'alerts'] });
       nav(`/animales/${ctx.animal.id}`);
     } catch (e) {
       setError((e as { response?: { data?: { error?: { message?: string } } } })
-        ?.response?.data?.error?.message ?? 'No pudimos guardar el aborto.');
+        ?.response?.data?.error?.message ?? t('aborto.saveFailed'));
     }
   }
 
   if (step === 1) {
     return (
-      <WizardStep current={1} total={3} title="¿Cuál vaca abortó?"
+      <WizardStep current={1} total={3} title={t('aborto.step1Title')}
         canAdvance={!!ctx.animal} onNext={() => setStep(2)}>
         <WizardLocationSelector value={ctx} onChange={setCtx} sexFilter="FEMALE" />
       </WizardStep>
@@ -70,20 +77,20 @@ export function AbortoFlow() {
 
   if (step === 2) {
     return (
-      <WizardStep current={2} total={3} title="¿Cuándo pasó?"
+      <WizardStep current={2} total={3} title={t('aborto.step2Title')}
         canAdvance={!!abortedAt}
         onNext={() => setStep(3)} onBack={() => setStep(1)}>
-        <HelpfulField id="ab-date" label="Fecha del aborto" icon={Calendar} required>
+        <HelpfulField id="ab-date" label={t('aborto.dateLabel')} icon={Calendar} required>
           <input id="ab-date" type="date" value={abortedAt}
             onChange={e => setAbortedAt(e.target.value)}
             className="w-full border rounded-md px-3 py-2 text-base bg-background" />
         </HelpfulField>
-        <HelpfulField id="ab-days" label="Días de gestación al abortar" icon={Baby} help="Aproximado." example="120">
+        <HelpfulField id="ab-days" label={t('aborto.gestationLabel')} icon={Baby} help={t('aborto.gestationHelp')} example="120">
           <input id="ab-days" type="number" inputMode="numeric" min={0}
             value={gestationDays} onChange={e => setGestationDays(e.target.value)}
             className="w-full border rounded-md px-3 py-2 text-base bg-background" />
         </HelpfulField>
-        <HelpfulField id="ab-cause" label="Causa probable (si la sabes)" icon={MessageSquare} example="Infección uterina">
+        <HelpfulField id="ab-cause" label={t('aborto.causeLabel')} icon={MessageSquare} example={t('aborto.causeExample')}>
           <input id="ab-cause" value={cause}
             onChange={e => setCause(e.target.value)}
             className="w-full border rounded-md px-3 py-2 text-base bg-background" />
@@ -93,7 +100,7 @@ export function AbortoFlow() {
   }
 
   return (
-    <WizardStep current={3} total={3} title="¿Listo? Así se guardará"
+    <WizardStep current={3} total={3} title={t('aborto.step3Title')}
       canAdvance={!create.isPending} onNext={save} onBack={() => setStep(2)} isLast>
       <div className="rounded-xl border p-4 space-y-3">
         <div className="flex items-center gap-3">
@@ -104,10 +111,10 @@ export function AbortoFlow() {
             {ctx.animal?.name ? <p className="text-sm text-muted-foreground">{ctx.animal.name}</p> : null}
           </div>
         </div>
-        <p className="flex items-center gap-2"><HeartCrack className="h-4 w-4 text-primary" aria-hidden /> Aborto</p>
+        <p className="flex items-center gap-2"><HeartCrack className="h-4 w-4 text-primary" aria-hidden /> {t('aborto.summaryAbortion')}</p>
         <p className="flex items-center gap-2"><Calendar className="h-4 w-4 text-primary" aria-hidden /> {abortedAt}</p>
-        {gestationDays ? <p className="text-sm text-muted-foreground">Gestación: {gestationDays} días</p> : null}
-        {cause ? <p className="text-sm text-muted-foreground">Causa: {cause}</p> : null}
+        {gestationDays ? <p className="text-sm text-muted-foreground">{t('aborto.summaryGestation', { days: gestationDays })}</p> : null}
+        {cause ? <p className="text-sm text-muted-foreground">{t('aborto.summaryCause', { cause })}</p> : null}
       </div>
       {error ? <p role="alert" className="text-sm text-destructive">{error}</p> : null}
     </WizardStep>

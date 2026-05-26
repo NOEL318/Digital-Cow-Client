@@ -5,6 +5,7 @@
 import { useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import { Icon } from 'leaflet';
 import { ranchApi } from '@/features/ranches/api';
@@ -34,6 +35,7 @@ const ranchIcon = new Icon({
  * navegar al listado filtrado del rancho.
  */
 export function RanchMap() {
+  const { t } = useTranslation('common');
   const ranches = useQuery({ queryKey: ['ranches'], queryFn: ranchApi.list });
 
   const geolocated = useMemo(
@@ -42,16 +44,16 @@ export function RanchMap() {
   );
 
   if (ranches.isLoading) {
-    return <p className="py-8 text-center text-muted-foreground">Cargando mapa...</p>;
+    return <p className="py-8 text-center text-muted-foreground">{t('map.loading')}</p>;
   }
 
   if (geolocated.length === 0) {
     return (
       <EmptyState
         icon={MapPin}
-        title="Aun no tienes ranchos en el mapa"
-        description="Pon la ubicacion (latitud y longitud) de cada rancho en Ajustes para verlos aqui."
-        ctaLabel="Ir a ranchos"
+        title={t('map.noRanchesTitle')}
+        description={t('map.noRanchesDesc')}
+        ctaLabel={t('map.goToRanches')}
         onCta={() => window.location.assign('/ajustes/ranchos')}
       />
     );
@@ -83,7 +85,7 @@ export function RanchMap() {
                   to={`/animales?ranchId=${r.id}`}
                   className="text-primary text-sm underline"
                 >
-                  Ver animales aqui
+                  {t('map.viewAnimals')}
                 </Link>
               </div>
             </Popup>

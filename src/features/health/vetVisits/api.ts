@@ -21,7 +21,11 @@ export function useCreateVetVisit() {
   return useMutation({
     mutationFn: async (body: VetVisitCreate) =>
       (await http.post<VetVisit>('/health/vet-visits', body)).data,
-    onSuccess: () => qc.invalidateQueries({ queryKey: QK })
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: QK });
+      qc.invalidateQueries({ queryKey: ['health', 'alerts'] });
+      qc.invalidateQueries({ queryKey: ['dashboard', 'health'] });
+    }
   });
 }
 
@@ -31,7 +35,10 @@ export function useUpdateVetVisit() {
   return useMutation({
     mutationFn: async ({ id, body }: { id: number; body: Partial<VetVisitCreate> }) =>
       (await http.patch<VetVisit>(`/health/vet-visits/${id}`, body)).data,
-    onSuccess: () => qc.invalidateQueries({ queryKey: QK })
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: QK });
+      qc.invalidateQueries({ queryKey: ['dashboard', 'health'] });
+    }
   });
 }
 
@@ -40,6 +47,9 @@ export function useDeleteVetVisit() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (id: number) => (await http.delete(`/health/vet-visits/${id}`)).data,
-    onSuccess: () => qc.invalidateQueries({ queryKey: QK })
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: QK });
+      qc.invalidateQueries({ queryKey: ['dashboard', 'health'] });
+    }
   });
 }

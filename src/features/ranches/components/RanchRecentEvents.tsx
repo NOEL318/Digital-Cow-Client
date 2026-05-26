@@ -12,6 +12,8 @@ import { useCalvings } from '@/features/reproduction/calvings/api';
 import { useMilkings } from '@/features/production/milkings/api';
 import { useAnimalSales } from '@/features/finance/animalSales/api';
 import { toArray } from '@/lib/page';
+import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/ui/table';
+import { Badge } from '@/components/ui/badge';
 import type { AnimalListItem, Page } from '@/features/animals/types';
 
 interface Props {
@@ -19,12 +21,23 @@ interface Props {
   ranchId: number;
 }
 
+type EventKind = 'vaccination' | 'diagnosis' | 'treatment' | 'calving' | 'milking' | 'sale';
+
 type EventRow = {
   id: string;
   date: string;
-  kind: 'vaccination' | 'diagnosis' | 'treatment' | 'calving' | 'milking' | 'sale';
+  kind: EventKind;
   label: string;
   animalTag?: string;
+};
+
+const KIND_TONE: Record<EventKind, 'info' | 'success' | 'warning' | 'danger' | 'neutral' | 'primary'> = {
+  vaccination: 'success',
+  diagnosis: 'warning',
+  treatment: 'info',
+  calving: 'primary',
+  milking: 'neutral',
+  sale: 'danger'
 };
 
 /**
@@ -128,29 +141,33 @@ export function RanchRecentEvents({ ranchId }: Props) {
   }, [vaccinations.data, diagnoses.data, treatments.data, calvings.data, milkings.data, sales.data, ranchAnimals]);
 
   return (
-    <div className="overflow-x-auto">
-      <table className="w-full text-sm border">
-        <thead>
-          <tr className="border-b text-left bg-muted">
-            <th className="p-2">{t('detail.eventDate')}</th>
-            <th className="p-2">{t('detail.eventType')}</th>
-            <th className="p-2">{t('detail.eventAnimal')}</th>
-            <th className="p-2">{t('detail.eventDetail')}</th>
-          </tr>
-        </thead>
-        <tbody>
-          {events.length === 0 ? (
-            <tr><td colSpan={4} className="p-4 text-center text-muted-foreground">{t('detail.noEvents')}</td></tr>
-          ) : events.map(e => (
-            <tr key={e.id} className="border-b">
-              <td className="p-2">{e.date}</td>
-              <td className="p-2">{t(`detail.kind.${e.kind}`)}</td>
-              <td className="p-2">{e.animalTag ?? '-'}</td>
-              <td className="p-2">{e.label}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+    <Table>
+      <TableHeader>
+        <TableRow>
+          <TableHead>{t('detail.eventDate')}</TableHead>
+          <TableHead>{t('detail.eventType')}</TableHead>
+          <TableHead>{t('detail.eventAnimal')}</TableHead>
+          <TableHead>{t('detail.eventDetail')}</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {events.length === 0 ? (
+          <TableRow>
+            <TableCell colSpan={4} className="py-6 text-center text-muted-foreground">
+              {t('detail.noEvents')}
+            </TableCell>
+          </TableRow>
+        ) : events.map(e => (
+          <TableRow key={e.id}>
+            <TableCell>{e.date}</TableCell>
+            <TableCell>
+              <Badge tone={KIND_TONE[e.kind]}>{t(`detail.kind.${e.kind}`)}</Badge>
+            </TableCell>
+            <TableCell>{e.animalTag ?? '-'}</TableCell>
+            <TableCell>{e.label}</TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
   );
 }

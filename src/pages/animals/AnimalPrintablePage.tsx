@@ -4,6 +4,7 @@
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
+import { useTranslation } from 'react-i18next';
 import { QRCodeSVG } from 'qrcode.react';
 import {
   ArrowLeft, Printer, Syringe, Pill, Stethoscope, Scale, Milk,
@@ -36,6 +37,7 @@ interface Photo { id: number; url: string }
 export default function AnimalPrintablePage() {
   const { id } = useParams<{ id: string }>();
   const animalId = Number(id);
+  const { t } = useTranslation('animals');
 
   const animal = useQuery({ queryKey: ['animal', animalId], queryFn: () => animalsApi.get(animalId) });
   const photos = useQuery({
@@ -58,12 +60,12 @@ export default function AnimalPrintablePage() {
 
   useEffect(() => {
     if (!ready) return;
-    const t = setTimeout(() => window.print(), 600);
-    return () => clearTimeout(t);
+    const timer = setTimeout(() => window.print(), 600);
+    return () => clearTimeout(timer);
   }, [ready]);
 
   if (!animal.data) {
-    return <div className="p-8 text-center">Preparando hoja del animal...</div>;
+    return <div className="p-8 text-center">{t('detail.preparing')}</div>;
   }
 
   const a = animal.data;
@@ -86,10 +88,10 @@ export default function AnimalPrintablePage() {
 
       <div className="no-print sticky top-0 z-10 bg-background border-b px-4 py-2 flex items-center justify-between">
         <Button variant="outline" onClick={() => window.history.back()}>
-          <ArrowLeft className="h-4 w-4 mr-2" /> Volver
+          <ArrowLeft className="h-4 w-4 mr-2" /> {t('print.back')}
         </Button>
         <Button onClick={() => window.print()}>
-          <Printer className="h-4 w-4 mr-2" /> Imprimir o guardar PDF
+          <Printer className="h-4 w-4 mr-2" /> {t('print.print')}
         </Button>
       </div>
 
@@ -108,56 +110,55 @@ export default function AnimalPrintablePage() {
                 {a.internalTag}{a.name ? ` · ${a.name}` : ''}
               </h1>
               <p className="text-xs">
-                {a.sex === 'FEMALE' ? 'Hembra' : 'Macho'} · {labelStatus(a.status)} ·{' '}
-                {a.purpose === 'BEEF' ? 'Carne' : a.purpose === 'DAIRY' ? 'Leche' : 'Doble propósito'}
+                {t(`sex.${a.sex}`)} · {t(`status.${a.status}`)} · {t(`purpose.${a.purpose}`)}
               </p>
               <p className="text-[10px] text-gray-600 mt-0.5">
-                Hoja generada el {new Date().toLocaleDateString()} · Digital Cow
+                {t('print.generatedOn', { date: new Date().toLocaleDateString() })}
               </p>
             </div>
             <div className="text-center shrink-0">
               <QRCodeSVG value={detailUrl} size={60} />
-              <p className="text-[7px] text-gray-600 mt-0.5">Escanea para ver online</p>
+              <p className="text-[7px] text-gray-600 mt-0.5">{t('share.scanQr')}</p>
             </div>
           </div>
         </header>
 
         <section className="text-[11px] mb-3 grid grid-cols-2 gap-x-4 gap-y-0 avoid-break">
-          <Row label="Marca interna" value={a.internalTag} />
-          <Row label="Marca oficial" value={a.officialTag ?? '-'} />
-          <Row label="RFID" value={a.rfid ?? '-'} />
-          <Row label="Raza" value={breed?.nameEs ?? '-'} />
-          <Row label="Nacimiento" value={a.birthDate ?? '-'} />
-          <Row label="Rancho" value={ranch?.name ?? '-'} />
+          <Row label={t('print.rows.internalTag')} value={a.internalTag} />
+          <Row label={t('print.rows.officialTag')} value={a.officialTag ?? '-'} />
+          <Row label={t('print.rows.rfid')} value={a.rfid ?? '-'} />
+          <Row label={t('print.rows.breed')} value={breed?.nameEs ?? '-'} />
+          <Row label={t('print.rows.birthDate')} value={a.birthDate ?? '-'} />
+          <Row label={t('print.rows.ranch')} value={ranch?.name ?? '-'} />
           {lactation.data?.lastCalving ? (
-            <Row label="Último parto" value={lactation.data.lastCalving} />
+            <Row label={t('print.rows.lastCalving')} value={lactation.data.lastCalving} />
           ) : null}
           {lactation.data?.daysInMilk != null && !lactation.data.dry ? (
-            <Row label="Días en leche" value={String(lactation.data.daysInMilk)} />
+            <Row label={t('print.rows.daysInMilk')} value={String(lactation.data.daysInMilk)} />
           ) : null}
-          {lactation.data?.dry ? <Row label="Estado lactacional" value="Seca" /> : null}
+          {lactation.data?.dry ? <Row label={t('print.rows.lacStatus')} value={t('print.rows.dry')} /> : null}
           {lactation.data?.recentAvgLiters != null ? (
-            <Row label="Promedio reciente" value={`${lactation.data.recentAvgLiters} litros/día`} />
+            <Row label={t('print.rows.recentAvg')} value={t('print.rows.recentAvgValue', { liters: lactation.data.recentAvgLiters })} />
           ) : null}
         </section>
 
         {a.notes ? (
           <section className="text-[11px] mb-3 avoid-break">
-            <p className="text-gray-600 font-semibold mb-0.5">Notas</p>
+            <p className="text-gray-600 font-semibold mb-0.5">{t('print.sections.notes')}</p>
             <p className="border-l-2 border-gray-300 pl-2 break-words">{a.notes}</p>
           </section>
         ) : null}
 
-        <Section title="Vacunaciones" icon={Syringe} empty={topVaccinations.length === 0}>
+        <Section title={t('print.sections.vaccinations')} icon={Syringe} empty={topVaccinations.length === 0} noRecordsLabel={t('print.noRecords')}>
           {topVaccinations.map(v => (
             <li key={v.id} className="flex justify-between gap-2">
               <span>{v.appliedAt}</span>
-              <span className="text-right truncate">Vacuna #{v.vaccineId}</span>
+              <span className="text-right truncate">#{v.vaccineId}</span>
             </li>
           ))}
         </Section>
 
-        <Section title="Pesajes" icon={Scale} empty={topWeighings.length === 0}>
+        <Section title={t('print.sections.weighings')} icon={Scale} empty={topWeighings.length === 0} noRecordsLabel={t('print.noRecords')}>
           {topWeighings.map(w => (
             <li key={w.id} className="flex justify-between gap-2">
               <span>{w.weighedAt}</span>
@@ -166,34 +167,34 @@ export default function AnimalPrintablePage() {
           ))}
         </Section>
 
-        <Section title="Ordeños" icon={Milk} empty={topMilkings.length === 0}>
+        <Section title={t('print.sections.milkings')} icon={Milk} empty={topMilkings.length === 0} noRecordsLabel={t('print.noRecords')}>
           {topMilkings.map(m => (
             <li key={m.id} className="flex justify-between gap-2">
               <span>{m.milkingDate} · {m.session}</span>
-              <span className="text-right font-semibold">{m.liters} litros</span>
+              <span className="text-right font-semibold">{m.liters} L</span>
             </li>
           ))}
         </Section>
 
-        <Section title="Diagnósticos" icon={Stethoscope} empty={topDiagnoses.length === 0}>
+        <Section title={t('print.sections.diagnoses')} icon={Stethoscope} empty={topDiagnoses.length === 0} noRecordsLabel={t('print.noRecords')}>
           {topDiagnoses.map(d => (
             <li key={d.id} className="flex justify-between gap-2">
               <span>{d.diagnosedAt}</span>
-              <span className="text-right truncate">Enf. #{d.diseaseId}</span>
+              <span className="text-right truncate">#{d.diseaseId}</span>
             </li>
           ))}
         </Section>
 
-        <Section title="Tratamientos" icon={Pill} empty={topTreatments.length === 0}>
-          {topTreatments.map(t => (
-            <li key={t.id} className="flex justify-between gap-2">
-              <span>{t.startedAt}</span>
-              <span className="text-right truncate">Med. #{t.medicationId}</span>
+        <Section title={t('print.sections.treatments')} icon={Pill} empty={topTreatments.length === 0} noRecordsLabel={t('print.noRecords')}>
+          {topTreatments.map(tr => (
+            <li key={tr.id} className="flex justify-between gap-2">
+              <span>{tr.startedAt}</span>
+              <span className="text-right truncate">#{tr.medicationId}</span>
             </li>
           ))}
         </Section>
 
-        <Section title="Partos" icon={Baby} empty={topCalvings.length === 0}>
+        <Section title={t('print.sections.calvings')} icon={Baby} empty={topCalvings.length === 0} noRecordsLabel={t('print.noRecords')}>
           {topCalvings.map(c => (
             <li key={c.id} className="flex justify-between gap-2">
               <span>{c.calvedAt}</span>
@@ -202,7 +203,7 @@ export default function AnimalPrintablePage() {
           ))}
         </Section>
 
-        <Section title="Servicios reproductivos" icon={Heart} empty={topServices.length === 0}>
+        <Section title={t('print.sections.services')} icon={Heart} empty={topServices.length === 0} noRecordsLabel={t('print.noRecords')}>
           {topServices.map(s => (
             <li key={s.id} className="flex justify-between gap-2">
               <span>{s.serviceDate}</span>
@@ -230,12 +231,13 @@ function Row({ label, value }: { label: string; value: string }) {
 }
 
 function Section({
-  title, icon: Icon, children, empty
+  title, icon: Icon, children, empty, noRecordsLabel
 }: {
   title: string;
   icon: LucideIcon;
   children: React.ReactNode;
   empty: boolean;
+  noRecordsLabel: string;
 }) {
   return (
     <section className="mb-2 avoid-break">
@@ -244,23 +246,12 @@ function Section({
         {title}
       </h2>
       {empty ? (
-        <p className="text-[10px] text-gray-500 italic">Sin registros.</p>
+        <p className="text-[10px] text-gray-500 italic">{noRecordsLabel}</p>
       ) : (
         <ul className="text-[10px] space-y-0.5">{children}</ul>
       )}
     </section>
   );
-}
-
-function labelStatus(s: string): string {
-  switch (s) {
-    case 'ACTIVE': return 'Activo';
-    case 'SOLD': return 'Vendido';
-    case 'DEAD': return 'Muerto';
-    case 'MISSING': return 'Extraviado';
-    case 'TRANSFERRED': return 'Transferido';
-    default: return s;
-  }
 }
 
 function PrintStyles() {

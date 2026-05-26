@@ -7,6 +7,10 @@ import { Plus, Lock } from 'lucide-react';
 import i18n from '@/lib/i18n';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import {
+  Table, TableHeader, TableBody, TableRow, TableHead, TableCell
+} from '@/components/ui/table';
+import { Badge } from '@/components/ui/badge';
 import { localizedName } from '@/lib/catalog';
 import { useFeedItems, useCreateFeedItem } from '@/features/feeding/items/api';
 import { FeedItemForm } from '@/features/feeding/items/components/FeedItemForm';
@@ -36,37 +40,42 @@ export default function FeedItemsPage() {
           </DialogContent>
         </Dialog>
       </div>
-      <table className="w-full border rounded">
-        <thead>
-          <tr className="bg-muted">
-            <th className="p-2 text-left">{t('feeding:item.code')}</th>
-            <th className="p-2 text-left">{t('feeding:item.nameEs')}</th>
-            <th className="p-2 text-left">{t('feeding:item.category')}</th>
-            <th className="p-2 text-left">{t('feeding:item.dryMatterPct')}</th>
-            <th className="p-2 text-left">{t('feeding:item.proteinPct')}</th>
-            <th className="p-2 text-left">{t('feeding:item.energyMcalKg')}</th>
-            <th className="p-2 text-left">{t('feeding:item.unitCost')}</th>
-            <th className="p-2 text-left">{t('feeding:item.currency')}</th>
-          </tr>
-        </thead>
-        <tbody>
+
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>{t('feeding:item.code')}</TableHead>
+            <TableHead>{t('feeding:item.nameEs')}</TableHead>
+            <TableHead>{t('feeding:item.category')}</TableHead>
+            <TableHead>{t('feeding:item.dryMatterPct')}</TableHead>
+            <TableHead>{t('feeding:item.proteinPct')}</TableHead>
+            <TableHead>{t('feeding:item.energyMcalKg')}</TableHead>
+            <TableHead>{t('feeding:item.unitCost')}</TableHead>
+            <TableHead>{t('feeding:item.currency')}</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
           {items.data?.map(f => (
-            <tr key={f.id} className="border-t">
-              <td className="p-2 flex items-center gap-1">
+            <TableRow key={f.id}>
+              <TableCell className="flex items-center gap-1">
                 {f.code}
-                {f.accountId === null && <Lock className="h-3 w-3 text-muted-foreground" aria-label={t('feeding:item.global')} />}
-              </td>
-              <td className="p-2">{localizedName(f, locale)}</td>
-              <td className="p-2">{t(`feeding:item.categoryValue.${f.category}`)}</td>
-              <td className="p-2">{f.dryMatterPct ?? '-'}</td>
-              <td className="p-2">{f.proteinPct ?? '-'}</td>
-              <td className="p-2">{f.energyMcalKg ?? '-'}</td>
-              <td className="p-2">{f.unitCost ?? '-'}</td>
-              <td className="p-2">{f.currency ?? '-'}</td>
-            </tr>
+                {f.accountId === null && (
+                  <Lock className="h-3 w-3 text-muted-foreground" aria-label={t('feeding:item.global')} />
+                )}
+              </TableCell>
+              <TableCell>{localizedName(f, locale)}</TableCell>
+              <TableCell>
+                <Badge tone="neutral">{t(`feeding:item.categoryValue.${f.category}`)}</Badge>
+              </TableCell>
+              <TableCell>{f.dryMatterPct ?? '-'}</TableCell>
+              <TableCell>{f.proteinPct ?? '-'}</TableCell>
+              <TableCell>{f.energyMcalKg ?? '-'}</TableCell>
+              <TableCell>{f.unitCost ?? '-'}</TableCell>
+              <TableCell>{f.currency ?? '-'}</TableCell>
+            </TableRow>
           ))}
-        </tbody>
-      </table>
+        </TableBody>
+      </Table>
     </div>
   );
 }

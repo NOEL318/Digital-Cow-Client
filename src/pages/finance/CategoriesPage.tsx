@@ -8,6 +8,9 @@ import { Plus, Lock } from 'lucide-react';
 import i18n from '@/lib/i18n';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import {
+  Table, TableHeader, TableBody, TableRow, TableHead, TableCell
+} from '@/components/ui/table';
 import { localizedName } from '@/lib/catalog';
 import {
   useExpenseCategories, useCreateExpenseCategory,
@@ -56,27 +59,27 @@ export default function CategoriesPage() {
               </DialogContent>
             </Dialog>
           </div>
-          <table className="w-full border rounded">
-            <thead>
-              <tr className="bg-muted">
-                <th className="p-2 text-left">{t('finance:category.code')}</th>
-                <th className="p-2 text-left">{t('finance:category.nameEs')}</th>
-                <th className="p-2 text-left">{t('finance:category.kind')}</th>
-              </tr>
-            </thead>
-            <tbody>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>{t('finance:category.code')}</TableHead>
+                <TableHead>{t('finance:category.nameEs')}</TableHead>
+                <TableHead>{t('finance:category.kind')}</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
               {expCats.data?.map(c => (
-                <tr key={c.id} className="border-t">
-                  <td className="p-2 flex items-center gap-1">
+                <TableRow key={c.id}>
+                  <TableCell className="flex items-center gap-1">
                     {c.code}
                     {c.accountId === null && <Lock className="h-3 w-3 text-muted-foreground" aria-label={t('finance:category.global')} />}
-                  </td>
-                  <td className="p-2">{localizedName(c, locale)}</td>
-                  <td className="p-2">{t(`finance:category.expenseKindValue.${c.kind}`)}</td>
-                </tr>
+                  </TableCell>
+                  <TableCell>{localizedName(c, locale)}</TableCell>
+                  <TableCell>{t(`finance:category.expenseKindValue.${c.kind}`)}</TableCell>
+                </TableRow>
               ))}
-            </tbody>
-          </table>
+            </TableBody>
+          </Table>
         </Tabs.Content>
 
         <Tabs.Content value="income" className="space-y-3">
@@ -94,27 +97,27 @@ export default function CategoriesPage() {
               </DialogContent>
             </Dialog>
           </div>
-          <table className="w-full border rounded">
-            <thead>
-              <tr className="bg-muted">
-                <th className="p-2 text-left">{t('finance:category.code')}</th>
-                <th className="p-2 text-left">{t('finance:category.nameEs')}</th>
-                <th className="p-2 text-left">{t('finance:category.kind')}</th>
-              </tr>
-            </thead>
-            <tbody>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>{t('finance:category.code')}</TableHead>
+                <TableHead>{t('finance:category.nameEs')}</TableHead>
+                <TableHead>{t('finance:category.kind')}</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
               {incCats.data?.map(c => (
-                <tr key={c.id} className="border-t">
-                  <td className="p-2 flex items-center gap-1">
+                <TableRow key={c.id}>
+                  <TableCell className="flex items-center gap-1">
                     {c.code}
                     {c.accountId === null && <Lock className="h-3 w-3 text-muted-foreground" aria-label={t('finance:category.global')} />}
-                  </td>
-                  <td className="p-2">{localizedName(c, locale)}</td>
-                  <td className="p-2">{t(`finance:category.incomeKindValue.${c.kind}`)}</td>
-                </tr>
+                  </TableCell>
+                  <TableCell>{localizedName(c, locale)}</TableCell>
+                  <TableCell>{t(`finance:category.incomeKindValue.${c.kind}`)}</TableCell>
+                </TableRow>
               ))}
-            </tbody>
-          </table>
+            </TableBody>
+          </Table>
         </Tabs.Content>
       </Tabs.Root>
     </div>

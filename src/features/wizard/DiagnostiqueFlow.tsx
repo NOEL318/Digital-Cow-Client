@@ -4,6 +4,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { useQueryClient } from '@tanstack/react-query';
 import { Stethoscope, Calendar, AlertTriangle, ShieldAlert, Flame } from 'lucide-react';
 import { WizardStep } from '@/components/ui/wizard-step';
 import { HelpfulField } from '@/components/ui/helpful-field';
@@ -19,8 +20,10 @@ import type { DiagnosisSeverity } from '@/features/health/diagnoses/types';
 
 /** Wizard "Diagnostiqué". Pasos: ubicación+animal, enfermedad+severidad+fecha, confirmar. */
 export function DiagnostiqueFlow() {
+  const { t } = useTranslation('wizard');
   const { t: tCommon } = useTranslation('common');
   const nav = useNavigate();
+  const qc = useQueryClient();
   const [params] = useSearchParams();
   const prefAnimalId = params.get('animalId') ? Number(params.get('animalId')) : null;
 
@@ -64,16 +67,19 @@ export function DiagnostiqueFlow() {
         severity,
         symptoms: symptoms.trim() || undefined
       });
+      qc.invalidateQueries({ queryKey: ['animal', ctx.animal.id] });
+      qc.invalidateQueries({ queryKey: ['health', 'diagnoses'] });
+      qc.invalidateQueries({ queryKey: ['health', 'alerts'] });
       nav(`/animales/${ctx.animal.id}`);
     } catch (e) {
       setError((e as { response?: { data?: { error?: { message?: string } } } })
-        ?.response?.data?.error?.message ?? 'No pudimos guardar el diagnóstico.');
+        ?.response?.data?.error?.message ?? t('diagnostique.saveFailed'));
     }
   }
 
   if (step === 1) {
     return (
-      <WizardStep current={1} total={3} title="¿A cuál animal diagnosticaste?"
+      <WizardStep current={1} total={3} title={t('diagnostique.step1Title')}
         canAdvance={!!ctx.animal} onNext={() => setStep(2)}>
         <WizardLocationSelector value={ctx} onChange={setCtx} />
       </WizardStep>
@@ -82,11 +88,11 @@ export function DiagnostiqueFlow() {
 
   if (step === 2) {
     return (
-      <WizardStep current={2} total={3} title="¿Qué tiene?"
-        subtitle="Elige la enfermedad y qué tan fuerte está."
+      <WizardStep current={2} total={3} title={t('diagnostique.step2Title')}
+        subtitle={t('diagnostique.step2Subtitle')}
         canAdvance={!!diseaseId && !!diagnosedAt}
         onNext={() => setStep(3)} onBack={() => setStep(1)}>
-        <HelpfulField id="dx-disease" label="Enfermedad" icon={Stethoscope} required>
+        <HelpfulField id="dx-disease" label={t('diagnostique.diseaseLabel')} icon={Stethoscope} required>
           <select id="dx-disease" value={diseaseId ?? ''}
             onChange={e => setDiseaseId(e.target.value ? Number(e.target.value) : null)}
             className="w-full border rounded-md px-3 py-3 text-base bg-background">
@@ -98,26 +104,26 @@ export function DiagnostiqueFlow() {
         </HelpfulField>
 
         <div className="space-y-2">
-          <p className="text-sm font-semibold">Severidad</p>
+          <p className="text-sm font-semibold">{t('diagnostique.severityLabel')}</p>
           <BigPicker<DiagnosisSeverity>
             options={[
-              { value: 'LOW', label: 'Leve', icon: AlertTriangle, description: 'Síntomas suaves.' },
-              { value: 'MEDIUM', label: 'Media', icon: ShieldAlert, description: 'Necesita atención.' },
-              { value: 'HIGH', label: 'Grave', icon: Flame, description: 'Urgente, vet.' }
+              { value: 'LOW', label: t('diagnostique.severity.LOW'), icon: AlertTriangle, description: t('diagnostique.severityDesc.LOW') },
+              { value: 'MEDIUM', label: t('diagnostique.severity.MEDIUM'), icon: ShieldAlert, description: t('diagnostique.severityDesc.MEDIUM') },
+              { value: 'HIGH', label: t('diagnostique.severity.HIGH'), icon: Flame, description: t('diagnostique.severityDesc.HIGH') }
             ]}
             value={severity}
             onChange={setSeverity}
-            ariaLabel="Severidad del diagnóstico"
+            ariaLabel={t('diagnostique.severityLabel')}
           />
         </div>
 
-        <HelpfulField id="dx-date" label="Fecha" icon={Calendar} required>
+        <HelpfulField id="dx-date" label={t('diagnostique.dateLabel')} icon={Calendar} required>
           <input id="dx-date" type="date" value={diagnosedAt}
             onChange={e => setDiagnosedAt(e.target.value)}
             className="w-full border rounded-md px-3 py-2 text-base bg-background" />
         </HelpfulField>
 
-        <HelpfulField id="dx-symptoms" label="Síntomas que ves" help="Una línea corta describiendo lo que observas." example="No quiere comer, ojos llorosos">
+        <HelpfulField id="dx-symptoms" label={t('diagnostique.symptomsLabel')} help={t('diagnostique.symptomsHelp')} example={t('diagnostique.symptomsExample')}>
           <input id="dx-symptoms" value={symptoms}
             onChange={e => setSymptoms(e.target.value)}
             className="w-full border rounded-md px-3 py-2 text-base bg-background" />
@@ -127,9 +133,9 @@ export function DiagnostiqueFlow() {
   }
 
   const disease = diseases.data?.find(d => d.id === diseaseId);
-  const severityLabel = severity === 'LOW' ? 'Leve' : severity === 'HIGH' ? 'Grave' : 'Media';
+  const severityLabel = t(`diagnostique.severity.${severity}` as const);
   return (
-    <WizardStep current={3} total={3} title="¿Listo? Así se guardará"
+    <WizardStep current={3} total={3} title={t('diagnostique.step3Title')}
       canAdvance={!create.isPending} onNext={save} onBack={() => setStep(2)} isLast>
       <div className="rounded-xl border p-4 space-y-3">
         <div className="flex items-center gap-3">
@@ -143,7 +149,7 @@ export function DiagnostiqueFlow() {
         <p className="flex items-center gap-2"><Stethoscope className="h-4 w-4 text-primary" aria-hidden /> {disease ? localizedName(disease, locale) : '-'}</p>
         <p className="flex items-center gap-2"><ShieldAlert className="h-4 w-4 text-primary" aria-hidden /> {severityLabel}</p>
         <p className="flex items-center gap-2"><Calendar className="h-4 w-4 text-primary" aria-hidden /> {diagnosedAt}</p>
-        {symptoms ? <p className="text-sm text-muted-foreground">Síntomas: {symptoms}</p> : null}
+        {symptoms ? <p className="text-sm text-muted-foreground">{t('diagnostique.summarySymptoms', { symptoms })}</p> : null}
       </div>
       {error ? <p role="alert" className="text-sm text-destructive">{error}</p> : null}
     </WizardStep>

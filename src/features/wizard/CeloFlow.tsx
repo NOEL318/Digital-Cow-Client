@@ -3,6 +3,8 @@
  */
 import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useQueryClient } from '@tanstack/react-query';
+import { useTranslation } from 'react-i18next';
 import { Heart, Calendar, Eye, Activity, Thermometer, Camera, MoreHorizontal, Flame, Sparkle, Sparkles } from 'lucide-react';
 import { WizardStep } from '@/components/ui/wizard-step';
 import { HelpfulField } from '@/components/ui/helpful-field';
@@ -17,7 +19,9 @@ type Intensity = 'WEAK' | 'MODERATE' | 'STRONG';
 
 /** Wizard "Vi un celo". Pasos: hembra, fecha+intensidad+método, confirmar. */
 export function CeloFlow() {
+  const { t } = useTranslation('wizard');
   const nav = useNavigate();
+  const qc = useQueryClient();
   const [params] = useSearchParams();
   const prefAnimalId = params.get('animalId') ? Number(params.get('animalId')) : null;
 
@@ -56,16 +60,19 @@ export function CeloFlow() {
         intensity,
         detectionMethod: method
       });
+      qc.invalidateQueries({ queryKey: ['animal', ctx.animal.id] });
+      qc.invalidateQueries({ queryKey: ['reproduction', 'heats'] });
+      qc.invalidateQueries({ queryKey: ['reproduction', 'alerts'] });
       nav(`/animales/${ctx.animal.id}`);
     } catch (e) {
       setError((e as { response?: { data?: { error?: { message?: string } } } })
-        ?.response?.data?.error?.message ?? 'No pudimos guardar el celo.');
+        ?.response?.data?.error?.message ?? t('celo.saveFailed'));
     }
   }
 
   if (step === 1) {
     return (
-      <WizardStep current={1} total={3} title="¿A cuál vaca le viste el celo?"
+      <WizardStep current={1} total={3} title={t('celo.step1Title')}
         canAdvance={!!ctx.animal} onNext={() => setStep(2)}>
         <WizardLocationSelector value={ctx} onChange={setCtx} sexFilter="FEMALE" />
       </WizardStep>
@@ -74,40 +81,40 @@ export function CeloFlow() {
 
   if (step === 2) {
     return (
-      <WizardStep current={2} total={3} title="¿Cómo lo viste y qué tan fuerte?"
+      <WizardStep current={2} total={3} title={t('celo.step2Title')}
         canAdvance={!!detectedAt}
         onNext={() => setStep(3)} onBack={() => setStep(1)}>
         <div className="space-y-2">
-          <p className="text-sm font-semibold">Intensidad</p>
+          <p className="text-sm font-semibold">{t('celo.intensityLabel')}</p>
           <BigPicker<Intensity>
             options={[
-              { value: 'WEAK', label: 'Débil', icon: Sparkle, description: 'Señales suaves.' },
-              { value: 'MODERATE', label: 'Normal', icon: Sparkles, description: 'Claro pero tranquilo.' },
-              { value: 'STRONG', label: 'Fuerte', icon: Flame, description: 'Muy notorio.' }
+              { value: 'WEAK', label: t('celo.intensity.WEAK'), icon: Sparkle, description: t('celo.intensityDesc.WEAK') },
+              { value: 'MODERATE', label: t('celo.intensity.MODERATE'), icon: Sparkles, description: t('celo.intensityDesc.MODERATE') },
+              { value: 'STRONG', label: t('celo.intensity.STRONG'), icon: Flame, description: t('celo.intensityDesc.STRONG') }
             ]}
             value={intensity}
             onChange={setIntensity}
-            ariaLabel="Intensidad del celo"
+            ariaLabel={t('celo.intensityLabel')}
           />
         </div>
 
         <div className="space-y-2">
-          <p className="text-sm font-semibold">¿Cómo lo detectaste?</p>
+          <p className="text-sm font-semibold">{t('celo.detectionLabel')}</p>
           <BigPicker<Method>
             options={[
-              { value: 'VISUAL', label: 'A simple vista', icon: Eye },
-              { value: 'PEDOMETER', label: 'Podómetro', icon: Activity },
-              { value: 'HEAT_PATCH', label: 'Parche', icon: Thermometer },
-              { value: 'CAMERA', label: 'Cámara', icon: Camera },
-              { value: 'OTHER', label: 'Otro', icon: MoreHorizontal }
+              { value: 'VISUAL', label: t('celo.method.VISUAL'), icon: Eye },
+              { value: 'PEDOMETER', label: t('celo.method.PEDOMETER'), icon: Activity },
+              { value: 'HEAT_PATCH', label: t('celo.method.HEAT_PATCH'), icon: Thermometer },
+              { value: 'CAMERA', label: t('celo.method.CAMERA'), icon: Camera },
+              { value: 'OTHER', label: t('celo.method.OTHER'), icon: MoreHorizontal }
             ]}
             value={method}
             onChange={setMethod}
-            ariaLabel="Método de detección"
+            ariaLabel={t('celo.detectionLabel')}
           />
         </div>
 
-        <HelpfulField id="celo-date" label="Cuándo lo viste" icon={Calendar} required>
+        <HelpfulField id="celo-date" label={t('celo.dateLabel')} icon={Calendar} required>
           <input id="celo-date" type="datetime-local" value={detectedAt}
             onChange={e => setDetectedAt(e.target.value)}
             className="w-full border rounded-md px-3 py-2 text-base bg-background" />
@@ -116,9 +123,9 @@ export function CeloFlow() {
     );
   }
 
-  const intensityLabel = intensity === 'WEAK' ? 'Débil' : intensity === 'STRONG' ? 'Fuerte' : 'Normal';
+  const intensityLabel = t(`celo.intensity.${intensity}` as const);
   return (
-    <WizardStep current={3} total={3} title="¿Listo? Así se guardará"
+    <WizardStep current={3} total={3} title={t('celo.step3Title')}
       canAdvance={!create.isPending} onNext={save} onBack={() => setStep(2)} isLast>
       <div className="rounded-xl border p-4 space-y-3">
         <div className="flex items-center gap-3">
@@ -129,7 +136,7 @@ export function CeloFlow() {
             {ctx.animal?.name ? <p className="text-sm text-muted-foreground">{ctx.animal.name}</p> : null}
           </div>
         </div>
-        <p className="flex items-center gap-2"><Heart className="h-4 w-4 text-primary" aria-hidden /> Celo {intensityLabel.toLowerCase()}</p>
+        <p className="flex items-center gap-2"><Heart className="h-4 w-4 text-primary" aria-hidden /> {t('celo.summaryHeat')} {intensityLabel.toLowerCase()}</p>
         <p className="flex items-center gap-2"><Calendar className="h-4 w-4 text-primary" aria-hidden /> {detectedAt.replace('T', ' ')}</p>
       </div>
       {error ? <p role="alert" className="text-sm text-destructive">{error}</p> : null}

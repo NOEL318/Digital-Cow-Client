@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { ranchApi } from '@/features/ranches/api';
 import { RanchFormDialog } from '@/features/ranches/components/RanchFormDialog';
 import { Button } from '@/components/ui/button';
+import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/ui/table';
 
 /** Listado de ranchos de la cuenta. */
 export default function RanchesPage() {
@@ -21,18 +22,28 @@ export default function RanchesPage() {
         <h2 className="text-xl font-bold">{t('title')}</h2>
         <Button onClick={() => setOpen(true)}>{t('new')}</Button>
       </div>
-      <table className="w-full text-sm">
-        <thead><tr className="border-b text-left"><th className="p-2">{t('fields.name')}</th><th>{t('fields.location')}</th><th>{t('fields.area')}</th></tr></thead>
-        <tbody>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>{t('fields.name')}</TableHead>
+            <TableHead>{t('fields.location')}</TableHead>
+            <TableHead>{t('fields.area')}</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
           {data.map(r => (
-            <tr key={r.id} className="border-b hover:bg-accent">
-              <td className="p-2"><Link to={`/ranches/${r.id}`} className="underline">{r.name}</Link></td>
-              <td>{r.location}</td>
-              <td>{r.areaHectares ?? '-'}</td>
-            </tr>
+            <TableRow key={r.id}>
+              <TableCell>
+                <Link to={`/ranches/${r.id}`} className="underline font-medium">
+                  {r.name}
+                </Link>
+              </TableCell>
+              <TableCell>{r.location}</TableCell>
+              <TableCell>{r.areaHectares ?? '-'}</TableCell>
+            </TableRow>
           ))}
-        </tbody>
-      </table>
+        </TableBody>
+      </Table>
       <RanchFormDialog open={open} onClose={() => setOpen(false)} />
     </div>
   );

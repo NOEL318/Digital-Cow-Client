@@ -5,7 +5,9 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/ui/table';
 import { useBulls, useCreateBull } from '@/features/reproduction/bulls/api';
 import { BullForm } from '@/features/reproduction/bulls/components/BullForm';
 
@@ -33,26 +35,30 @@ export default function BullsPage() {
           </DialogContent>
         </Dialog>
       </div>
-      <table className="w-full border rounded">
-        <thead>
-          <tr className="bg-muted">
-            <th className="p-2 text-left">{t('reproduction:bull.internalCode')}</th>
-            <th className="p-2 text-left">{t('reproduction:bull.name')}</th>
-            <th className="p-2 text-left">{t('reproduction:bull.source')}</th>
-            <th className="p-2 text-left">{t('reproduction:bull.registryNumber')}</th>
-          </tr>
-        </thead>
-        <tbody>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>{t('reproduction:bull.internalCode')}</TableHead>
+            <TableHead>{t('reproduction:bull.name')}</TableHead>
+            <TableHead>{t('reproduction:bull.source')}</TableHead>
+            <TableHead>{t('reproduction:bull.registryNumber')}</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
           {bulls.data?.map(b => (
-            <tr key={b.id} className="border-t">
-              <td className="p-2">{b.internalCode}</td>
-              <td className="p-2">{b.name}</td>
-              <td className="p-2">{t(`reproduction:bull.${b.source}`)}</td>
-              <td className="p-2">{b.registryNumber ?? '-'}</td>
-            </tr>
+            <TableRow key={b.id}>
+              <TableCell>{b.internalCode}</TableCell>
+              <TableCell>{b.name}</TableCell>
+              <TableCell>
+                <Badge tone={b.source === 'OWN' ? 'success' : 'neutral'}>
+                  {t(`reproduction:bull.${b.source}`)}
+                </Badge>
+              </TableCell>
+              <TableCell>{b.registryNumber ?? '-'}</TableCell>
+            </TableRow>
           ))}
-        </tbody>
-      </table>
+        </TableBody>
+      </Table>
     </div>
   );
 }

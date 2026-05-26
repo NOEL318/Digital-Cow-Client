@@ -35,7 +35,7 @@ export function DiagnosisForm({ defaultValues, onSubmit, submitting }: Props) {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
       <div>
-        <Label htmlFor="animalId">Animal</Label>
+        <Label htmlFor="animalId">{t('health:animal')}</Label>
         <select
           id="animalId"
           {...register('animalId', { valueAsNumber: true })}

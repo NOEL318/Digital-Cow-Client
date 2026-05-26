@@ -32,6 +32,9 @@ export function useCreateHeat() {
       (await http.post<Heat>('/reproduction/heats', body)).data,
     onSuccess: (_data, body) => {
       qc.invalidateQueries({ queryKey: QK });
+      qc.invalidateQueries({ queryKey: ['dashboard', 'reproduction'] });
+      qc.invalidateQueries({ queryKey: ['reproduction', 'alerts'] });
+      qc.invalidateQueries({ queryKey: ['reproduction', 'kpis'] });
       if (body.animalId) qc.invalidateQueries({ queryKey: ['animal', body.animalId] });
     }
   });
@@ -45,6 +48,9 @@ export function useUpdateHeat() {
       (await http.patch<Heat>(`/reproduction/heats/${id}`, body)).data,
     onSuccess: (_data, vars) => {
       qc.invalidateQueries({ queryKey: QK });
+      qc.invalidateQueries({ queryKey: ['dashboard', 'reproduction'] });
+      qc.invalidateQueries({ queryKey: ['reproduction', 'alerts'] });
+      qc.invalidateQueries({ queryKey: ['reproduction', 'kpis'] });
       if (vars.body.animalId) qc.invalidateQueries({ queryKey: ['animal', vars.body.animalId] });
     }
   });
@@ -59,6 +65,9 @@ export function useDeleteHeat() {
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: QK });
       qc.invalidateQueries({ queryKey: ['animal'] });
+      qc.invalidateQueries({ queryKey: ['dashboard', 'reproduction'] });
+      qc.invalidateQueries({ queryKey: ['reproduction', 'alerts'] });
+      qc.invalidateQueries({ queryKey: ['reproduction', 'kpis'] });
     }
   });
 }

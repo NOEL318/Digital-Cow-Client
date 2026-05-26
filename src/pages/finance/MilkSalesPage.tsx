@@ -6,6 +6,9 @@ import { useTranslation } from 'react-i18next';
 import { Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import {
+  Table, TableHeader, TableBody, TableRow, TableHead, TableCell
+} from '@/components/ui/table';
 import { toArray } from '@/lib/page';
 import { useMilkSales, useCreateMilkSale } from '@/features/finance/milkSales/api';
 import type { MilkSale } from '@/features/finance/milkSales/types';
@@ -42,30 +45,32 @@ export default function MilkSalesPage() {
           </DialogContent>
         </Dialog>
       </div>
-      <table className="w-full border rounded">
-        <thead>
-          <tr className="bg-muted">
-            <th className="p-2 text-left">{t('finance:milkSale.saleDate')}</th>
-            <th className="p-2 text-left">{t('finance:milkSale.ranch')}</th>
-            <th className="p-2 text-left">{t('finance:milkSale.buyer')}</th>
-            <th className="p-2 text-right">{t('finance:milkSale.totalLiters')}</th>
-            <th className="p-2 text-right">{t('finance:milkSale.pricePerLiter')}</th>
-            <th className="p-2 text-right">{t('finance:milkSale.totalPrice')}</th>
-          </tr>
-        </thead>
-        <tbody>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>{t('finance:milkSale.saleDate')}</TableHead>
+            <TableHead>{t('finance:milkSale.ranch')}</TableHead>
+            <TableHead>{t('finance:milkSale.buyer')}</TableHead>
+            <TableHead className="text-right">{t('finance:milkSale.totalLiters')}</TableHead>
+            <TableHead className="text-right">{t('finance:milkSale.pricePerLiter')}</TableHead>
+            <TableHead className="text-right">{t('finance:milkSale.totalPrice')}</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
           {toArray<MilkSale>(sales.data).map(s => (
-            <tr key={s.id} className="border-t">
-              <td className="p-2">{s.saleDate}</td>
-              <td className="p-2">{ranchName(s.ranchId)}</td>
-              <td className="p-2">{s.buyer ?? '-'}</td>
-              <td className="p-2 text-right">{Number(s.totalLiters).toFixed(2)}</td>
-              <td className="p-2 text-right">{Number(s.pricePerLiter).toFixed(4)}</td>
-              <td className="p-2 text-right">{Number(s.totalPrice).toFixed(2)} {s.currency}</td>
-            </tr>
+            <TableRow key={s.id}>
+              <TableCell>{s.saleDate}</TableCell>
+              <TableCell>{ranchName(s.ranchId)}</TableCell>
+              <TableCell>{s.buyer ?? '-'}</TableCell>
+              <TableCell className="text-right">{Number(s.totalLiters).toFixed(2)}</TableCell>
+              <TableCell className="text-right">{Number(s.pricePerLiter).toFixed(4)}</TableCell>
+              <TableCell className="text-right font-semibold text-green-700 dark:text-green-400">
+                {Number(s.totalPrice).toFixed(2)} {s.currency}
+              </TableCell>
+            </TableRow>
           ))}
-        </tbody>
-      </table>
+        </TableBody>
+      </Table>
     </div>
   );
 }

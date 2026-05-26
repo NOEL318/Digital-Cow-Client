@@ -33,6 +33,8 @@ export function useCreateDryOff() {
     onSuccess: (_data, body) => {
       qc.invalidateQueries({ queryKey: QK });
       qc.invalidateQueries({ queryKey: ['reproduction', 'alerts'] });
+      qc.invalidateQueries({ queryKey: ['dashboard', 'reproduction'] });
+      qc.invalidateQueries({ queryKey: ['reproduction', 'kpis'] });
       if (body.animalId) qc.invalidateQueries({ queryKey: ['animal', body.animalId] });
     }
   });
@@ -46,6 +48,9 @@ export function useUpdateDryOff() {
       (await http.patch<DryOff>(`/reproduction/dry-offs/${id}`, body)).data,
     onSuccess: (_data, vars) => {
       qc.invalidateQueries({ queryKey: QK });
+      qc.invalidateQueries({ queryKey: ['dashboard', 'reproduction'] });
+      qc.invalidateQueries({ queryKey: ['reproduction', 'alerts'] });
+      qc.invalidateQueries({ queryKey: ['reproduction', 'kpis'] });
       if (vars.body.animalId) qc.invalidateQueries({ queryKey: ['animal', vars.body.animalId] });
     }
   });
@@ -60,6 +65,9 @@ export function useDeleteDryOff() {
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: QK });
       qc.invalidateQueries({ queryKey: ['animal'] });
+      qc.invalidateQueries({ queryKey: ['dashboard', 'reproduction'] });
+      qc.invalidateQueries({ queryKey: ['reproduction', 'alerts'] });
+      qc.invalidateQueries({ queryKey: ['reproduction', 'kpis'] });
     }
   });
 }

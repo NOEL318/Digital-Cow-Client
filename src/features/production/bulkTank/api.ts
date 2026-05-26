@@ -22,7 +22,10 @@ export function useCreateBulkTankDelivery() {
   return useMutation({
     mutationFn: async (body: BulkTankDeliveryCreate) =>
       (await http.post<BulkTankDelivery>('/production/bulk-tank-deliveries', body)).data,
-    onSuccess: () => qc.invalidateQueries({ queryKey: QK })
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: QK });
+      qc.invalidateQueries({ queryKey: ['dashboard', 'production'] });
+    }
   });
 }
 
@@ -32,7 +35,10 @@ export function useUpdateBulkTankDelivery() {
   return useMutation({
     mutationFn: async ({ id, body }: { id: number; body: Partial<BulkTankDeliveryCreate> }) =>
       (await http.patch<BulkTankDelivery>(`/production/bulk-tank-deliveries/${id}`, body)).data,
-    onSuccess: () => qc.invalidateQueries({ queryKey: QK })
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: QK });
+      qc.invalidateQueries({ queryKey: ['dashboard', 'production'] });
+    }
   });
 }
 
@@ -42,6 +48,9 @@ export function useDeleteBulkTankDelivery() {
   return useMutation({
     mutationFn: async (id: number) =>
       (await http.delete(`/production/bulk-tank-deliveries/${id}`)).data,
-    onSuccess: () => qc.invalidateQueries({ queryKey: QK })
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: QK });
+      qc.invalidateQueries({ queryKey: ['dashboard', 'production'] });
+    }
   });
 }

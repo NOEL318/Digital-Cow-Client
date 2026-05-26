@@ -4,6 +4,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { useQueryClient } from '@tanstack/react-query';
 import { Droplet, Calendar, User, Beef, Heart } from 'lucide-react';
 import { WizardStep } from '@/components/ui/wizard-step';
 import { HelpfulField } from '@/components/ui/helpful-field';
@@ -19,8 +20,10 @@ type ServiceType = 'AI' | 'NATURAL' | 'EMBRYO_TRANSFER';
 
 /** Wizard "Inseminé / Servicio". Pasos: hembra, tipo+toro/pajilla+fecha, confirmar. */
 export function ServirFlow() {
+  const { t } = useTranslation('wizard');
   const { t: tCommon } = useTranslation('common');
   const nav = useNavigate();
+  const qc = useQueryClient();
   const [params] = useSearchParams();
   const prefAnimalId = params.get('animalId') ? Number(params.get('animalId')) : null;
 
@@ -76,16 +79,20 @@ export function ServirFlow() {
         semenStrawId: serviceType === 'AI' ? strawId ?? undefined : undefined,
         technicianName: technician.trim() || undefined
       });
+      qc.invalidateQueries({ queryKey: ['animal', ctx.animal.id] });
+      qc.invalidateQueries({ queryKey: ['reproduction', 'services'] });
+      qc.invalidateQueries({ queryKey: ['reproduction', 'semen-straws'] });
+      qc.invalidateQueries({ queryKey: ['reproduction', 'alerts'] });
       nav(`/animales/${ctx.animal.id}`);
     } catch (e) {
       setError((e as { response?: { data?: { error?: { message?: string } } } })
-        ?.response?.data?.error?.message ?? 'No pudimos guardar el servicio.');
+        ?.response?.data?.error?.message ?? t('servir.saveFailed'));
     }
   }
 
   if (step === 1) {
     return (
-      <WizardStep current={1} total={3} title="¿A cuál vaca le serviste?"
+      <WizardStep current={1} total={3} title={t('servir.step1Title')}
         canAdvance={!!ctx.animal} onNext={() => setStep(2)}>
         <WizardLocationSelector value={ctx} onChange={setCtx} sexFilter="FEMALE" />
       </WizardStep>
@@ -94,26 +101,26 @@ export function ServirFlow() {
 
   if (step === 2) {
     return (
-      <WizardStep current={2} total={3} title="¿Cómo fue el servicio?"
-        subtitle="Inseminación, monta o transferencia."
+      <WizardStep current={2} total={3} title={t('servir.step2Title')}
+        subtitle={t('servir.step2Subtitle')}
         canAdvance={canAdvanceStep2}
         onNext={() => setStep(3)} onBack={() => setStep(1)}>
         <div className="space-y-2">
-          <p className="text-sm font-semibold">Tipo</p>
+          <p className="text-sm font-semibold">{t('servir.typeLabel')}</p>
           <BigPicker<ServiceType>
             options={[
-              { value: 'AI', label: 'Inseminación', icon: Droplet, description: 'Con pajilla.' },
-              { value: 'NATURAL', label: 'Monta natural', icon: Beef, description: 'Con toro.' },
-              { value: 'EMBRYO_TRANSFER', label: 'Embrión', icon: Heart, description: 'Transferencia.' }
+              { value: 'AI', label: t('servir.serviceType.AI'), icon: Droplet, description: t('servir.serviceTypeDesc.AI') },
+              { value: 'NATURAL', label: t('servir.serviceType.NATURAL'), icon: Beef, description: t('servir.serviceTypeDesc.NATURAL') },
+              { value: 'EMBRYO_TRANSFER', label: t('servir.serviceType.EMBRYO_TRANSFER'), icon: Heart, description: t('servir.serviceTypeDesc.EMBRYO_TRANSFER') }
             ]}
             value={serviceType}
-            onChange={(t) => { setServiceType(t); setBullId(null); setStrawId(null); }}
-            ariaLabel="Tipo de servicio"
+            onChange={(tp) => { setServiceType(tp); setBullId(null); setStrawId(null); }}
+            ariaLabel={t('servir.typeLabel')}
           />
         </div>
 
         {(serviceType === 'AI' || serviceType === 'NATURAL') ? (
-          <HelpfulField id="srv-bull" label="Toro" icon={Beef} required>
+          <HelpfulField id="srv-bull" label={t('servir.bullLabel')} icon={Beef} required>
             <select id="srv-bull" value={bullId ?? ''}
               onChange={e => setBullId(e.target.value ? Number(e.target.value) : null)}
               className="w-full border rounded-md px-3 py-3 text-base bg-background">
@@ -126,44 +133,44 @@ export function ServirFlow() {
         ) : null}
 
         {serviceType === 'AI' ? (
-          <HelpfulField id="srv-straw" label="Pajilla" icon={Droplet} required>
+          <HelpfulField id="srv-straw" label={t('servir.strawLabel')} icon={Droplet} required>
             <select id="srv-straw" value={strawId ?? ''}
               onChange={e => setStrawId(e.target.value ? Number(e.target.value) : null)}
               className="w-full border rounded-md px-3 py-3 text-base bg-background">
               <option value="">{tCommon("placeholder.selectSemen")}</option>
               {(straws.data ?? []).filter(s => s.availableQuantity > 0 && (!bullId || s.bullId === bullId)).map(s => (
                 <option key={s.id} value={s.id}>
-                  {s.batchNumber ?? `Pajilla #${s.id}`} ({s.availableQuantity} disp.)
+                  {s.batchNumber ?? `Pajilla #${s.id}`} ({s.availableQuantity} {t('servir.strawAvailable')})
                 </option>
               ))}
             </select>
           </HelpfulField>
         ) : null}
 
-        <HelpfulField id="srv-date" label="Fecha del servicio" icon={Calendar} required>
+        <HelpfulField id="srv-date" label={t('servir.dateLabel')} icon={Calendar} required>
           <input id="srv-date" type="date" value={serviceDate}
             onChange={e => setServiceDate(e.target.value)}
             className="w-full border rounded-md px-3 py-2 text-base bg-background" />
         </HelpfulField>
 
-        <HelpfulField id="srv-tech" label="Quién lo hizo" icon={User} help="Nombre del inseminador o de quien atendió.">
+        <HelpfulField id="srv-tech" label={t('servir.technicianLabel')} icon={User} help={t('servir.technicianHelp')}>
           <input id="srv-tech" value={technician}
             onChange={e => setTechnician(e.target.value)}
             className="w-full border rounded-md px-3 py-2 text-base bg-background" />
         </HelpfulField>
 
         {estimatedCalving ? (
-          <p className="text-xs text-muted-foreground">Fecha estimada de parto: <strong>{estimatedCalving}</strong></p>
+          <p className="text-xs text-muted-foreground">{t('servir.estimatedCalving')}<strong>{estimatedCalving}</strong></p>
         ) : null}
       </WizardStep>
     );
   }
 
-  const typeLabel = serviceType === 'AI' ? 'Inseminación' : serviceType === 'NATURAL' ? 'Monta natural' : 'Transferencia de embrión';
+  const typeLabel = t(`servir.serviceType.${serviceType}` as const);
   const bull = bulls.data?.find(b => b.id === bullId);
   const straw = straws.data?.find(s => s.id === strawId);
   return (
-    <WizardStep current={3} total={3} title="¿Listo? Así se guardará"
+    <WizardStep current={3} total={3} title={t('servir.step3Title')}
       canAdvance={!create.isPending} onNext={save} onBack={() => setStep(2)} isLast>
       <div className="rounded-xl border p-4 space-y-3">
         <div className="flex items-center gap-3">
@@ -176,10 +183,10 @@ export function ServirFlow() {
         </div>
         <p className="flex items-center gap-2"><Droplet className="h-4 w-4 text-primary" aria-hidden /> {typeLabel}</p>
         {bull ? <p className="flex items-center gap-2"><Beef className="h-4 w-4 text-primary" aria-hidden /> {bull.name} ({bull.internalCode})</p> : null}
-        {straw ? <p className="text-sm text-muted-foreground">Pajilla: {straw.batchNumber ?? `#${straw.id}`}</p> : null}
+        {straw ? <p className="text-sm text-muted-foreground">{t('servir.summaryStraw')}{straw.batchNumber ?? `#${straw.id}`}</p> : null}
         <p className="flex items-center gap-2"><Calendar className="h-4 w-4 text-primary" aria-hidden /> {serviceDate}</p>
-        {technician ? <p className="text-sm text-muted-foreground">Hizo: {technician}</p> : null}
-        {estimatedCalving ? <p className="text-xs text-muted-foreground">Parto estimado: {estimatedCalving}</p> : null}
+        {technician ? <p className="text-sm text-muted-foreground">{t('servir.summaryTechnician')}{technician}</p> : null}
+        {estimatedCalving ? <p className="text-xs text-muted-foreground">{t('servir.summaryEstimatedCalving')}{estimatedCalving}</p> : null}
       </div>
       {error ? <p role="alert" className="text-sm text-destructive">{error}</p> : null}
     </WizardStep>

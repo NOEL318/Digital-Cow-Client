@@ -5,9 +5,19 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/ui/table';
 import { useCalvings, useCreateCalving } from '@/features/reproduction/calvings/api';
 import { CalvingForm } from '@/features/reproduction/calvings/components/CalvingForm';
+import type { CalvingOutcome } from '@/features/reproduction/calvings/types';
+
+function outcomeTone(outcome: CalvingOutcome): 'success' | 'danger' | 'warning' | 'neutral' {
+  if (outcome === 'LIVE') return 'success';
+  if (outcome === 'TWIN_LIVE') return 'success';
+  if (outcome === 'STILLBORN' || outcome === 'TWIN_STILLBORN') return 'danger';
+  return 'warning';
+}
 
 /** Pagina de listado de partos. */
 export default function CalvingsPage() {
@@ -33,28 +43,32 @@ export default function CalvingsPage() {
           </DialogContent>
         </Dialog>
       </div>
-      <table className="w-full border rounded">
-        <thead>
-          <tr className="bg-muted">
-            <th className="p-2 text-left">{t('reproduction:calving.calvedAt')}</th>
-            <th className="p-2 text-left">{t('reproduction:calving.animal')}</th>
-            <th className="p-2 text-left">{t('reproduction:calving.ease')}</th>
-            <th className="p-2 text-left">{t('reproduction:calving.outcome')}</th>
-            <th className="p-2 text-left">{t('reproduction:calving.calfSex')}</th>
-          </tr>
-        </thead>
-        <tbody>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>{t('reproduction:calving.calvedAt')}</TableHead>
+            <TableHead>{t('reproduction:calving.animal')}</TableHead>
+            <TableHead>{t('reproduction:calving.ease')}</TableHead>
+            <TableHead>{t('reproduction:calving.outcome')}</TableHead>
+            <TableHead>{t('reproduction:calving.calfSex')}</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
           {calvings.data?.map(c => (
-            <tr key={c.id} className="border-t">
-              <td className="p-2">{c.calvedAt}</td>
-              <td className="p-2">{c.animalId}</td>
-              <td className="p-2">{t(`reproduction:calving.easeValue.${c.ease}`)}</td>
-              <td className="p-2">{t(`reproduction:calving.outcomeValue.${c.outcome}`)}</td>
-              <td className="p-2">{c.calfSex ?? '-'}</td>
-            </tr>
+            <TableRow key={c.id}>
+              <TableCell>{c.calvedAt}</TableCell>
+              <TableCell>{c.animalId}</TableCell>
+              <TableCell>{t(`reproduction:calving.easeValue.${c.ease}`)}</TableCell>
+              <TableCell>
+                <Badge tone={outcomeTone(c.outcome)}>
+                  {t(`reproduction:calving.outcomeValue.${c.outcome}`)}
+                </Badge>
+              </TableCell>
+              <TableCell>{c.calfSex ?? '-'}</TableCell>
+            </TableRow>
           ))}
-        </tbody>
-      </table>
+        </TableBody>
+      </Table>
     </div>
   );
 }

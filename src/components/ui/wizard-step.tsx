@@ -1,5 +1,6 @@
 import { type ReactNode, useEffect, useRef } from 'react';
 import { ChevronLeft, ChevronRight, Check } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { useVoice } from '@/lib/use-voice';
 import { BigButton } from './big-button';
 import { cn } from '@/lib/utils';
@@ -15,9 +16,9 @@ interface WizardStepProps {
   subtitle?: string;
   /** Contenido del paso (form fields, BigPickers, etc.). */
   children: ReactNode;
-  /** Etiqueta del boton siguiente; default "Siguiente". */
+  /** Etiqueta del boton siguiente; default t('wizard.next'). */
   nextLabel?: string;
-  /** Etiqueta del boton atras; default "Volver". */
+  /** Etiqueta del boton atras; default t('wizard.back'). */
   backLabel?: string;
   /** Si el paso es valido y se puede avanzar. */
   canAdvance: boolean;
@@ -25,7 +26,7 @@ interface WizardStepProps {
   onNext: () => void;
   /** Handler para volver al paso anterior. Si no se provee, no se muestra. */
   onBack?: () => void;
-  /** Si es el ultimo paso, cambia el boton siguiente a "Guardar". */
+  /** Si es el ultimo paso, cambia el boton siguiente a t('wizard.save'). */
   isLast?: boolean;
   className?: string;
 }
@@ -50,6 +51,7 @@ export function WizardStep({
   isLast,
   className
 }: WizardStepProps) {
+  const { t } = useTranslation('common');
   const { speak } = useVoice();
   const titleRef = useRef(title);
 
@@ -66,7 +68,7 @@ export function WizardStep({
     <div className={cn('flex flex-col gap-6 max-w-2xl mx-auto', className)}>
       <header className="space-y-2">
         <p className="text-xs uppercase tracking-wide text-muted-foreground">
-          Paso {current} de {total}
+          {t('wizard.stepOf', { current, total })}
         </p>
         <h1 className="text-2xl font-bold leading-tight">{title}</h1>
         {subtitle ? <p className="text-base text-muted-foreground">{subtitle}</p> : null}
@@ -75,7 +77,7 @@ export function WizardStep({
       <footer className="flex items-center justify-between gap-3 pt-4">
         {onBack ? (
           <BigButton
-            label={backLabel ?? 'Volver'}
+            label={backLabel ?? t('wizard.back')}
             icon={ChevronLeft}
             variant="outline"
             onClick={onBack}
@@ -84,7 +86,7 @@ export function WizardStep({
           <span />
         )}
         <BigButton
-          label={nextLabel ?? (isLast ? 'Guardar' : 'Siguiente')}
+          label={nextLabel ?? (isLast ? t('wizard.save') : t('wizard.next'))}
           icon={isLast ? Check : ChevronRight}
           variant="primary"
           disabled={!canAdvance}

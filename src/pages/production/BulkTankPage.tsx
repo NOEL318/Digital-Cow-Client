@@ -6,6 +6,10 @@ import { useTranslation } from 'react-i18next';
 import { Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import {
+  Table, TableHeader, TableBody, TableRow, TableHead, TableCell
+} from '@/components/ui/table';
+import { Badge } from '@/components/ui/badge';
 import { useBulkTankDeliveries, useCreateBulkTankDelivery } from '@/features/production/bulkTank/api';
 import { BulkTankDeliveryForm } from '@/features/production/bulkTank/components/BulkTankDeliveryForm';
 
@@ -33,26 +37,29 @@ export default function BulkTankPage() {
           </DialogContent>
         </Dialog>
       </div>
-      <table className="w-full border rounded">
-        <thead>
-          <tr className="bg-muted">
-            <th className="p-2 text-left">{t('production:bulkTank.deliveryDate')}</th>
-            <th className="p-2 text-left">{t('production:bulkTank.ranch')}</th>
-            <th className="p-2 text-left">{t('production:bulkTank.totalLiters')}</th>
-            <th className="p-2 text-left">{t('production:bulkTank.buyer')}</th>
-          </tr>
-        </thead>
-        <tbody>
+
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>{t('production:bulkTank.deliveryDate')}</TableHead>
+            <TableHead>{t('production:bulkTank.ranch')}</TableHead>
+            <TableHead>{t('production:bulkTank.totalLiters')}</TableHead>
+            <TableHead>{t('production:bulkTank.buyer')}</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
           {deliveries.data?.map(d => (
-            <tr key={d.id} className="border-t">
-              <td className="p-2">{d.deliveryDate}</td>
-              <td className="p-2">{d.ranchId}</td>
-              <td className="p-2">{d.totalLiters}</td>
-              <td className="p-2">{d.buyer ?? '-'}</td>
-            </tr>
+            <TableRow key={d.id}>
+              <TableCell>{d.deliveryDate}</TableCell>
+              <TableCell>{d.ranchId}</TableCell>
+              <TableCell>
+                <Badge tone="success">{d.totalLiters}</Badge>
+              </TableCell>
+              <TableCell>{d.buyer ?? '-'}</TableCell>
+            </TableRow>
           ))}
-        </tbody>
-      </table>
+        </TableBody>
+      </Table>
     </div>
   );
 }

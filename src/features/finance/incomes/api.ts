@@ -53,7 +53,12 @@ export function useUpdateIncome() {
   return useMutation({
     mutationFn: async ({ id, body }: { id: number; body: Partial<IncomeCreate> }) =>
       (await http.patch<Income>(`/finance/incomes/${id}`, body)).data,
-    onSuccess: () => qc.invalidateQueries({ queryKey: QK })
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: QK });
+      qc.invalidateQueries({ queryKey: ['dashboard', 'finance'] });
+      qc.invalidateQueries({ queryKey: ['finance', 'pnl'] });
+      qc.invalidateQueries({ queryKey: ['finance', 'cash-flow'] });
+    }
   });
 }
 
@@ -63,6 +68,11 @@ export function useDeleteIncome() {
   return useMutation({
     mutationFn: async (id: number) =>
       (await http.delete(`/finance/incomes/${id}`)).data,
-    onSuccess: () => qc.invalidateQueries({ queryKey: QK })
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: QK });
+      qc.invalidateQueries({ queryKey: ['dashboard', 'finance'] });
+      qc.invalidateQueries({ queryKey: ['finance', 'pnl'] });
+      qc.invalidateQueries({ queryKey: ['finance', 'cash-flow'] });
+    }
   });
 }

@@ -4,6 +4,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { useQueryClient } from '@tanstack/react-query';
 import { PlusCircle, Calendar, DollarSign, Tags, User } from 'lucide-react';
 import { WizardStep } from '@/components/ui/wizard-step';
 import { HelpfulField } from '@/components/ui/helpful-field';
@@ -14,8 +15,10 @@ import { useCreateIncome } from '@/features/finance/incomes/api';
  * Wizard "Recibi dinero". Dos pasos: categoria y monto, confirmar.
  */
 export function RecibirDineroFlow() {
+  const { t } = useTranslation('wizard');
   const { t: tCommon } = useTranslation('common');
   const nav = useNavigate();
+  const qc = useQueryClient();
   const create = useCreateIncome();
   const categories = useIncomeCategories();
   const [step, setStep] = useState(1);
@@ -37,10 +40,14 @@ export function RecibirDineroFlow() {
         payer: payer || undefined,
         description: description || undefined
       });
+      qc.invalidateQueries({ queryKey: ['finance', 'incomes'] });
+      qc.invalidateQueries({ queryKey: ['dashboard', 'finance'] });
+      qc.invalidateQueries({ queryKey: ['finance', 'pnl'] });
+      qc.invalidateQueries({ queryKey: ['finance', 'cash-flow'] });
       nav('/inicio');
     } catch (e) {
       const msg = (e as { response?: { data?: { message?: string } } })?.response?.data?.message
-        ?? 'No pudimos guardar el ingreso.';
+        ?? t('recibirDinero.saveFailed');
       setError(msg);
     }
   }
@@ -50,12 +57,12 @@ export function RecibirDineroFlow() {
       <WizardStep
         current={1}
         total={2}
-        title="De donde vino el dinero?"
-        subtitle="Elige una categoria, pon el monto y la fecha."
+        title={t('recibirDinero.step1Title')}
+        subtitle={t('recibirDinero.step1Subtitle')}
         canAdvance={!!categoryId && !!amount && Number(amount) > 0 && !!receivedAt}
         onNext={() => setStep(2)}
       >
-        <HelpfulField id="i-cat" label="Categoria del ingreso" icon={Tags} required>
+        <HelpfulField id="i-cat" label={t('recibirDinero.categoryLabel')} icon={Tags} required>
           <select
             id="i-cat"
             value={categoryId ?? ''}
@@ -69,7 +76,7 @@ export function RecibirDineroFlow() {
           </select>
         </HelpfulField>
 
-        <HelpfulField id="i-amount" label="Cuanto dinero recibiste?" icon={DollarSign} required example="1500">
+        <HelpfulField id="i-amount" label={t('recibirDinero.amountLabel')} icon={DollarSign} required example={t('recibirDinero.amountExample')}>
           <input
             id="i-amount"
             type="number"
@@ -82,7 +89,7 @@ export function RecibirDineroFlow() {
           />
         </HelpfulField>
 
-        <HelpfulField id="i-date" label="Fecha del ingreso" icon={Calendar} required>
+        <HelpfulField id="i-date" label={t('recibirDinero.dateLabel')} icon={Calendar} required>
           <input
             id="i-date"
             type="date"
@@ -92,7 +99,7 @@ export function RecibirDineroFlow() {
           />
         </HelpfulField>
 
-        <HelpfulField id="i-payer" label="Quien te pago" icon={User} help="Para acordarte de quien fue." example="Carniceria El Llano">
+        <HelpfulField id="i-payer" label={t('recibirDinero.payerLabel')} icon={User} help={t('recibirDinero.payerHelp')} example={t('recibirDinero.payerExample')}>
           <input
             id="i-payer"
             value={payer}
@@ -101,7 +108,7 @@ export function RecibirDineroFlow() {
           />
         </HelpfulField>
 
-        <HelpfulField id="i-desc" label="Nota corta" example="Venta de leche del lunes">
+        <HelpfulField id="i-desc" label={t('recibirDinero.noteLabel')} example={t('recibirDinero.noteExample')}>
           <input
             id="i-desc"
             value={description}
@@ -118,7 +125,7 @@ export function RecibirDineroFlow() {
     <WizardStep
       current={2}
       total={2}
-      title="Listo? Asi se guardara"
+      title={t('recibirDinero.step2Title')}
       canAdvance={!create.isPending}
       onNext={save}
       onBack={() => setStep(1)}
@@ -126,10 +133,10 @@ export function RecibirDineroFlow() {
     >
       <div className="rounded-xl border p-4 space-y-2">
         <p className="text-2xl font-bold flex items-center gap-2"><PlusCircle className="h-6 w-6 text-green-700" aria-hidden /> {amount}</p>
-        <p><span className="text-muted-foreground">Categoria:</span> {cat?.nameEs}</p>
-        <p><span className="text-muted-foreground">Fecha:</span> {receivedAt}</p>
-        {payer ? <p><span className="text-muted-foreground">Pagado por:</span> {payer}</p> : null}
-        {description ? <p><span className="text-muted-foreground">Nota:</span> {description}</p> : null}
+        <p><span className="text-muted-foreground">{t('recibirDinero.summaryCategory')}</span> {cat?.nameEs}</p>
+        <p><span className="text-muted-foreground">{t('recibirDinero.summaryDate')}</span> {receivedAt}</p>
+        {payer ? <p><span className="text-muted-foreground">{t('recibirDinero.summaryPayer')}</span> {payer}</p> : null}
+        {description ? <p><span className="text-muted-foreground">{t('recibirDinero.summaryNote')}</span> {description}</p> : null}
       </div>
       {error ? <p role="alert" className="text-sm text-destructive">{error}</p> : null}
     </WizardStep>

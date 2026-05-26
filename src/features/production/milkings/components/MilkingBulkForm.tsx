@@ -6,6 +6,9 @@ import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import {
+  Table, TableHeader, TableBody, TableRow, TableHead, TableCell
+} from '@/components/ui/table';
 import { useAnimals } from '@/features/animals/api';
 import { useRanches, useLots } from '@/features/ranches/api';
 import { useCreateMilkingBulk } from '../api';
@@ -96,18 +99,18 @@ export function MilkingBulkForm({ onDone }: { onDone?: () => void }) {
       ) : lotAnimals.length === 0 ? (
         <p className="text-sm text-muted-foreground">{t('production:milking.noActiveAnimals')}</p>
       ) : (
-        <table className="w-full border rounded">
-          <thead>
-            <tr className="bg-muted">
-              <th className="p-2 text-left">{t('production:milking.animal')}</th>
-              <th className="p-2 text-left w-40">{t('production:milking.liters')}</th>
-            </tr>
-          </thead>
-          <tbody>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>{t('production:milking.animal')}</TableHead>
+              <TableHead className="w-40">{t('production:milking.liters')}</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
             {lotAnimals.map(a => (
-              <tr key={a.id} className="border-t">
-                <td className="p-2">{a.internalTag}{a.name ? ` - ${a.name}` : ''}</td>
-                <td className="p-2">
+              <TableRow key={a.id}>
+                <TableCell>{a.internalTag}{a.name ? ` - ${a.name}` : ''}</TableCell>
+                <TableCell>
                   <Input
                     type="number"
                     step="0.01"
@@ -115,11 +118,11 @@ export function MilkingBulkForm({ onDone }: { onDone?: () => void }) {
                     value={values[a.id] ?? ''}
                     onChange={e => update(a.id, e.target.value)}
                   />
-                </td>
-              </tr>
+                </TableCell>
+              </TableRow>
             ))}
-          </tbody>
-        </table>
+          </TableBody>
+        </Table>
       )}
 
       <Button onClick={submit} disabled={bulk.isPending || !lotId || lotAnimals.length === 0}>

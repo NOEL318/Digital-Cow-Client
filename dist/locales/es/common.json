@@ -58,7 +58,7 @@
   "labels": {
     "calfSex": "Sexo del becerro",
     "mapLocation": "Ubicación en el mapa",
-    "accountName": "Nombre de la cuenta",
+    "accountName": "Nombre del rancho/cuenta",
     "defaultLocale": "Idioma por defecto",
     "signIn": "Iniciar sesión",
     "bySex": "Por sexo",
@@ -67,5 +67,103 @@
     "animalPhotos": "Fotos del animal",
     "moneyDetail": "Dinero en detalle",
     "lotConditionsToday": "Condiciones del corral hoy"
+  },
+  "ajustes": {
+    "subtitle": "Toda la configuración de tu cuenta y rancho en un solo lugar.",
+    "categoriesAria": "Categorías de ajustes",
+    "groupAccount": "Mi cuenta",
+    "groupRanch": "Mi rancho",
+    "groupCatalogs": "Catálogos",
+    "groupPreferences": "Preferencias"
+  },
+  "notifications": {
+    "title": "Notificaciones",
+    "unsupported": "Tu navegador no soporta notificaciones.",
+    "active": "Notificaciones activas.",
+    "pitch": "Te avisamos cuando algo importante pase aunque no tengas la app abierta.",
+    "enable": "Activar notificaciones",
+    "enableFailed": "No se activaron las notificaciones. Revisa los permisos del navegador."
+  },
+  "profile": {
+    "yourName": "Tu nombre",
+    "email": "Correo"
+  },
+  "scanner": {
+    "defaultTitle": "Escanear código de barras",
+    "noCamera": "No encontramos una cámara en este dispositivo. Puedes escribir el código a mano.",
+    "permissionDenied": "No nos diste permiso para usar la cámara. Puedes escribir el código a mano.",
+    "cameraError": "No pudimos abrir la cámara. Puedes escribir el código a mano.",
+    "manualLabel": "Escribir código a mano",
+    "manualPlaceholder": "Ejemplo: 7501234567890",
+    "useBtn": "Usar"
+  },
+  "ranchPicker": {
+    "noRanches": "Aún no tienes ranchos registrados.",
+    "allLabel": "Todos",
+    "ariaLabel": "Rancho"
+  },
+  "lotPicker": {
+    "pickRanchFirst": "Elige primero un rancho.",
+    "noLots": "Este rancho aún no tiene lotes.",
+    "allLabel": "Todos los lotes",
+    "ariaLabel": "Lote"
+  },
+  "offline": {
+    "noConnection": "Sin conexión",
+    "pendingSync": "{{count}} por sincronizar",
+    "retrySync": "Reintentar sincronización"
+  },
+  "map": {
+    "loading": "Cargando mapa...",
+    "noRanchesTitle": "Aún no tienes ranchos en el mapa",
+    "noRanchesDesc": "Pon la ubicación (latitud y longitud) de cada rancho en Ajustes para verlos aquí.",
+    "goToRanches": "Ir a ranchos",
+    "viewAnimals": "Ver animales aquí"
+  },
+  "lightbox": {
+    "ariaLabel": "Visor de fotos",
+    "close": "Cerrar",
+    "download": "Descargar foto",
+    "prev": "Anterior",
+    "next": "Siguiente",
+    "photoAlt": "Foto {{n}}"
+  },
+  "wizard": {
+    "stepOf": "Paso {{current}} de {{total}}",
+    "back": "Volver",
+    "next": "Siguiente",
+    "save": "Guardar"
+  },
+  "hacerNota": {
+    "subtitle": "Elige qué quieres hacer. Te guiamos paso a paso.",
+    "registrar": "Registrar",
+    "ver": "Ver",
+    "act": {
+      "vacune": { "label": "Vacuné", "desc": "Registrar una vacuna que aplicaste." },
+      "pese": { "label": "Pesé", "desc": "Anotar cuánto pesa un animal." },
+      "ordene": { "label": "Ordeñé", "desc": "Registrar el ordeño de una vaca." },
+      "diagnostique": { "label": "Diagnostiqué", "desc": "Registrar una enfermedad o síntoma." },
+      "trate": { "label": "Traté", "desc": "Aplicar un tratamiento con medicamento." },
+      "alimentar": { "label": "Alimenté", "desc": "Registrar comida dada a un lote." },
+      "celo": { "label": "Vi un celo", "desc": "Anotar la detección de un celo." },
+      "servi": { "label": "Inseminé / serví", "desc": "Inseminación o monta." },
+      "prenez": { "label": "Detecté preñez", "desc": "Registrar un chequeo de preñez." },
+      "parto": { "label": "Parió una vaca", "desc": "Anotar un parto." },
+      "seque": { "label": "Sequé", "desc": "Marcar una vaca como seca." },
+      "destete": { "label": "Desteté", "desc": "Registrar el destete de un becerro." },
+      "aborto": { "label": "Aborto", "desc": "Anotar la pérdida de una gestación." },
+      "compre": { "label": "Compré animal", "desc": "Agregar un animal al rancho." },
+      "vendi": { "label": "Vendí animal", "desc": "Registrar la venta de un animal." },
+      "gaste": { "label": "Gasté", "desc": "Anotar dinero que salió." },
+      "recibi": { "label": "Recibí dinero", "desc": "Anotar dinero que entró." }
+    },
+    "sec": {
+      "salud": { "label": "Salud", "desc": "Vacunas, diagnósticos, tratamientos y alertas." },
+      "alimentacion": { "label": "Alimentación", "desc": "Insumos, planes y consumo del rancho." },
+      "dinero": { "label": "Dinero", "desc": "Gastos, ingresos y resumen financiero." },
+      "produccion": { "label": "Producción", "desc": "Pesajes, ordeños y curvas de producción." },
+      "reproduccion": { "label": "Reproducción", "desc": "Celos, servicios, gestaciones y partos." },
+      "reportes": { "label": "Reportes", "desc": "Inventario, históricos y resumen mensual." }
+    }
   }
 }

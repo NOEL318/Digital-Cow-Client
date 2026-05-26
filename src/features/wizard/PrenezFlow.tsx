@@ -3,6 +3,8 @@
  */
 import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useQueryClient } from '@tanstack/react-query';
+import { useTranslation } from 'react-i18next';
 import { Baby, Calendar, Check, X, HelpCircle, Hand, Activity, Droplet, Milk } from 'lucide-react';
 import { WizardStep } from '@/components/ui/wizard-step';
 import { HelpfulField } from '@/components/ui/helpful-field';
@@ -17,7 +19,9 @@ type Method = 'PALPATION' | 'ULTRASOUND' | 'BLOOD_TEST' | 'MILK_TEST';
 
 /** Wizard "Detecté preñez". Pasos: hembra, resultado+método+fecha, confirmar. */
 export function PrenezFlow() {
+  const { t } = useTranslation('wizard');
   const nav = useNavigate();
+  const qc = useQueryClient();
   const [params] = useSearchParams();
   const prefAnimalId = params.get('animalId') ? Number(params.get('animalId')) : null;
 
@@ -62,16 +66,19 @@ export function PrenezFlow() {
         checkedAt,
         estimatedGestationDays: result === 'POSITIVE' && gestationDays ? Number(gestationDays) : undefined
       });
+      qc.invalidateQueries({ queryKey: ['animal', ctx.animal.id] });
+      qc.invalidateQueries({ queryKey: ['reproduction', 'pregnancy-checks'] });
+      qc.invalidateQueries({ queryKey: ['reproduction', 'alerts'] });
       nav(`/animales/${ctx.animal.id}`);
     } catch (e) {
       setError((e as { response?: { data?: { error?: { message?: string } } } })
-        ?.response?.data?.error?.message ?? 'No pudimos guardar el chequeo.');
+        ?.response?.data?.error?.message ?? t('prenez.saveFailed'));
     }
   }
 
   if (step === 1) {
     return (
-      <WizardStep current={1} total={3} title="¿A cuál vaca chequeaste?"
+      <WizardStep current={1} total={3} title={t('prenez.step1Title')}
         canAdvance={!!ctx.animal} onNext={() => setStep(2)}>
         <WizardLocationSelector value={ctx} onChange={setCtx} sexFilter="FEMALE" />
       </WizardStep>
@@ -80,46 +87,46 @@ export function PrenezFlow() {
 
   if (step === 2) {
     return (
-      <WizardStep current={2} total={3} title="¿Qué resultado dio?"
+      <WizardStep current={2} total={3} title={t('prenez.step2Title')}
         canAdvance={!!result && !!method && !!checkedAt}
         onNext={() => setStep(3)} onBack={() => setStep(1)}>
         <div className="space-y-2">
-          <p className="text-sm font-semibold">Resultado</p>
+          <p className="text-sm font-semibold">{t('prenez.resultLabel')}</p>
           <BigPicker<Result>
             options={[
-              { value: 'POSITIVE', label: 'Preñada', icon: Check, description: 'Está esperando.' },
-              { value: 'NEGATIVE', label: 'Vacía', icon: X, description: 'No preñada.' },
-              { value: 'DOUBTFUL', label: 'Dudoso', icon: HelpCircle, description: 'No claro.' }
+              { value: 'POSITIVE', label: t('prenez.result.POSITIVE'), icon: Check, description: t('prenez.resultDesc.POSITIVE') },
+              { value: 'NEGATIVE', label: t('prenez.result.NEGATIVE'), icon: X, description: t('prenez.resultDesc.NEGATIVE') },
+              { value: 'DOUBTFUL', label: t('prenez.result.DOUBTFUL'), icon: HelpCircle, description: t('prenez.resultDesc.DOUBTFUL') }
             ]}
             value={result}
             onChange={setResult}
-            ariaLabel="Resultado del chequeo"
+            ariaLabel={t('prenez.resultLabel')}
           />
         </div>
 
         <div className="space-y-2">
-          <p className="text-sm font-semibold">¿Cómo lo chequeaste?</p>
+          <p className="text-sm font-semibold">{t('prenez.methodLabel')}</p>
           <BigPicker<Method>
             options={[
-              { value: 'PALPATION', label: 'Tacto', icon: Hand },
-              { value: 'ULTRASOUND', label: 'Ecografía', icon: Activity },
-              { value: 'BLOOD_TEST', label: 'Sangre', icon: Droplet },
-              { value: 'MILK_TEST', label: 'Leche', icon: Milk }
+              { value: 'PALPATION', label: t('prenez.method.PALPATION'), icon: Hand },
+              { value: 'ULTRASOUND', label: t('prenez.method.ULTRASOUND'), icon: Activity },
+              { value: 'BLOOD_TEST', label: t('prenez.method.BLOOD_TEST'), icon: Droplet },
+              { value: 'MILK_TEST', label: t('prenez.method.MILK_TEST'), icon: Milk }
             ]}
             value={method}
             onChange={setMethod}
-            ariaLabel="Método del chequeo"
+            ariaLabel={t('prenez.methodLabel')}
           />
         </div>
 
-        <HelpfulField id="pc-date" label="Fecha del chequeo" icon={Calendar} required>
+        <HelpfulField id="pc-date" label={t('prenez.dateLabel')} icon={Calendar} required>
           <input id="pc-date" type="date" value={checkedAt}
             onChange={e => setCheckedAt(e.target.value)}
             className="w-full border rounded-md px-3 py-2 text-base bg-background" />
         </HelpfulField>
 
         {result === 'POSITIVE' ? (
-          <HelpfulField id="pc-days" label="Días de gestación estimados" icon={Baby} example="60">
+          <HelpfulField id="pc-days" label={t('prenez.gestationLabel')} icon={Baby} example={t('prenez.gestationExample')}>
             <input id="pc-days" type="number" inputMode="numeric" min={1} max={300}
               value={gestationDays} onChange={e => setGestationDays(e.target.value)}
               className="w-full border rounded-md px-3 py-2 text-base bg-background" />
@@ -127,15 +134,15 @@ export function PrenezFlow() {
         ) : null}
 
         {estimatedCalving ? (
-          <p className="text-xs text-muted-foreground">Parto estimado: <strong>{estimatedCalving}</strong></p>
+          <p className="text-xs text-muted-foreground">{t('prenez.estimatedCalving')}<strong>{estimatedCalving}</strong></p>
         ) : null}
       </WizardStep>
     );
   }
 
-  const resultLabel = result === 'POSITIVE' ? 'Preñada' : result === 'NEGATIVE' ? 'Vacía' : 'Dudoso';
+  const resultLabel = t(`prenez.result.${result}` as const);
   return (
-    <WizardStep current={3} total={3} title="¿Listo? Así se guardará"
+    <WizardStep current={3} total={3} title={t('prenez.step3Title')}
       canAdvance={!create.isPending} onNext={save} onBack={() => setStep(2)} isLast>
       <div className="rounded-xl border p-4 space-y-3">
         <div className="flex items-center gap-3">
@@ -148,7 +155,7 @@ export function PrenezFlow() {
         </div>
         <p className="flex items-center gap-2 text-xl font-bold"><Baby className="h-5 w-5 text-primary" aria-hidden /> {resultLabel}</p>
         <p className="flex items-center gap-2"><Calendar className="h-4 w-4 text-primary" aria-hidden /> {checkedAt}</p>
-        {estimatedCalving ? <p className="text-sm text-muted-foreground">Parto estimado: {estimatedCalving}</p> : null}
+        {estimatedCalving ? <p className="text-sm text-muted-foreground">{t('prenez.estimatedCalving')}{estimatedCalving}</p> : null}
       </div>
       {error ? <p role="alert" className="text-sm text-destructive">{error}</p> : null}
     </WizardStep>

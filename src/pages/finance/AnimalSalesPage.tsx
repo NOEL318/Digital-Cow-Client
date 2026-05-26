@@ -6,6 +6,9 @@ import { useTranslation } from 'react-i18next';
 import { Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import {
+  Table, TableHeader, TableBody, TableRow, TableHead, TableCell
+} from '@/components/ui/table';
 import { toArray } from '@/lib/page';
 import { useAnimalSales, useCreateAnimalSale } from '@/features/finance/animalSales/api';
 import type { AnimalSale } from '@/features/finance/animalSales/types';
@@ -45,30 +48,32 @@ export default function AnimalSalesPage() {
           </DialogContent>
         </Dialog>
       </div>
-      <table className="w-full border rounded">
-        <thead>
-          <tr className="bg-muted">
-            <th className="p-2 text-left">{t('finance:animalSale.soldAt')}</th>
-            <th className="p-2 text-left">{t('finance:animalSale.animal')}</th>
-            <th className="p-2 text-left">{t('finance:animalSale.buyer')}</th>
-            <th className="p-2 text-right">{t('finance:animalSale.liveWeightKg')}</th>
-            <th className="p-2 text-right">{t('finance:animalSale.pricePerKg')}</th>
-            <th className="p-2 text-right">{t('finance:animalSale.totalPrice')}</th>
-          </tr>
-        </thead>
-        <tbody>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>{t('finance:animalSale.soldAt')}</TableHead>
+            <TableHead>{t('finance:animalSale.animal')}</TableHead>
+            <TableHead>{t('finance:animalSale.buyer')}</TableHead>
+            <TableHead className="text-right">{t('finance:animalSale.liveWeightKg')}</TableHead>
+            <TableHead className="text-right">{t('finance:animalSale.pricePerKg')}</TableHead>
+            <TableHead className="text-right">{t('finance:animalSale.totalPrice')}</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
           {salesRows.map(s => (
-            <tr key={s.id} className="border-t">
-              <td className="p-2">{s.soldAt}</td>
-              <td className="p-2">{animalLabel(s.animalId)}</td>
-              <td className="p-2">{s.buyer ?? '-'}</td>
-              <td className="p-2 text-right">{s.liveWeightKg ?? '-'}</td>
-              <td className="p-2 text-right">{s.pricePerKg ?? '-'}</td>
-              <td className="p-2 text-right">{Number(s.totalPrice).toFixed(2)} {s.currency}</td>
-            </tr>
+            <TableRow key={s.id}>
+              <TableCell>{s.soldAt}</TableCell>
+              <TableCell>{animalLabel(s.animalId)}</TableCell>
+              <TableCell>{s.buyer ?? '-'}</TableCell>
+              <TableCell className="text-right">{s.liveWeightKg ?? '-'}</TableCell>
+              <TableCell className="text-right">{s.pricePerKg ?? '-'}</TableCell>
+              <TableCell className="text-right font-semibold text-green-700 dark:text-green-400">
+                {Number(s.totalPrice).toFixed(2)} {s.currency}
+              </TableCell>
+            </TableRow>
           ))}
-        </tbody>
-      </table>
+        </TableBody>
+      </Table>
     </div>
   );
 }

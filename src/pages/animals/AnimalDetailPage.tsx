@@ -25,6 +25,9 @@ import { AnimalProductionTab } from '@/features/animals/components/AnimalProduct
 import { AnimalFinanceTab } from '@/features/animals/components/AnimalFinanceTab';
 import { useAnimalLactation } from '@/features/agenda/api';
 import { BigButton } from '@/components/ui/big-button';
+import { Badge as SexBadge } from '@/components/ui/badge';
+import { sexStyle } from '@/features/animals/sex-style';
+import { cn } from '@/lib/utils';
 
 /**
  * Vista detalle del animal: foto principal, badges de estado
@@ -45,7 +48,7 @@ export default function AnimalDetailPage() {
   if (q.isError) {
     return (
       <div className="p-6 text-center space-y-3">
-        <p className="text-destructive">{t('animals:detail.loadFailed', { defaultValue: 'No se pudo cargar el animal.' })}</p>
+        <p className="text-destructive">{t('animals:detail.loadFailed')}</p>
         <button
           type="button"
           onClick={() => q.refetch()}
@@ -61,31 +64,38 @@ export default function AnimalDetailPage() {
   const canSell = a.status === 'ACTIVE';
   const canMove = a.status === 'ACTIVE';
   const lac = lactation.data;
+  const sx = sexStyle(a.sex);
 
   return (
     <div className="space-y-4 max-w-5xl mx-auto">
-      <AnimalHero
-        animalId={a.id}
-        internalTag={a.internalTag}
-        name={a.name}
-        coverPhotoId={a.coverPhotoId}
-      />
+      {/* Anillo de la foto teñido por sexo: rosa hembra, grafito macho. */}
+      <div className={cn('rounded-2xl ring-2 ring-offset-2 ring-offset-background', sx.ring)}>
+        <AnimalHero
+          animalId={a.id}
+          internalTag={a.internalTag}
+          name={a.name}
+          coverPhotoId={a.coverPhotoId}
+        />
+      </div>
 
       <header className="flex items-start justify-between gap-3 flex-wrap">
-        <div>
+        <div className="space-y-1">
           <h1 className="text-3xl font-bold">{a.internalTag}{a.name ? ` · ${a.name}` : ''}</h1>
-          <p className="text-sm text-muted-foreground">
-            {t(`animals:sex.${a.sex}`)} · {t(`animals:status.${a.status}`)}
-          </p>
+          <div className="flex items-center gap-2">
+            <SexBadge tone={a.sex === 'FEMALE' ? 'pink' : 'graphite'}>
+              {t(`animals:sex.${a.sex}`)}
+            </SexBadge>
+            <span className="text-sm text-muted-foreground">{t(`animals:status.${a.status}`)}</span>
+          </div>
         </div>
         <div className="flex gap-2 flex-wrap">
           {canSell ? (
-            <BigButton label="Vender" icon={Handshake} variant="primary" onClick={() => setSellOpen(true)} />
+            <BigButton label={t('animals:detail.sell')} icon={Handshake} variant="primary" onClick={() => setSellOpen(true)} />
           ) : null}
           {canMove ? (
-            <BigButton label="Mover de lote" icon={Move} variant="outline" onClick={() => setMoveOpen(true)} />
+            <BigButton label={t('animals:detail.move')} icon={Move} variant="outline" onClick={() => setMoveOpen(true)} />
           ) : null}
-          <BigButton label="Compartir" icon={Share2} variant="outline" onClick={() => setShareOpen(true)} />
+          <BigButton label={t('animals:detail.share')} icon={Share2} variant="outline" onClick={() => setShareOpen(true)} />
           <BigButton
             label={t('common:actions.edit')}
             icon={Edit2}
@@ -98,15 +108,15 @@ export default function AnimalDetailPage() {
       {lac && (lac.daysInMilk != null || lac.dry || lac.lastCalving) ? (
         <div className="flex flex-wrap gap-2">
           {lac.dry ? (
-            <Badge tone="amber" icon={Milk} label="Seca" />
+            <LacBadge tone="amber" icon={Milk} label={t('animals:lactation.dry')} />
           ) : lac.daysInMilk != null ? (
-            <Badge tone="green" icon={Milk} label={`${lac.daysInMilk} días en leche`} />
+            <LacBadge tone="green" icon={Milk} label={t('animals:lactation.daysInMilk', { days: lac.daysInMilk })} />
           ) : null}
           {lac.lastCalving ? (
-            <Badge tone="pink" icon={Baby} label={`Último parto: ${lac.lastCalving}`} />
+            <LacBadge tone="pink" icon={Baby} label={t('animals:lactation.lastCalving', { date: lac.lastCalving })} />
           ) : null}
           {lac.recentAvgLiters != null && !lac.dry ? (
-            <Badge tone="blue" icon={Milk} label={`Promedio reciente: ${lac.recentAvgLiters} litros/día`} />
+            <LacBadge tone="blue" icon={Milk} label={t('animals:lactation.recentAvg', { liters: lac.recentAvgLiters })} />
           ) : null}
         </div>
       ) : null}
@@ -142,14 +152,14 @@ export default function AnimalDetailPage() {
 
       <Tabs.Root defaultValue="datos" className="space-y-4">
         <Tabs.List className="grid grid-cols-3 border rounded-xl overflow-hidden">
-          <TabHead value="datos" icon={Camera} label="Datos y fotos" />
-          <TabHead value="historia" icon={Activity} label="Su historia" />
-          <TabHead value="dinero" icon={BarChart3} label="Dinero y comparar" />
+          <TabHead value="datos" icon={Camera} label={t('animals:tabs.dataAndPhotos')} />
+          <TabHead value="historia" icon={Activity} label={t('animals:tabs.history')} />
+          <TabHead value="dinero" icon={BarChart3} label={t('animals:tabs.moneyAndCompare')} />
         </Tabs.List>
 
         <Tabs.Content value="datos" className="space-y-6">
           <section className="space-y-3">
-            <h2 className="text-lg font-semibold">Identificación</h2>
+            <h2 className="text-lg font-semibold">{t('animals:detail.identification')}</h2>
             <div className="rounded-xl border divide-y">
               <Field label={t('animals:fields.officialTag')} value={a.officialTag ?? '-'} />
               <Field label={t('animals:fields.rfid')} value={a.rfid ?? '-'} />
@@ -159,21 +169,24 @@ export default function AnimalDetailPage() {
             </div>
           </section>
           <section className="space-y-3">
-            <h2 className="text-lg font-semibold">Fotos del animal</h2>
-            <PhotoUploader animalId={a.id} onUploaded={() => qc.invalidateQueries({ queryKey: ['animal-photos', a.id] })} />
+            <h2 className="text-lg font-semibold">{t('animals:photos.title')}</h2>
+            <PhotoUploader animalId={a.id} onUploaded={() => {
+              qc.invalidateQueries({ queryKey: ['animal-photos', a.id] });
+              qc.invalidateQueries({ queryKey: ['animal', a.id] });
+            }} />
             <PhotoGallery animalId={a.id} />
           </section>
         </Tabs.Content>
 
         <Tabs.Content value="historia" className="space-y-6">
-          <Section title="Salud"><AnimalHealthTab /></Section>
-          <Section title="Reproducción"><AnimalReproductionTab /></Section>
-          <Section title="Producción"><AnimalProductionTab /></Section>
+          <Section title={t('animals:detail.health')}><AnimalHealthTab /></Section>
+          <Section title={t('animals:detail.reproduction')}><AnimalReproductionTab /></Section>
+          <Section title={t('animals:detail.production')}><AnimalProductionTab /></Section>
         </Tabs.Content>
 
         <Tabs.Content value="dinero" className="space-y-6">
-          <Section title="Dinero del animal"><AnimalFinanceTab /></Section>
-          <Section title="Comparación mes a mes"><ComparisonChart animalId={a.id} /></Section>
+          <Section title={t('animals:detail.money')}><AnimalFinanceTab /></Section>
+          <Section title={t('animals:detail.comparison')}><ComparisonChart animalId={a.id} /></Section>
         </Tabs.Content>
       </Tabs.Root>
     </div>
@@ -201,7 +214,7 @@ function Section({ title, children }: { title: string; children: React.ReactNode
   );
 }
 
-function Badge({ tone, icon: Icon, label }: { tone: 'amber' | 'green' | 'pink' | 'blue'; icon: LucideIcon; label: string }) {
+function LacBadge({ tone, icon: Icon, label }: { tone: 'amber' | 'green' | 'pink' | 'blue'; icon: LucideIcon; label: string }) {
   const tones: Record<string, string> = {
     amber: 'bg-amber-100 text-amber-900 dark:bg-amber-900/40 dark:text-amber-200',
     green: 'bg-green-100 text-green-900 dark:bg-green-900/40 dark:text-green-200',

@@ -1,0 +1,356 @@
+{
+  "confirm": "Ready? Here is what will be saved",
+  "confirmShort": "Ready? Here is what will be saved",
+  "saveFailed": "Could not save.",
+  "noAnimalsActive": "No active animals in this {{context}}.",
+  "lot": "lot",
+  "ranch": "ranch",
+  "optional": "(optional)",
+  "location": {
+    "ranch": "Ranch",
+    "lot": "Lot / pen",
+    "ranchLabel": "Ranch: ",
+    "lotLabel": "Lot: ",
+    "noLot": "No lot",
+    "animal": "Animal",
+    "animalOptional": "Animal (optional)"
+  },
+  "animalPicker": {
+    "placeholder": "Tag or name of the animal"
+  },
+  "aborto": {
+    "step1Title": "Which cow had an abortion?",
+    "step2Title": "When did it happen?",
+    "step3Title": "Ready? Here is what will be saved",
+    "dateLabel": "Abortion date",
+    "gestationLabel": "Gestation days at abortion",
+    "gestationHelp": "Approximate.",
+    "causeLabel": "Probable cause (if known)",
+    "causeExample": "Uterine infection",
+    "summaryAbortion": "Abortion",
+    "summaryGestation": "Gestation: {{days}} days",
+    "summaryCause": "Cause: {{cause}}",
+    "saveFailed": "Could not save the abortion."
+  },
+  "alimentar": {
+    "step1Title": "Which cow did you feed?",
+    "step1Subtitle": "Each cow can eat differently even in the same pen.",
+    "step2Title": "What did you give and how much?",
+    "step3Title": "Ready? Here is what will be saved",
+    "feedLabel": "Feed",
+    "kgLabel": "Kilograms",
+    "kgExample": "3.5",
+    "dateLabel": "Date",
+    "saveFailed": "Could not save.",
+    "summaryOf": "of"
+  },
+  "celo": {
+    "step1Title": "Which cow showed heat?",
+    "step2Title": "How did you detect it and how strong?",
+    "step3Title": "Ready? Here is what will be saved",
+    "intensityLabel": "Intensity",
+    "detectionLabel": "How did you detect it?",
+    "dateLabel": "When did you see it",
+    "summaryHeat": "Heat",
+    "saveFailed": "Could not save the heat event.",
+    "intensity": {
+      "WEAK": "Weak",
+      "MODERATE": "Normal",
+      "STRONG": "Strong"
+    },
+    "intensityDesc": {
+      "WEAK": "Mild signs.",
+      "MODERATE": "Clear but calm.",
+      "STRONG": "Very noticeable."
+    },
+    "method": {
+      "VISUAL": "Visual observation",
+      "PEDOMETER": "Pedometer",
+      "HEAT_PATCH": "Heat patch",
+      "CAMERA": "Camera",
+      "OTHER": "Other"
+    }
+  },
+  "comprar": {
+    "step1Title": "What is this animal's name?",
+    "step1Subtitle": "Enter a short tag (the one you use at the ranch) and optionally a name.",
+    "step2Title": "Is it female or male?",
+    "step2Subtitle": "And what is the animal used for.",
+    "step3Title": "Where does it come from?",
+    "step3Subtitle": "Choose the ranch. If you bought it, note how much you paid and from whom.",
+    "step4Title": "Ready? Here is what will be saved",
+    "tagLabel": "Animal tag",
+    "tagHelp": "So you can find it quickly in lists.",
+    "tagExample": "ESM-042",
+    "nameLabel": "Name",
+    "nameHelp": "If it has one. Optional.",
+    "nameExample": "Estrella",
+    "breedLabel": "Breed",
+    "sexLabel": "Sex",
+    "purposeLabel": "What is it for?",
+    "ranchWhereLabel": "Ranch where it will live",
+    "purchaseCheck": "Yes, I bought it and want to record the expense",
+    "purchaseDateLabel": "Purchase date",
+    "purchasePriceLabel": "Purchase price",
+    "purchasePriceExample": "18000",
+    "sellerLabel": "Who sold it to you",
+    "sellerExample": "Don Manuel",
+    "purchaseNote": "It will be automatically recorded as an expense in the \"Animal purchase\" category.",
+    "summaryRace": "Breed:",
+    "summarySex": "Sex:",
+    "summaryPurpose": "Purpose:",
+    "summaryRanch": "Ranch:",
+    "summaryExpense": "Expense to record:",
+    "sex": {
+      "FEMALE": "Female",
+      "MALE": "Male"
+    },
+    "purpose": {
+      "BEEF": "Beef",
+      "DAIRY": "Dairy",
+      "DUAL": "Dual purpose"
+    },
+    "purposeDesc": {
+      "BEEF": "For fattening and beef sale.",
+      "DAIRY": "For milk production.",
+      "DUAL": "Beef and dairy."
+    },
+    "saveFailed": "Could not save the animal. Check the data."
+  },
+  "destetar": {
+    "step1Title": "Which calf did you wean?",
+    "step2Title": "When and at what weight?",
+    "step3Title": "Ready? Here is what will be saved",
+    "dateLabel": "Weaning date",
+    "weightLabel": "Weight at weaning (kg)",
+    "weightExample": "180",
+    "summaryWeaned": "Weaned",
+    "saveFailed": "Could not save the weaning."
+  },
+  "diagnostique": {
+    "step1Title": "Which animal did you diagnose?",
+    "step2Title": "What does it have?",
+    "step2Subtitle": "Choose the disease and how severe it is.",
+    "step3Title": "Ready? Here is what will be saved",
+    "diseaseLabel": "Disease",
+    "severityLabel": "Severity",
+    "dateLabel": "Date",
+    "symptomsLabel": "Symptoms you see",
+    "symptomsHelp": "A short line describing what you observe.",
+    "symptomsExample": "Won't eat, watery eyes",
+    "summarySymptoms": "Symptoms: {{symptoms}}",
+    "saveFailed": "Could not save the diagnosis.",
+    "severity": {
+      "LOW": "Mild",
+      "MEDIUM": "Medium",
+      "HIGH": "Severe"
+    },
+    "severityDesc": {
+      "LOW": "Mild symptoms.",
+      "MEDIUM": "Needs attention.",
+      "HIGH": "Urgent, vet."
+    }
+  },
+  "gastar": {
+    "step1Title": "What did you spend on?",
+    "step1Subtitle": "Choose a category, enter the amount and the date.",
+    "step2Title": "Ready? Here is what will be saved",
+    "categoryLabel": "Expense category",
+    "amountLabel": "How much did you spend?",
+    "amountExample": "450",
+    "dateLabel": "Expense date",
+    "vendorLabel": "Who did you pay?",
+    "vendorHelp": "To remember where you bought it.",
+    "vendorExample": "El Toro Veterinary",
+    "noteLabel": "Short note",
+    "noteHelp": "To remember what it was.",
+    "noteExample": "Vaccines for new calves",
+    "summaryCategory": "Category:",
+    "summaryDate": "Date:",
+    "summaryVendor": "Paid to:",
+    "summaryNote": "Note:",
+    "saveFailed": "Could not save the expense."
+  },
+  "ordenar": {
+    "step1Title": "Which cow did you milk?",
+    "step2Title": "How much milk and when?",
+    "step2Subtitle": "Tap a common value or enter the exact amount.",
+    "step3Title": "Ready? Here is what will be saved",
+    "sessionLabel": "Session",
+    "litersLabel": "Liters",
+    "litersExample": "12.5",
+    "dateLabel": "Date",
+    "litersUnit": "liters",
+    "saveFailed": "Could not save the milking.",
+    "session": {
+      "AM": "Morning",
+      "PM": "Afternoon",
+      "TOTAL": "Full day total"
+    },
+    "sessionDesc": {
+      "AM": "Morning milking.",
+      "PM": "Afternoon milking.",
+      "TOTAL": "Sum of morning and afternoon."
+    }
+  },
+  "parto": {
+    "step1Title": "Which cow calved?",
+    "step2Title": "How was the calving?",
+    "step3Title": "Ready? Here is what will be saved",
+    "dateLabel": "Calving date",
+    "easeLabel": "Difficulty",
+    "outcomeLabel": "Outcome",
+    "calfWeightLabel": "Calf weight (kg)",
+    "calfWeightExample": "35",
+    "summaryEase": "Difficulty: {{ease}}",
+    "summaryOutcome": "Outcome: {{outcome}}",
+    "summaryCalfFemale": "female",
+    "summaryCalfMale": "male",
+    "summaryCalfWeight": " · {{weight}} kg",
+    "saveFailed": "Could not save the calving.",
+    "ease": {
+      "FREE": "On her own",
+      "EASY": "Easy",
+      "ASSISTED": "Assisted",
+      "DIFFICULT": "Difficult",
+      "SURGERY": "C-section"
+    },
+    "easeDesc": {
+      "FREE": "No help needed."
+    },
+    "outcome": {
+      "LIVE": "Live",
+      "STILLBORN": "Stillborn",
+      "TWIN_LIVE": "Live twins",
+      "TWIN_MIXED": "Mixed twins",
+      "TWIN_STILLBORN": "Stillborn twins"
+    }
+  },
+  "pesar": {
+    "step1Title": "Which animal did you weigh?",
+    "step2Title": "How much does it weigh?",
+    "step2Subtitle": "Tap a common value or enter the exact amount.",
+    "step3Title": "Ready? Here is what will be saved",
+    "weightLabel": "Weight in kilograms",
+    "weightExample": "420",
+    "dateLabel": "Weighing date",
+    "kgUnit": "kilograms",
+    "saveFailed": "Could not save the weighing."
+  },
+  "prenez": {
+    "step1Title": "Which cow did you check?",
+    "step2Title": "What was the result?",
+    "step3Title": "Ready? Here is what will be saved",
+    "resultLabel": "Result",
+    "methodLabel": "How did you check?",
+    "dateLabel": "Check date",
+    "gestationLabel": "Estimated gestation days",
+    "gestationExample": "60",
+    "estimatedCalving": "Estimated calving: ",
+    "saveFailed": "Could not save the pregnancy check.",
+    "result": {
+      "POSITIVE": "Pregnant",
+      "NEGATIVE": "Open",
+      "DOUBTFUL": "Doubtful"
+    },
+    "resultDesc": {
+      "POSITIVE": "She is expecting.",
+      "NEGATIVE": "Not pregnant.",
+      "DOUBTFUL": "Not clear."
+    },
+    "method": {
+      "PALPATION": "Palpation",
+      "ULTRASOUND": "Ultrasound",
+      "BLOOD_TEST": "Blood test",
+      "MILK_TEST": "Milk test"
+    }
+  },
+  "recibirDinero": {
+    "step1Title": "Where did the money come from?",
+    "step1Subtitle": "Choose a category, enter the amount and the date.",
+    "step2Title": "Ready? Here is what will be saved",
+    "categoryLabel": "Income category",
+    "amountLabel": "How much did you receive?",
+    "amountExample": "1500",
+    "dateLabel": "Income date",
+    "payerLabel": "Who paid you?",
+    "payerHelp": "To remember who it was.",
+    "payerExample": "El Llano Butcher Shop",
+    "noteLabel": "Short note",
+    "noteExample": "Monday milk sale",
+    "summaryCategory": "Category:",
+    "summaryDate": "Date:",
+    "summaryPayer": "Paid by:",
+    "summaryNote": "Note:",
+    "saveFailed": "Could not save the income."
+  },
+  "secar": {
+    "step1Title": "Which cow did you dry off?",
+    "step2Title": "When did you dry her off?",
+    "step3Title": "Ready? Here is what will be saved",
+    "dateLabel": "Dry-off date",
+    "lactationLabel": "Lactation days (optional)",
+    "lactationHelp": "How many days she has been producing.",
+    "lactationExample": "305",
+    "summaryDried": "Dried off",
+    "summaryLactation": "Lactation: {{days}} days",
+    "saveFailed": "Could not save the dry-off."
+  },
+  "servir": {
+    "step1Title": "Which cow did you serve?",
+    "step2Title": "How was the service?",
+    "step2Subtitle": "Insemination, natural service or embryo transfer.",
+    "step3Title": "Ready? Here is what will be saved",
+    "typeLabel": "Type",
+    "bullLabel": "Bull",
+    "strawLabel": "Straw",
+    "dateLabel": "Service date",
+    "technicianLabel": "Who performed it",
+    "technicianHelp": "Name of the inseminator or attendant.",
+    "estimatedCalving": "Estimated calving date: ",
+    "summaryStraw": "Straw: ",
+    "summaryTechnician": "By: ",
+    "summaryEstimatedCalving": "Estimated calving: ",
+    "saveFailed": "Could not save the service.",
+    "serviceType": {
+      "AI": "Insemination",
+      "NATURAL": "Natural service",
+      "EMBRYO_TRANSFER": "Embryo"
+    },
+    "serviceTypeDesc": {
+      "AI": "With straw.",
+      "NATURAL": "With bull.",
+      "EMBRYO_TRANSFER": "Transfer."
+    },
+    "strawAvailable": "avail."
+  },
+  "tratar": {
+    "step1Title": "Which animal did you treat?",
+    "step2Title": "What medication did you use?",
+    "step2Subtitle": "Choose from the catalog and enter the date.",
+    "step3Title": "Ready? Here is what will be saved",
+    "medicationLabel": "Medication",
+    "dateLabel": "Date started",
+    "doseLabel": "Dose applied",
+    "doseHelp": "How much did you give.",
+    "doseExample": "10 ml",
+    "withdrawalTitle": "Estimated withdrawal periods:",
+    "withdrawalMilk": "Milk until: ",
+    "withdrawalMeat": "Meat until: ",
+    "summaryDose": "Dose: {{dose}}",
+    "saveFailed": "Could not save the treatment."
+  },
+  "vacunar": {
+    "step1Title": "Which animal did you vaccinate?",
+    "step2Title": "Which vaccine did you give?",
+    "step2Subtitle": "Choose from your catalog and enter the date.",
+    "step3Title": "Ready? Here is what will be saved",
+    "vaccineLabel": "Vaccine",
+    "dateLabel": "Application date",
+    "batchLabel": "Vial batch number",
+    "batchHelp": "For tracing if there is a reaction.",
+    "batchExample": "L2024-A35",
+    "summaryBatch": "Vial batch: {{batch}}",
+    "saveFailed": "Could not save the vaccination."
+  }
+}

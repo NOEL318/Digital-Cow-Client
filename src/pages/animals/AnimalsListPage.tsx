@@ -14,22 +14,15 @@ import { breedsApi } from '@/features/breeds/api';
 import { ranchApi } from '@/features/ranches/api';
 import type { AnimalListItem } from '@/features/animals/types';
 import { useAnimalBadges, type AnimalBadge } from '@/features/animals/badges/api';
+import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { BigButton } from '@/components/ui/big-button';
 import { AnimalAvatar } from '@/components/ui/animal-avatar';
 import { EmptyState } from '@/components/ui/empty-state';
 import { RanchMap } from '@/components/ranch-map';
+import { sexStyle } from '@/features/animals/sex-style';
 
 type ViewMode = 'list' | 'cards' | 'map';
-
-const BADGE_META: Record<string, { icon: LucideIcon; color: string; label: string; short: string }> = {
-  VACCINE_DUE:    { icon: Syringe, color: 'bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-200',       label: 'Vacuna atrasada',     short: 'Vacuna' },
-  TREATMENT_OPEN: { icon: Pill,    color: 'bg-orange-100 text-orange-800 dark:bg-orange-900/40 dark:text-orange-200', label: 'En tratamiento',  short: 'Tratamiento' },
-  WEIGHING_DUE:   { icon: Scale,   color: 'bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-200', label: 'Falta pesar',         short: 'Pesar' },
-  IN_HEAT:        { icon: Heart,   color: 'bg-pink-100 text-pink-800 dark:bg-pink-900/40 dark:text-pink-200',     label: 'En celo',             short: 'Celo' },
-  PREGNANT:       { icon: Baby,    color: 'bg-purple-100 text-purple-800 dark:bg-purple-900/40 dark:text-purple-200', label: 'Preñada',         short: 'Preñada' },
-  DRY:            { icon: Milk,    color: 'bg-stone-200 text-stone-800 dark:bg-stone-700 dark:text-stone-100',    label: 'Seca',                short: 'Seca' }
-};
 
 /** Listado de animales con foto principal, badges de estado, búsqueda y tres modos visuales. */
 export default function AnimalsListPage() {
@@ -128,14 +121,14 @@ export default function AnimalsListPage() {
           )}
         </select>
 
-        <div className="ml-auto inline-flex rounded-md border overflow-hidden" role="group" aria-label="Vista">
+        <div className="ml-auto inline-flex rounded-md border overflow-hidden" role="group" aria-label={t('view.label')}>
           <button
             type="button"
             onClick={() => setView('list')}
             aria-pressed={mode === 'list'}
             className={`flex items-center gap-1 px-3 py-2 text-sm ${mode === 'list' ? 'bg-accent font-semibold' : 'hover:bg-accent'}`}
           >
-            <List className="h-4 w-4" aria-hidden /> Lista
+            <List className="h-4 w-4" aria-hidden /> {t('view.list')}
           </button>
           <button
             type="button"
@@ -143,7 +136,7 @@ export default function AnimalsListPage() {
             aria-pressed={mode === 'cards'}
             className={`flex items-center gap-1 px-3 py-2 text-sm border-l ${mode === 'cards' ? 'bg-accent font-semibold' : 'hover:bg-accent'}`}
           >
-            <LayoutGrid className="h-4 w-4" aria-hidden /> Tarjetas
+            <LayoutGrid className="h-4 w-4" aria-hidden /> {t('view.cards')}
           </button>
           <button
             type="button"
@@ -151,7 +144,7 @@ export default function AnimalsListPage() {
             aria-pressed={mode === 'map'}
             className={`flex items-center gap-1 px-3 py-2 text-sm border-l ${mode === 'map' ? 'bg-accent font-semibold' : 'hover:bg-accent'}`}
           >
-            <MapIcon className="h-4 w-4" aria-hidden /> Mapa
+            <MapIcon className="h-4 w-4" aria-hidden /> {t('view.map')}
           </button>
         </div>
       </div>
@@ -163,8 +156,8 @@ export default function AnimalsListPage() {
       ) : !list.data?.content?.length ? (
         <EmptyState
           icon={MapPin}
-          title="No hay animales que coincidan"
-          description="Cambia los filtros o quita la búsqueda. También puedes agregar un animal nuevo."
+          title={t('noMatch.title')}
+          description={t('noMatch.description')}
           ctaLabel={t('new')}
           onCta={() => window.location.assign('/animales/nuevo')}
         />
@@ -175,6 +168,7 @@ export default function AnimalsListPage() {
               key={a.id}
               animal={a}
               statusLabel={t(`status.${a.status}`)}
+              sexLabel={t(`sex.${a.sex}`)}
               badges={badgesByAnimal.get(a.id) ?? []}
             />
           ))}
@@ -183,6 +177,7 @@ export default function AnimalsListPage() {
         <ul className="divide-y border rounded-xl overflow-hidden">
           {list.data.content.map(a => {
             const aBadges = badgesByAnimal.get(a.id) ?? [];
+            const sx = sexStyle(a.sex);
             return (
               <li key={a.id}>
                 <Link
@@ -193,16 +188,18 @@ export default function AnimalsListPage() {
                     <img
                       src={a.coverPhotoUrl}
                       alt={a.name ? `${a.name} (${a.internalTag})` : a.internalTag}
-                      className="h-14 w-14 rounded-full object-cover shrink-0"
+                      className={`h-14 w-14 rounded-full object-cover shrink-0 ring-2 ${sx.ring}`}
                       loading="lazy"
                     />
                   ) : (
-                    <AnimalAvatar
-                      photoUrl={undefined}
-                      internalTag={a.internalTag}
-                      name={a.name}
-                      size={56}
-                    />
+                    <div className={`rounded-full ring-2 ${sx.ring} shrink-0`}>
+                      <AnimalAvatar
+                        photoUrl={undefined}
+                        internalTag={a.internalTag}
+                        name={a.name}
+                        size={56}
+                      />
+                    </div>
                   )}
                   <div className="flex-1 min-w-0 space-y-1">
                     <div className="flex items-center gap-2 flex-wrap">
@@ -215,12 +212,12 @@ export default function AnimalsListPage() {
                       </div>
                     ) : null}
                   </div>
-                  <span className="text-xs text-muted-foreground hidden sm:inline">
+                  <Badge tone={a.sex === 'FEMALE' ? 'pink' : 'graphite'} className="hidden sm:inline-flex">
                     {t(`sex.${a.sex}`)}
-                  </span>
-                  <span className={`text-xs px-2 py-1 rounded-full ${statusToneClass(a.status)}`}>
+                  </Badge>
+                  <Badge tone={statusTone(a.status)}>
                     {t(`status.${a.status}`)}
-                  </span>
+                  </Badge>
                 </Link>
               </li>
             );
@@ -240,16 +237,35 @@ export default function AnimalsListPage() {
 }
 
 function BadgeChip({ kind }: { kind: AnimalBadge }) {
-  const meta = BADGE_META[kind];
-  if (!meta) return null;
-  const Icon = meta.icon;
+  const { t } = useTranslation('animals');
+  const BADGE_ICON: Record<string, LucideIcon> = {
+    VACCINE_DUE: Syringe,
+    TREATMENT_OPEN: Pill,
+    WEIGHING_DUE: Scale,
+    IN_HEAT: Heart,
+    PREGNANT: Baby,
+    DRY: Milk
+  };
+  const BADGE_COLOR: Record<string, string> = {
+    VACCINE_DUE: 'bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-200',
+    TREATMENT_OPEN: 'bg-orange-100 text-orange-800 dark:bg-orange-900/40 dark:text-orange-200',
+    WEIGHING_DUE: 'bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-200',
+    IN_HEAT: 'bg-pink-100 text-pink-800 dark:bg-pink-900/40 dark:text-pink-200',
+    PREGNANT: 'bg-purple-100 text-purple-800 dark:bg-purple-900/40 dark:text-purple-200',
+    DRY: 'bg-stone-200 text-stone-800 dark:bg-stone-700 dark:text-stone-100'
+  };
+  const Icon = BADGE_ICON[kind];
+  const color = BADGE_COLOR[kind];
+  const shortKey = `badges.${kind}` as const;
+  const longKey = `badges.${kind}_long` as const;
+  if (!Icon || !color) return null;
   return (
     <span
-      title={meta.label}
-      className={`inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full font-medium ${meta.color}`}
+      title={t(longKey, { defaultValue: kind })}
+      className={`inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full font-medium ${color}`}
     >
       <Icon className="h-3 w-3" aria-hidden />
-      {meta.short}
+      {t(shortKey, { defaultValue: kind })}
     </span>
   );
 }
@@ -257,17 +273,19 @@ function BadgeChip({ kind }: { kind: AnimalBadge }) {
 interface AnimalCardProps {
   animal: AnimalListItem;
   statusLabel: string;
+  sexLabel: string;
   badges: AnimalBadge[];
 }
 
-function AnimalCard({ animal, statusLabel, badges }: AnimalCardProps) {
+function AnimalCard({ animal, statusLabel, sexLabel, badges }: AnimalCardProps) {
+  const sx = sexStyle(animal.sex);
   return (
     <li>
       <Link
         to={`/animales/${animal.id}`}
         className="block rounded-xl border overflow-hidden hover:shadow-md transition-shadow bg-background"
       >
-        <div className="aspect-square bg-muted relative">
+        <div className={`aspect-square bg-muted relative ring-2 ring-inset ${sx.ring}`}>
           {animal.coverPhotoUrl ? (
             <img
               src={animal.coverPhotoUrl}
@@ -287,6 +305,9 @@ function AnimalCard({ animal, statusLabel, badges }: AnimalCardProps) {
         <div className="p-3 space-y-1">
           <p className="font-semibold truncate">{animal.internalTag}</p>
           {animal.name ? <p className="text-sm text-muted-foreground truncate">{animal.name}</p> : null}
+          <span className={`inline-flex items-center text-xs px-2 py-0.5 rounded-full font-medium ${sx.badge}`}>
+            {sexLabel}
+          </span>
           {badges.length > 0 ? (
             <div className="flex flex-wrap gap-1 pt-1">
               {badges.map(b => <BadgeChip key={b} kind={b} />)}
@@ -296,6 +317,15 @@ function AnimalCard({ animal, statusLabel, badges }: AnimalCardProps) {
       </Link>
     </li>
   );
+}
+
+function statusTone(s: AnimalListItem['status']): 'success' | 'warning' | 'danger' | 'neutral' {
+  switch (s) {
+    case 'ACTIVE': return 'success';
+    case 'SOLD': return 'warning';
+    case 'DEAD': return 'danger';
+    default: return 'neutral';
+  }
 }
 
 function statusToneClass(s: AnimalListItem['status']): string {

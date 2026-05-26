@@ -32,6 +32,9 @@ export function useCreateWeaning() {
       (await http.post<Weaning>('/reproduction/weanings', body)).data,
     onSuccess: (_data, body) => {
       qc.invalidateQueries({ queryKey: QK });
+      qc.invalidateQueries({ queryKey: ['dashboard', 'reproduction'] });
+      qc.invalidateQueries({ queryKey: ['reproduction', 'alerts'] });
+      qc.invalidateQueries({ queryKey: ['reproduction', 'kpis'] });
       if ((body as { animalId?: number }).animalId) {
         qc.invalidateQueries({ queryKey: ['animal', (body as { animalId?: number }).animalId] });
       }
@@ -48,6 +51,9 @@ export function useUpdateWeaning() {
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: QK });
       qc.invalidateQueries({ queryKey: ['animal'] });
+      qc.invalidateQueries({ queryKey: ['dashboard', 'reproduction'] });
+      qc.invalidateQueries({ queryKey: ['reproduction', 'alerts'] });
+      qc.invalidateQueries({ queryKey: ['reproduction', 'kpis'] });
     }
   });
 }
@@ -61,6 +67,9 @@ export function useDeleteWeaning() {
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: QK });
       qc.invalidateQueries({ queryKey: ['animal'] });
+      qc.invalidateQueries({ queryKey: ['dashboard', 'reproduction'] });
+      qc.invalidateQueries({ queryKey: ['reproduction', 'alerts'] });
+      qc.invalidateQueries({ queryKey: ['reproduction', 'kpis'] });
     }
   });
 }

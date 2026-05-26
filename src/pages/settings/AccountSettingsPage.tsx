@@ -1,27 +1,32 @@
 /**
- * Esta pagina permite al usuario cambiar su contrasena y configurar la seguridad de la cuenta.
+ * Esta pagina permite al Owner/Admin editar el nombre del rancho/cuenta.
+ * El idioma vive en la seccion Preferencias para no duplicar el selector;
+ * aqui se preserva el idioma por defecto existente sin volver a mostrarlo.
  */
 import { useForm } from 'react-hook-form';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { http } from '@/lib/http';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/components/ui/toast';
+import { useAccount, useUpdateAccount } from '@/features/account/api';
 
 /** Pagina de configuracion de cuenta (Owner/Admin). */
 export default function AccountSettingsPage() {
   const { t } = useTranslation('common');
   const toast = useToast();
-  const form = useForm<{ name: string; defaultLocale: 'es' | 'en' }>();
+  const { data } = useAccount();
+  const update = useUpdateAccount();
+  const form = useForm<{ name: string }>();
 
   useEffect(() => {
-    http.get('/account').then(r => form.reset({ name: r.data.name, defaultLocale: r.data.defaultLocale }));
-  }, [form]);
+    if (data) form.reset({ name: data.name });
+  }, [data, form]);
 
   const onSubmit = form.handleSubmit(async values => {
-    await http.patch('/account', values);
+    // Preservamos defaultLocale tal cual: el idioma se gestiona en Preferencias.
+    await update.mutateAsync({ name: values.name, defaultLocale: data?.defaultLocale });
     toast.push(t('actions.save'));
   });
 
@@ -31,14 +36,7 @@ export default function AccountSettingsPage() {
         <Label htmlFor="name">{t('labels.accountName')}</Label>
         <Input id="name" {...form.register('name')} />
       </div>
-      <div>
-        <Label htmlFor="locale">{t('labels.defaultLocale')}</Label>
-        <select id="locale" {...form.register('defaultLocale')} className="w-full h-10 rounded-md border border-input bg-background px-3">
-          <option value="es">ES</option>
-          <option value="en">EN</option>
-        </select>
-      </div>
-      <Button type="submit">{t('actions.save')}</Button>
+      <Button type="submit" disabled={update.isPending}>{t('actions.save')}</Button>
     </form>
   );
 }

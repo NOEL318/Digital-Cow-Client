@@ -147,5 +147,33 @@
     "mtdMargin": "Margin this month",
     "ytdMargin": "Margin this year",
     "topExpenseCategory": "Top expense category"
+  },
+  "panel": {
+    "expenses": {
+      "title": "Expenses",
+      "desc": "What you paid for supplies, services, and more."
+    },
+    "incomes": {
+      "title": "Incomes",
+      "desc": "The money you received."
+    },
+    "animalSales": {
+      "title": "Animal sales",
+      "desc": "Animals you sold and to whom."
+    },
+    "milkSales": {
+      "title": "Milk sales",
+      "desc": "Milk delivered to the buyer and its price."
+    }
+  },
+  "comparison": {
+    "title": "Month-by-month comparison",
+    "loading": "Loading...",
+    "noData": "Not enough data to compare yet.",
+    "weight": "Weight (kilograms)",
+    "feed": "Lot feed (kilograms)",
+    "expense": "Monthly expense",
+    "income": "Monthly income",
+    "help": "Compare four metrics for the same animal on one chart, month by month: weight, lot feed consumed, total cost (meds, vaccines, assigned expenses), and total income (milk sales, animal sale). Useful to answer: does this cow earn more than she costs? Is she gaining weight? Tap the chips above to toggle each series."
   }
 }

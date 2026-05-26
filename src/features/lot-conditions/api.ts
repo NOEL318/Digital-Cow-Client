@@ -51,7 +51,10 @@ export function useCreateLotCondition(lotId: number) {
   return useMutation({
     mutationFn: async (body: LotConditionCreate) =>
       (await http.post<LotCondition>('/lot-conditions', body)).data,
-    onSuccess: () => qc.invalidateQueries({ queryKey: KEY(lotId) })
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: KEY(lotId) });
+      qc.invalidateQueries({ queryKey: ['dashboard'] });
+    }
   });
 }
 
@@ -60,6 +63,9 @@ export function useDeleteLotCondition(lotId: number) {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (id: number) => http.delete(`/lot-conditions/${id}`),
-    onSuccess: () => qc.invalidateQueries({ queryKey: KEY(lotId) })
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: KEY(lotId) });
+      qc.invalidateQueries({ queryKey: ['dashboard'] });
+    }
   });
 }

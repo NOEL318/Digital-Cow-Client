@@ -8,6 +8,9 @@ import i18n from '@/lib/i18n';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import {
+  Table, TableHeader, TableBody, TableRow, TableHead, TableCell
+} from '@/components/ui/table';
 import { localizedName } from '@/lib/catalog';
 import { useFeedItems } from '@/features/feeding/items/api';
 import { useAddPlanItem, useRemovePlanItem } from '../api';
@@ -46,33 +49,34 @@ export function FeedingPlanItemsList({ planId, items }: Props) {
   return (
     <div className="space-y-3">
       <h3 className="font-semibold">{t('feeding:plan.items')}</h3>
-      <table className="w-full border rounded">
-        <thead>
-          <tr className="bg-muted text-sm">
-            <th className="p-2 text-left">{t('feeding:plan.feedItem')}</th>
-            <th className="p-2 text-left">{t('feeding:plan.kgPerHeadDay')}</th>
-            <th className="p-2 text-left">{t('feeding:plan.notes')}</th>
-            <th className="p-2 w-16" />
-          </tr>
-        </thead>
-        <tbody>
+
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>{t('feeding:plan.feedItem')}</TableHead>
+            <TableHead>{t('feeding:plan.kgPerHeadDay')}</TableHead>
+            <TableHead>{t('feeding:plan.notes')}</TableHead>
+            <TableHead className="w-16" />
+          </TableRow>
+        </TableHeader>
+        <TableBody>
           {items.map(it => {
             const f = feedItems.data?.find(x => x.id === it.feedItemId);
             return (
-              <tr key={it.id} className="border-t text-sm">
-                <td className="p-2">{f ? localizedName(f, locale) : `#${it.feedItemId}`}</td>
-                <td className="p-2">{it.kgPerHeadDay}</td>
-                <td className="p-2">{it.notes ?? '-'}</td>
-                <td className="p-2 text-right">
+              <TableRow key={it.id}>
+                <TableCell>{f ? localizedName(f, locale) : `#${it.feedItemId}`}</TableCell>
+                <TableCell>{it.kgPerHeadDay}</TableCell>
+                <TableCell>{it.notes ?? '-'}</TableCell>
+                <TableCell className="text-right">
                   <Button size="sm" variant="ghost" onClick={() => remove.mutate(it.id)}>
                     <Trash2 className="h-3 w-3" />
                   </Button>
-                </td>
-              </tr>
+                </TableCell>
+              </TableRow>
             );
           })}
-        </tbody>
-      </table>
+        </TableBody>
+      </Table>
 
       {adding ? (
         <div className="border rounded p-3 space-y-2">

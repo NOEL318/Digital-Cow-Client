@@ -2,6 +2,7 @@
  * Este componente es un selector visual del modulo ranches.
  */
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { MapContainer, TileLayer, Marker, Polygon, useMapEvents, useMap } from 'react-leaflet';
 import { Icon, type LatLngExpression } from 'leaflet';
 import { MapPin, Undo2, X, CheckCircle2 } from 'lucide-react';
@@ -38,6 +39,7 @@ function centroid(points: Array<[number, number]>): { lat: number; lng: number }
  * se calcula automáticamente y se devuelve junto al poligono.
  */
 export function LotPolygonPicker({ initialPolygon, initialCenter, onChange }: LotPolygonPickerProps) {
+  const { t } = useTranslation('ranches');
   const initialPoints = parseInitial(initialPolygon);
   const [points, setPoints] = useState<Array<[number, number]>>(initialPoints);
   const center: LatLngExpression =
@@ -63,7 +65,7 @@ export function LotPolygonPicker({ initialPolygon, initialCenter, onChange }: Lo
     <div className="space-y-2">
       <p className="text-sm text-muted-foreground inline-flex items-center gap-1">
         <MapPin className="h-4 w-4" aria-hidden />
-        Toca el mapa para marcar las esquinas del corral. Con tres o más puntos se dibuja el polígono.
+        {t('lotTapHint')}
       </p>
       <div className="h-72 rounded-xl overflow-hidden border">
         <MapContainer center={center} zoom={initialPoints.length > 0 ? 16 : 5} className="h-full w-full">
@@ -81,25 +83,25 @@ export function LotPolygonPicker({ initialPolygon, initialCenter, onChange }: Lo
       </div>
       <div className="flex flex-wrap gap-2">
         <BigButton
-          label="Quitar último"
+          label={t('removeLast')}
           icon={Undo2}
           variant="outline"
           onClick={() => setPoints(prev => prev.slice(0, -1))}
           disabled={points.length === 0}
         />
         <BigButton
-          label="Borrar todo"
+          label={t('clearAll')}
           icon={X}
           variant="outline"
           onClick={() => setPoints([])}
           disabled={points.length === 0}
         />
         {points.length >= 3 ? (
-          <span className="inline-flex items-center gap-1 text-sm text-green-700">
-            <CheckCircle2 className="h-4 w-4" aria-hidden /> Polígono listo ({points.length} esquinas)
+          <span className="inline-flex items-center gap-1 text-sm text-success">
+            <CheckCircle2 className="h-4 w-4" aria-hidden /> {t('polygonReady', { count: points.length })}
           </span>
         ) : points.length > 0 ? (
-          <span className="text-sm text-muted-foreground">{points.length} de 3 esquinas mínimas</span>
+          <span className="text-sm text-muted-foreground">{t('minCornersHint', { count: points.length })}</span>
         ) : null}
       </div>
     </div>

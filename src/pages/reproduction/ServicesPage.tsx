@@ -5,7 +5,9 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/ui/table';
 import { useServiceEvents, useCreateServiceEvent } from '@/features/reproduction/services/api';
 import { ServiceEventForm } from '@/features/reproduction/services/components/ServiceEventForm';
 
@@ -33,28 +35,32 @@ export default function ServicesPage() {
           </DialogContent>
         </Dialog>
       </div>
-      <table className="w-full border rounded">
-        <thead>
-          <tr className="bg-muted">
-            <th className="p-2 text-left">{t('reproduction:service.animal')}</th>
-            <th className="p-2 text-left">{t('reproduction:service.serviceDate')}</th>
-            <th className="p-2 text-left">{t('reproduction:service.serviceType')}</th>
-            <th className="p-2 text-left">{t('reproduction:service.bull')}</th>
-            <th className="p-2 text-left">{t('reproduction:service.technician')}</th>
-          </tr>
-        </thead>
-        <tbody>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>{t('reproduction:service.animal')}</TableHead>
+            <TableHead>{t('reproduction:service.serviceDate')}</TableHead>
+            <TableHead>{t('reproduction:service.serviceType')}</TableHead>
+            <TableHead>{t('reproduction:service.bull')}</TableHead>
+            <TableHead>{t('reproduction:service.technician')}</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
           {services.data?.map(s => (
-            <tr key={s.id} className="border-t">
-              <td className="p-2">#{s.animalId}</td>
-              <td className="p-2">{s.serviceDate}</td>
-              <td className="p-2">{t(`reproduction:service.type.${s.serviceType}`)}</td>
-              <td className="p-2">{s.bullId ? `#${s.bullId}` : '-'}</td>
-              <td className="p-2">{s.technicianName ?? '-'}</td>
-            </tr>
+            <TableRow key={s.id}>
+              <TableCell>#{s.animalId}</TableCell>
+              <TableCell>{s.serviceDate}</TableCell>
+              <TableCell>
+                <Badge tone={s.serviceType === 'AI' ? 'info' : s.serviceType === 'EMBRYO_TRANSFER' ? 'primary' : 'neutral'}>
+                  {t(`reproduction:service.type.${s.serviceType}`)}
+                </Badge>
+              </TableCell>
+              <TableCell>{s.bullId ? `#${s.bullId}` : '-'}</TableCell>
+              <TableCell>{s.technicianName ?? '-'}</TableCell>
+            </TableRow>
           ))}
-        </tbody>
-      </table>
+        </TableBody>
+      </Table>
     </div>
   );
 }

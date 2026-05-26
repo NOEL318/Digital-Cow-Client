@@ -2,6 +2,7 @@
  * Este componente es un selector visual del modulo ranches.
  */
 import { useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { MapContainer, TileLayer, Marker, useMapEvents, useMap } from 'react-leaflet';
 import { Icon, type LatLngExpression } from 'leaflet';
 import { MapPin, Crosshair } from 'lucide-react';
@@ -29,6 +30,7 @@ interface RanchLocationPickerProps {
  * geolocalizacion del navegador. Devuelve lat/lng al onChange.
  */
 export function RanchLocationPicker({ initial, onChange }: RanchLocationPickerProps) {
+  const { t } = useTranslation('ranches');
   const [pos, setPos] = useState<{ lat: number; lng: number } | null>(initial ?? null);
   const center: LatLngExpression = useMemo(
     () => (pos ? [pos.lat, pos.lng] : [19.4326, -99.1332]), // CDMX por defecto
@@ -43,12 +45,12 @@ export function RanchLocationPicker({ initial, onChange }: RanchLocationPickerPr
 
   function useMyLocation() {
     if (!navigator.geolocation) {
-      window.alert('Tu navegador no permite obtener la ubicación.');
+      window.alert(t('geoUnsupported'));
       return;
     }
     navigator.geolocation.getCurrentPosition(
       p => pick(p.coords.latitude, p.coords.longitude),
-      err => window.alert('No pudimos obtener tu ubicación: ' + err.message),
+      err => window.alert(t('geoFailed', { error: err.message })),
       { enableHighAccuracy: true, timeout: 8000 }
     );
   }
@@ -58,10 +60,10 @@ export function RanchLocationPicker({ initial, onChange }: RanchLocationPickerPr
       <div className="flex items-center justify-between gap-2 flex-wrap">
         <p className="text-sm text-muted-foreground inline-flex items-center gap-1">
           <MapPin className="h-4 w-4" aria-hidden />
-          Toca el mapa para poner el pin del rancho.
+          {t('mapTapHint')}
         </p>
         <BigButton
-          label="Usar mi ubicación"
+          label={t('useMyLocation')}
           icon={Crosshair}
           variant="outline"
           onClick={useMyLocation}

@@ -6,6 +6,15 @@ import { useTranslation } from 'react-i18next';
 import { Plus } from 'lucide-react';
 import i18n from '@/lib/i18n';
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import {
+  Table,
+  TableHeader,
+  TableBody,
+  TableRow,
+  TableHead,
+  TableCell
+} from '@/components/ui/table';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { useCreateTreatment, useTreatments } from '@/features/health/treatments/api';
 import { TreatmentForm } from '@/features/health/treatments/components/TreatmentForm';
@@ -28,6 +37,18 @@ export default function TreatmentsPage() {
     return m ? localizedName(m, locale) : '-';
   };
 
+  const today = new Date().toISOString().slice(0, 10);
+
+  const withdrawalBadge = (date: string | null | undefined) => {
+    if (!date) return <span className="text-muted-foreground">-</span>;
+    const isPast = date < today;
+    return (
+      <Badge tone={isPast ? 'success' : 'warning'}>
+        {date}
+      </Badge>
+    );
+  };
+
   return (
     <div className="p-6 space-y-4">
       <div className="flex items-center justify-between">
@@ -45,26 +66,26 @@ export default function TreatmentsPage() {
           </DialogContent>
         </Dialog>
       </div>
-      <table className="w-full border rounded">
-        <thead>
-          <tr className="bg-muted">
-            <th className="p-2 text-left">{t('health:treatment.startedAt')}</th>
-            <th className="p-2 text-left">{t('health:treatment.medication')}</th>
-            <th className="p-2 text-left">{t('health:treatment.withdrawalMilk')}</th>
-            <th className="p-2 text-left">{t('health:treatment.withdrawalMeat')}</th>
-          </tr>
-        </thead>
-        <tbody>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>{t('health:treatment.startedAt')}</TableHead>
+            <TableHead>{t('health:treatment.medication')}</TableHead>
+            <TableHead>{t('health:treatment.withdrawalMilk')}</TableHead>
+            <TableHead>{t('health:treatment.withdrawalMeat')}</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
           {list.data?.map(tr => (
-            <tr key={tr.id} className="border-t">
-              <td className="p-2">{tr.startedAt}</td>
-              <td className="p-2">{medName(tr.medicationId)}</td>
-              <td className="p-2">{tr.withdrawalMilkUntil ?? '-'}</td>
-              <td className="p-2">{tr.withdrawalMeatUntil ?? '-'}</td>
-            </tr>
+            <TableRow key={tr.id}>
+              <TableCell>{tr.startedAt}</TableCell>
+              <TableCell>{medName(tr.medicationId)}</TableCell>
+              <TableCell>{withdrawalBadge(tr.withdrawalMilkUntil)}</TableCell>
+              <TableCell>{withdrawalBadge(tr.withdrawalMeatUntil)}</TableCell>
+            </TableRow>
           ))}
-        </tbody>
-      </table>
+        </TableBody>
+      </Table>
     </div>
   );
 }

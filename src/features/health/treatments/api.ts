@@ -44,6 +44,7 @@ export function useCreateTreatment() {
     onSuccess: (_data, body) => {
       qc.invalidateQueries({ queryKey: QK });
       qc.invalidateQueries({ queryKey: ['health', 'alerts'] });
+      qc.invalidateQueries({ queryKey: ['dashboard', 'health'] });
       if (body.animalId) {
         qc.invalidateQueries({ queryKey: ['animal', body.animalId] });
       }
@@ -59,6 +60,8 @@ export function useUpdateTreatment() {
       (await http.patch<Treatment>(`/health/treatments/${id}`, body)).data,
     onSuccess: (_data, vars) => {
       qc.invalidateQueries({ queryKey: QK });
+      qc.invalidateQueries({ queryKey: ['health', 'alerts'] });
+      qc.invalidateQueries({ queryKey: ['dashboard', 'health'] });
       if (vars.body.animalId) {
         qc.invalidateQueries({ queryKey: ['animal', vars.body.animalId] });
       }
@@ -74,6 +77,8 @@ export function useDeleteTreatment() {
       (await http.delete(`/health/treatments/${id}`)).data,
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: QK });
+      qc.invalidateQueries({ queryKey: ['health', 'alerts'] });
+      qc.invalidateQueries({ queryKey: ['dashboard', 'health'] });
       qc.invalidateQueries({ queryKey: ['animal'] });
     }
   });

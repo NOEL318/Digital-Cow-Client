@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/ui/table';
 import { useAbortions, useCreateAbortion } from '@/features/reproduction/abortions/api';
 import { AbortionForm } from '@/features/reproduction/abortions/components/AbortionForm';
 
@@ -33,26 +34,26 @@ export default function AbortionsPage() {
           </DialogContent>
         </Dialog>
       </div>
-      <table className="w-full border rounded">
-        <thead>
-          <tr className="bg-muted">
-            <th className="p-2 text-left">{t('reproduction:abortion.abortedAt')}</th>
-            <th className="p-2 text-left">{t('reproduction:abortion.animal')}</th>
-            <th className="p-2 text-left">{t('reproduction:abortion.estimatedGestationDays')}</th>
-            <th className="p-2 text-left">{t('reproduction:abortion.cause')}</th>
-          </tr>
-        </thead>
-        <tbody>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>{t('reproduction:abortion.abortedAt')}</TableHead>
+            <TableHead>{t('reproduction:abortion.animal')}</TableHead>
+            <TableHead>{t('reproduction:abortion.estimatedGestationDays')}</TableHead>
+            <TableHead>{t('reproduction:abortion.cause')}</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
           {abortions.data?.map(a => (
-            <tr key={a.id} className="border-t">
-              <td className="p-2">{a.abortedAt}</td>
-              <td className="p-2">{a.animalId}</td>
-              <td className="p-2">{a.estimatedGestationDays ?? '-'}</td>
-              <td className="p-2">{a.cause ?? '-'}</td>
-            </tr>
+            <TableRow key={a.id}>
+              <TableCell>{a.abortedAt}</TableCell>
+              <TableCell>{a.animalId}</TableCell>
+              <TableCell>{a.estimatedGestationDays ?? '-'}</TableCell>
+              <TableCell>{a.cause ?? '-'}</TableCell>
+            </TableRow>
           ))}
-        </tbody>
-      </table>
+        </TableBody>
+      </Table>
     </div>
   );
 }

@@ -10,6 +10,14 @@ import { useForm } from 'react-hook-form';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import {
+  Table,
+  TableHeader,
+  TableBody,
+  TableRow,
+  TableHead,
+  TableCell
+} from '@/components/ui/table';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { useCreateHealthPlan, useHealthPlans } from '@/features/health/plans/api';
 import { healthPlanCreateSchema, type HealthPlanCreateInput } from '@/features/health/plans/schemas';
@@ -45,12 +53,12 @@ export default function HealthPlansPage() {
             <DialogHeader><DialogTitle>{t('health:plan.new')}</DialogTitle></DialogHeader>
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-3">
               <div>
-                <Label htmlFor="name">Name</Label>
+                <Label htmlFor="name">{t('health:plan.name')}</Label>
                 <Input id="name" {...register('name')} />
                 {errors.name && <p className="text-destructive text-sm">{errors.name.message}</p>}
               </div>
               <div>
-                <Label htmlFor="description">Description</Label>
+                <Label htmlFor="description">{t('health:plan.description')}</Label>
                 <Input id="description" {...register('description')} />
               </div>
               <div>
@@ -82,32 +90,32 @@ export default function HealthPlansPage() {
           </DialogContent>
         </Dialog>
       </div>
-      <table className="w-full border rounded">
-        <thead>
-          <tr className="bg-muted">
-            <th className="p-2 text-left">Name</th>
-            <th className="p-2 text-left">{t('health:plan.appliesToPurpose')}</th>
-            <th className="p-2 text-left">{t('health:plan.appliesToSex')}</th>
-            <th className="p-2 w-12" />
-          </tr>
-        </thead>
-        <tbody>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>{t('health:plan.name')}</TableHead>
+            <TableHead>{t('health:plan.appliesToPurpose')}</TableHead>
+            <TableHead>{t('health:plan.appliesToSex')}</TableHead>
+            <TableHead className="w-12" />
+          </TableRow>
+        </TableHeader>
+        <TableBody>
           {list.data?.map(p => (
-            <tr key={p.id} className="border-t hover:bg-accent/40">
-              <td className="p-2">
+            <TableRow key={p.id}>
+              <TableCell>
                 <Link to={`/health/plans/${p.id}`} className="text-primary hover:underline">{p.name}</Link>
-              </td>
-              <td className="p-2">{p.appliesToPurpose}</td>
-              <td className="p-2">{p.appliesToSex}</td>
-              <td className="p-2 text-right">
+              </TableCell>
+              <TableCell>{p.appliesToPurpose}</TableCell>
+              <TableCell>{p.appliesToSex}</TableCell>
+              <TableCell className="text-right">
                 {p.accountId === null && (
                   <Lock className="h-4 w-4 inline text-muted-foreground" aria-label={t('health:plan.global')} />
                 )}
-              </td>
-            </tr>
+              </TableCell>
+            </TableRow>
           ))}
-        </tbody>
-      </table>
+        </TableBody>
+      </Table>
     </div>
   );
 }

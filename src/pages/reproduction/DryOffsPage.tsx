@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/ui/table';
 import { useDryOffs, useCreateDryOff } from '@/features/reproduction/dryOffs/api';
 import { DryOffForm } from '@/features/reproduction/dryOffs/components/DryOffForm';
 
@@ -33,24 +34,24 @@ export default function DryOffsPage() {
           </DialogContent>
         </Dialog>
       </div>
-      <table className="w-full border rounded">
-        <thead>
-          <tr className="bg-muted">
-            <th className="p-2 text-left">{t('reproduction:dryOff.driedOffAt')}</th>
-            <th className="p-2 text-left">{t('reproduction:dryOff.animal')}</th>
-            <th className="p-2 text-right">{t('reproduction:dryOff.lactationDays')}</th>
-          </tr>
-        </thead>
-        <tbody>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>{t('reproduction:dryOff.driedOffAt')}</TableHead>
+            <TableHead>{t('reproduction:dryOff.animal')}</TableHead>
+            <TableHead className="text-right">{t('reproduction:dryOff.lactationDays')}</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
           {dryOffs.data?.map(d => (
-            <tr key={d.id} className="border-t">
-              <td className="p-2">{d.driedOffAt}</td>
-              <td className="p-2">{d.animalId}</td>
-              <td className="p-2 text-right">{d.lactationDays ?? '-'}</td>
-            </tr>
+            <TableRow key={d.id}>
+              <TableCell>{d.driedOffAt}</TableCell>
+              <TableCell>{d.animalId}</TableCell>
+              <TableCell className="text-right">{d.lactationDays ?? '-'}</TableCell>
+            </TableRow>
           ))}
-        </tbody>
-      </table>
+        </TableBody>
+      </Table>
     </div>
   );
 }

@@ -15,9 +15,10 @@ import HealthSummaryPage from './HealthSummaryPage';
  * Para abrir el reporte de un animal concreto se usa /reports/animal/:id.
  */
 function AnimalReportPlaceholder() {
+  const { t } = useTranslation(['reports']);
   return (
     <div className="rounded border p-6 text-sm text-muted-foreground">
-      Selecciona un animal desde la lista de Animales y abre su reporte para verlo aqui.
+      {t('reports:animal.animalReportPlaceholder')}
     </div>
   );
 }

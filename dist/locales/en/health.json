@@ -34,7 +34,11 @@
     "severity": "Severity",
     "symptoms": "Symptoms",
     "status": "Status",
-    "resolvedAt": "Resolved on"
+    "resolvedAt": "Resolved on",
+    "status_active": "Active",
+    "status_recovered": "Recovered",
+    "status_chronic": "Chronic",
+    "status_deceased": "Deceased"
   },
   "treatment": {
     "title": "Treatments",
@@ -49,7 +53,8 @@
     "withdrawalMilk": "Milk withdrawal until",
     "withdrawalMeat": "Meat withdrawal until",
     "withdrawalActive": "Withdrawal active",
-    "prescribedBy": "Prescribed by"
+    "prescribedBy": "Prescribed by",
+    "cost": "Cost"
   },
   "pest": {
     "title": "Pest controls",
@@ -57,11 +62,14 @@
     "pest": "Pest",
     "product": "Product used",
     "appliedAt": "Applied on",
-    "nextApplication": "Next application"
+    "nextApplication": "Next application",
+    "dose": "Dose",
+    "cost": "Cost"
   },
   "visit": {
     "title": "Vet visits",
     "new": "New visit",
+    "visitedAt": "Visit date",
     "vetName": "Veterinarian",
     "vetContact": "Contact",
     "reason": "Reason",
@@ -78,11 +86,26 @@
     "addStep": "Add step",
     "ageMonthsMin": "Minimum age in months",
     "recurrenceMonths": "Recurrence in months",
-    "assign": "Assign to animals or lots"
+    "assign": "Assign to animals or lots",
+    "name": "Name",
+    "description": "Description",
+    "animals": "Animals",
+    "lots": "Lots"
   },
   "tab": {
     "health": "Health",
     "timeline": "Timeline",
     "print": "Printable view"
+  },
+  "animal": "Animal",
+  "panel": {
+    "detailHeading": "Health in detail",
+    "viewAll": "View all",
+    "vaccinationsDesc": "View all applied and scheduled vaccines.",
+    "diagnosesDesc": "Diseases detected on the ranch.",
+    "treatmentsDesc": "Medicines applied and in progress.",
+    "pestControlsDesc": "Applications for ticks, flies, and more.",
+    "vetVisitsDesc": "Visit history and notes.",
+    "plansDesc": "Vaccination schedules by lot."
   }
 }

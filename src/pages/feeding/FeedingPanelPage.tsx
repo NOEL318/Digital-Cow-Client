@@ -14,10 +14,10 @@ import FeedingCostSummaryPage from './FeedingCostSummaryPage';
 export default function FeedingPanelPage() {
   const { t } = useTranslation(['feeding', 'common']);
   const sections = [
-    { to: '/panel/alimentacion/items', icon: Package, title: t('feeding:panel.items.title', { defaultValue: 'Alimentos' }), description: t('feeding:panel.items.desc', { defaultValue: 'Cosas que les das de comer y su precio por kilogramo.' }) },
-    { to: '/panel/alimentacion/planes', icon: ClipboardList, title: t('feeding:panel.plans.title', { defaultValue: 'Planes de alimentacion' }), description: t('feeding:panel.plans.desc', { defaultValue: 'Que come cada lote y cuanto.' }) },
-    { to: '/panel/alimentacion/registros', icon: Wheat, title: t('feeding:panel.records.title', { defaultValue: 'Registros del dia' }), description: t('feeding:panel.records.desc', { defaultValue: 'Lo que se les dio cada dia.' }) },
-    { to: '/panel/alimentacion/costo', icon: Calculator, title: t('feeding:panel.cost.title', { defaultValue: 'Resumen de costo' }), description: t('feeding:panel.cost.desc', { defaultValue: 'Cuanto cuesta alimentar tu rancho.' }) }
+    { to: '/panel/alimentacion/items',    icon: Package,       title: t('feeding:panel.items.title'),   description: t('feeding:panel.items.desc') },
+    { to: '/panel/alimentacion/planes',   icon: ClipboardList, title: t('feeding:panel.plans.title'),   description: t('feeding:panel.plans.desc') },
+    { to: '/panel/alimentacion/registros',icon: Wheat,         title: t('feeding:panel.records.title'), description: t('feeding:panel.records.desc') },
+    { to: '/panel/alimentacion/costo',    icon: Calculator,    title: t('feeding:panel.cost.title'),    description: t('feeding:panel.cost.desc') }
   ];
 
   return (
@@ -35,7 +35,7 @@ export default function FeedingPanelPage() {
                 size="md"
               >
                 <span className="inline-flex items-center text-xs text-primary mt-1">
-                  {t('common:actions.viewAll', { defaultValue: 'Ver todo' })}
+                  {t('common:actions.viewAll')}
                   <ChevronRight className="h-3 w-3" aria-hidden />
                 </span>
               </IconCard>

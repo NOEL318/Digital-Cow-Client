@@ -20,16 +20,7 @@ import { BarcodeScanner } from '@/components/ui/barcode-scanner';
 import { BigButton } from '@/components/ui/big-button';
 import { EmptyState } from '@/components/ui/empty-state';
 import { HelpfulField } from '@/components/ui/helpful-field';
-
-const CATEGORIES: { value: MedicationCategory; label: string }[] = [
-  { value: 'VACCINE', label: 'Vacuna' },
-  { value: 'ANTIBIOTIC', label: 'Antibiotico' },
-  { value: 'ANTIPARASITIC', label: 'Antiparasitario' },
-  { value: 'HORMONE', label: 'Hormonal' },
-  { value: 'VITAMIN', label: 'Vitamina o suplemento' },
-  { value: 'ANTIINFLAMMATORY', label: 'Antiinflamatorio' },
-  { value: 'OTHER', label: 'Otro' }
-];
+import { Badge } from '@/components/ui/badge';
 
 const EMPTY: MedicationUpsertRequest = {
   nameEs: '',
@@ -84,7 +75,7 @@ function expiryStatus(expiresAt: string | null | undefined): 'expired' | 'warnin
  * vencido o esta a 30 dias o menos de caducar.
  */
 export default function AjustesMedicamentosPage() {
-  const { t } = useTranslation('common');
+  const { t } = useTranslation(['catalog', 'common']);
   const { data, isLoading } = useMedications();
   const create = useCreateMedication();
   const update = useUpdateMedication();
@@ -98,7 +89,7 @@ export default function AjustesMedicamentosPage() {
     setScanAlert(null);
     const found = await findMedicationByBarcode(code);
     if (!found) {
-      setScanAlert({ kind: 'notfound', text: `Codigo "${code}" no esta en tu catalogo. Agregalo ahora.` });
+      setScanAlert({ kind: 'notfound', text: t('catalog:med.scanNotFound', { code }) });
       setEditing({ ...EMPTY, barcode: code });
       return;
     }
@@ -106,12 +97,12 @@ export default function AjustesMedicamentosPage() {
     if (status === 'expired') {
       setScanAlert({
         kind: 'expired',
-        text: `${found.nameEs} VENCIO el ${found.expiresAt}. No lo uses, busca otro envase.`
+        text: t('catalog:med.scanExpired', { name: found.nameEs, date: found.expiresAt })
       });
     } else if (status === 'warning') {
       setScanAlert({
         kind: 'warning',
-        text: `${found.nameEs} caduca el ${found.expiresAt}. Falta poco, usalo pronto.`
+        text: t('catalog:med.scanWarning', { name: found.nameEs, date: found.expiresAt })
       });
     }
     setEditing(toRequest(found));
@@ -144,17 +135,17 @@ export default function AjustesMedicamentosPage() {
       <header className="flex flex-wrap items-center justify-between gap-3">
         <h1 className="text-2xl font-bold flex items-center gap-2">
           <Pill className="h-6 w-6 text-primary" aria-hidden />
-          {t('nav.ajustesMedicamentos')}
+          {t('common:nav.ajustesMedicamentos')}
         </h1>
         <div className="flex gap-2 flex-wrap">
           <BigButton
-            label="Escanear codigo"
+            label={t('catalog:med.scanCode')}
             icon={ScanLine}
             variant="outline"
             onClick={() => setScannerOpen(true)}
           />
           <BigButton
-            label="Agregar medicamento"
+            label={t('catalog:med.addMedication')}
             icon={Plus}
             onClick={() => setEditing({ ...EMPTY })}
           />
@@ -164,13 +155,13 @@ export default function AjustesMedicamentosPage() {
       {scanAlert ? <ScanAlertBanner alert={scanAlert} onDismiss={() => setScanAlert(null)} /> : null}
 
       {isLoading ? (
-        <p>Cargando...</p>
+        <p>{t('common:loading')}</p>
       ) : !data || data.length === 0 ? (
         <EmptyState
           icon={Pill}
-          title="Aun no tienes medicamentos guardados"
-          description="Agrega los medicamentos que usas en tu rancho. Escanea el codigo de barras para llenar los datos automaticamente."
-          ctaLabel="Agregar el primero"
+          title={t('catalog:med.emptyTitle')}
+          description={t('catalog:med.emptyDesc')}
+          ctaLabel={t('catalog:med.emptyCtaLabel')}
           onCta={() => setEditing({ ...EMPTY })}
         />
       ) : (
@@ -192,29 +183,37 @@ export default function AjustesMedicamentosPage() {
                   <p className="text-sm text-muted-foreground">
                     {[m.activeIngredient, m.presentation, m.manufacturer].filter(Boolean).join(' · ')}
                   </p>
-                  {m.barcode ? <p className="text-xs text-muted-foreground">Codigo: {m.barcode}</p> : null}
+                  {m.barcode ? (
+                    <p className="text-xs text-muted-foreground">
+                      {t('catalog:med.barcodeLabel')}: {m.barcode}
+                    </p>
+                  ) : null}
                   {m.expiresAt ? (
-                    <p className={`text-xs inline-flex items-center gap-1 ${
-                      status === 'expired' ? 'text-red-700 font-semibold'
-                      : status === 'warning' ? 'text-amber-700 font-semibold'
-                      : 'text-muted-foreground'
-                    }`}>
+                    <p className="text-xs inline-flex items-center gap-1">
                       <Calendar className="h-3 w-3" aria-hidden />
-                      {status === 'expired' ? 'Vencido el ' : 'Caduca el '}{m.expiresAt}
+                      {status === 'expired' ? (
+                        <Badge tone="danger">{t('catalog:med.expired')} {m.expiresAt}</Badge>
+                      ) : status === 'warning' ? (
+                        <Badge tone="warning">{t('catalog:med.expiresSoon')} {m.expiresAt}</Badge>
+                      ) : (
+                        <Badge tone="success">{t('catalog:med.expiresSoon')} {m.expiresAt}</Badge>
+                      )}
                     </p>
                   ) : null}
                   <p className="text-xs text-muted-foreground">
-                    Retiro leche: {m.withdrawalMilkDays} dias · Retiro carne: {m.withdrawalMeatDays} dias
+                    {t('catalog:med.withdrawalMilkLine', { days: m.withdrawalMilkDays })}
+                    {' · '}
+                    {t('catalog:med.withdrawalMeatLine', { days: m.withdrawalMeatDays })}
                   </p>
                 </div>
                 <div className="flex gap-2">
-                  <BigButton label="Editar" icon={Edit2} variant="outline" onClick={() => setEditing(toRequest(m))} />
+                  <BigButton label={t('catalog:med.editBtn')} icon={Edit2} variant="outline" onClick={() => setEditing(toRequest(m))} />
                   <BigButton
-                    label="Eliminar"
+                    label={t('catalog:med.deleteBtn')}
                     icon={Trash2}
                     variant="destructive"
                     onClick={async () => {
-                      if (window.confirm(`Eliminar ${m.nameEs}?`)) await del.mutateAsync(m.id);
+                      if (window.confirm(t('catalog:med.deleteConfirm', { name: m.nameEs }))) await del.mutateAsync(m.id);
                     }}
                   />
                 </div>
@@ -228,7 +227,7 @@ export default function AjustesMedicamentosPage() {
         open={scannerOpen}
         onClose={() => setScannerOpen(false)}
         onDetected={handleScan}
-        title="Escanear codigo del medicamento"
+        title={t('catalog:med.scannerTitle')}
       />
     </div>
   );
@@ -237,6 +236,7 @@ export default function AjustesMedicamentosPage() {
 function ScanAlertBanner({
   alert, onDismiss
 }: { alert: { kind: 'expired' | 'warning' | 'notfound'; text: string }; onDismiss: () => void }) {
+  const { t } = useTranslation('catalog');
   const colors = alert.kind === 'expired'
     ? 'border-red-400 bg-red-100 text-red-900 dark:bg-red-950/40 dark:text-red-200'
     : alert.kind === 'warning'
@@ -246,7 +246,7 @@ function ScanAlertBanner({
     <div role="alert" className={`rounded-xl border p-3 flex items-start gap-2 ${colors}`}>
       <AlertTriangle className="h-5 w-5 mt-0.5 shrink-0" aria-hidden />
       <p className="flex-1 font-medium">{alert.text}</p>
-      <button type="button" onClick={onDismiss} className="text-sm underline">Cerrar</button>
+      <button type="button" onClick={onDismiss} className="text-sm underline">{t('med.alertClose')}</button>
     </div>
   );
 }
@@ -263,6 +263,7 @@ interface MedicineFormProps {
  * interno ni nombre en inglés (el backend los autogenera).
  */
 function MedicineForm({ initial, onSave, onCancel, submitting }: MedicineFormProps) {
+  const { t } = useTranslation(['catalog', 'common']);
   const [values, setValues] = useState<MedicationUpsertRequest & { id?: number }>(initial);
   const [scannerOpen, setScannerOpen] = useState(false);
 
@@ -270,13 +271,25 @@ function MedicineForm({ initial, onSave, onCancel, submitting }: MedicineFormPro
     setValues(prev => ({ ...prev, [k]: v }));
   }
 
+  const CATEGORIES: { value: MedicationCategory; label: string }[] = [
+    { value: 'VACCINE', label: t('catalog:med.categoryVaccine') },
+    { value: 'ANTIBIOTIC', label: t('catalog:med.categoryAntibiotic') },
+    { value: 'ANTIPARASITIC', label: t('catalog:med.categoryAntiparasitic') },
+    { value: 'HORMONE', label: t('catalog:med.categoryHormone') },
+    { value: 'VITAMIN', label: t('catalog:med.categoryVitamin') },
+    { value: 'ANTIINFLAMMATORY', label: t('catalog:med.categoryAntiinflammatory') },
+    { value: 'OTHER', label: t('catalog:med.categoryOther') }
+  ];
+
   const canSave = (values.nameEs ?? '').trim().length > 0;
 
   return (
     <div className="space-y-4 max-w-2xl">
-      <h1 className="text-2xl font-bold">{values.id ? 'Editar medicamento' : 'Agregar medicamento'}</h1>
+      <h1 className="text-2xl font-bold">
+        {values.id ? t('catalog:med.formEditTitle') : t('catalog:med.formAddTitle')}
+      </h1>
 
-      <HelpfulField id="med-name" label="Nombre del medicamento" required example="Oxitetraciclina larga acción">
+      <HelpfulField id="med-name" label={t('catalog:med.fieldName')} required example={t('catalog:med.fieldNameExample')}>
         <input
           id="med-name"
           value={values.nameEs}
@@ -285,7 +298,7 @@ function MedicineForm({ initial, onSave, onCancel, submitting }: MedicineFormPro
         />
       </HelpfulField>
 
-      <HelpfulField id="med-active" label="Principio activo" help="La sustancia que cura o protege." example="Oxitetraciclina">
+      <HelpfulField id="med-active" label={t('catalog:med.fieldActiveIngredient')} help={t('catalog:med.fieldActiveIngredientHelp')} example={t('catalog:med.fieldActiveIngredientExample')}>
         <input
           id="med-active"
           value={values.activeIngredient ?? ''}
@@ -294,7 +307,7 @@ function MedicineForm({ initial, onSave, onCancel, submitting }: MedicineFormPro
         />
       </HelpfulField>
 
-      <HelpfulField id="med-manufacturer" label="Fabricante" help="La empresa que lo produce." example="Bayer">
+      <HelpfulField id="med-manufacturer" label={t('catalog:med.fieldManufacturer')} help={t('catalog:med.fieldManufacturerHelp')} example={t('catalog:med.fieldManufacturerExample')}>
         <input
           id="med-manufacturer"
           value={values.manufacturer ?? ''}
@@ -303,7 +316,7 @@ function MedicineForm({ initial, onSave, onCancel, submitting }: MedicineFormPro
         />
       </HelpfulField>
 
-      <HelpfulField id="med-presentation" label="Presentacion" help="Tamano y forma del envase." example="Frasco inyectable de 100 mililitros">
+      <HelpfulField id="med-presentation" label={t('catalog:med.fieldPresentation')} help={t('catalog:med.fieldPresentationHelp')} example={t('catalog:med.fieldPresentationExample')}>
         <input
           id="med-presentation"
           value={values.presentation ?? ''}
@@ -312,7 +325,7 @@ function MedicineForm({ initial, onSave, onCancel, submitting }: MedicineFormPro
         />
       </HelpfulField>
 
-      <HelpfulField id="med-barcode" label="Codigo de barras" help="Lo encuentras en el envase. Puedes escanearlo." example="7501234567890">
+      <HelpfulField id="med-barcode" label={t('catalog:med.fieldBarcode')} help={t('catalog:med.fieldBarcodeHelp')} example={t('catalog:med.fieldBarcodeExample')}>
         <div className="flex gap-2">
           <input
             id="med-barcode"
@@ -320,11 +333,11 @@ function MedicineForm({ initial, onSave, onCancel, submitting }: MedicineFormPro
             onChange={e => set('barcode', e.target.value)}
             className="flex-1 border rounded-md px-3 py-2 text-base bg-background"
           />
-          <BigButton label="Escanear" icon={ScanLine} variant="outline" onClick={() => setScannerOpen(true)} />
+          <BigButton label={t('catalog:med.scanBtn')} icon={ScanLine} variant="outline" onClick={() => setScannerOpen(true)} />
         </div>
       </HelpfulField>
 
-      <HelpfulField id="med-expires" label="Fecha de caducidad" icon={Calendar} help="Cuando vence el envase. Te avisamos si lo escaneas vencido.">
+      <HelpfulField id="med-expires" label={t('catalog:med.fieldExpires')} icon={Calendar} help={t('catalog:med.fieldExpiresHelp')}>
         <input
           id="med-expires"
           type="date"
@@ -334,7 +347,7 @@ function MedicineForm({ initial, onSave, onCancel, submitting }: MedicineFormPro
         />
       </HelpfulField>
 
-      <HelpfulField id="med-category" label="Categoria" help="Para que sirve el medicamento.">
+      <HelpfulField id="med-category" label={t('catalog:med.fieldCategory')} help={t('catalog:med.fieldCategoryHelp')}>
         <select
           id="med-category"
           value={values.category ?? 'OTHER'}
@@ -347,7 +360,7 @@ function MedicineForm({ initial, onSave, onCancel, submitting }: MedicineFormPro
         </select>
       </HelpfulField>
 
-      <HelpfulField id="med-milk" label="Dias de retiro en leche" help="Dias que no se debe vender la leche despues de aplicar." example="3">
+      <HelpfulField id="med-milk" label={t('catalog:med.fieldWithdrawalMilk')} help={t('catalog:med.fieldWithdrawalMilkHelp')} example={t('catalog:med.fieldWithdrawalMilkExample')}>
         <input
           id="med-milk"
           type="number"
@@ -358,7 +371,7 @@ function MedicineForm({ initial, onSave, onCancel, submitting }: MedicineFormPro
         />
       </HelpfulField>
 
-      <HelpfulField id="med-meat" label="Dias de retiro en carne" help="Dias que no se debe vender el animal despues de aplicar." example="14">
+      <HelpfulField id="med-meat" label={t('catalog:med.fieldWithdrawalMeat')} help={t('catalog:med.fieldWithdrawalMeatHelp')} example={t('catalog:med.fieldWithdrawalMeatExample')}>
         <input
           id="med-meat"
           type="number"
@@ -369,7 +382,7 @@ function MedicineForm({ initial, onSave, onCancel, submitting }: MedicineFormPro
         />
       </HelpfulField>
 
-      <HelpfulField id="med-notes" label="Notas" help="Cualquier detalle util que quieras recordar.">
+      <HelpfulField id="med-notes" label={t('catalog:med.fieldNotes')} help={t('catalog:med.fieldNotesHelp')}>
         <textarea
           id="med-notes"
           rows={3}
@@ -380,9 +393,9 @@ function MedicineForm({ initial, onSave, onCancel, submitting }: MedicineFormPro
       </HelpfulField>
 
       <div className="flex justify-between gap-3 pt-4">
-        <BigButton label="Cancelar" variant="outline" onClick={onCancel} />
+        <BigButton label={t('common:actions.cancel')} variant="outline" onClick={onCancel} />
         <BigButton
-          label={values.id ? 'Guardar cambios' : 'Crear medicamento'}
+          label={values.id ? t('catalog:med.saveChanges') : t('catalog:med.createMedication')}
           disabled={!canSave || submitting}
           onClick={() => onSave(values)}
         />
@@ -392,7 +405,7 @@ function MedicineForm({ initial, onSave, onCancel, submitting }: MedicineFormPro
         open={scannerOpen}
         onClose={() => setScannerOpen(false)}
         onDetected={code => { set('barcode', code); setScannerOpen(false); }}
-        title="Escanear codigo del medicamento"
+        title={t('catalog:med.scannerTitle')}
       />
     </div>
   );

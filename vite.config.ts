@@ -28,6 +28,9 @@ export default defineConfig({
         // (rutas profundas como /hacer-nota/celo abiertas offline).
         navigateFallback: '/index.html',
         navigateFallbackDenylist: [/^\/api\//],
+        // El bundle principal supera los 2 MiB por defecto de workbox; subimos el
+        // tope para que igual se precachee y la app funcione offline completa.
+        maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
         // No precachear imágenes y datos que crecen sin límite.
         globPatterns: ['**/*.{js,css,html,svg,ico,woff,woff2}'],
         runtimeCaching: [

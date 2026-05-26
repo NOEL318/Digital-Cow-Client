@@ -6,6 +6,10 @@ import { useTranslation } from 'react-i18next';
 import { Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import {
+  Table, TableHeader, TableBody, TableRow, TableHead, TableCell
+} from '@/components/ui/table';
+import { Badge } from '@/components/ui/badge';
 import { useSlaughterResults, useCreateSlaughterResult } from '@/features/production/slaughter/api';
 import { SlaughterResultForm } from '@/features/production/slaughter/components/SlaughterResultForm';
 
@@ -15,6 +19,14 @@ export default function SlaughterPage() {
   const results = useSlaughterResults();
   const create = useCreateSlaughterResult();
   const [open, setOpen] = useState(false);
+
+  /** Tone based on carcass yield percentage (higher = better). */
+  function yieldTone(pct: number | null | undefined) {
+    if (pct == null) return 'neutral' as const;
+    if (pct >= 55) return 'success' as const;
+    if (pct >= 45) return 'warning' as const;
+    return 'danger' as const;
+  }
 
   return (
     <div className="p-6 space-y-4">
@@ -33,32 +45,37 @@ export default function SlaughterPage() {
           </DialogContent>
         </Dialog>
       </div>
-      <table className="w-full border rounded">
-        <thead>
-          <tr className="bg-muted">
-            <th className="p-2 text-left">{t('production:slaughter.slaughteredAt')}</th>
-            <th className="p-2 text-left">{t('production:slaughter.animal')}</th>
-            <th className="p-2 text-left">{t('production:slaughter.liveWeightKg')}</th>
-            <th className="p-2 text-left">{t('production:slaughter.carcassWeightKg')}</th>
-            <th className="p-2 text-left">{t('production:slaughter.yieldPct')}</th>
-            <th className="p-2 text-left">{t('production:slaughter.grade')}</th>
-            <th className="p-2 text-left">{t('production:slaughter.buyer')}</th>
-          </tr>
-        </thead>
-        <tbody>
+
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>{t('production:slaughter.slaughteredAt')}</TableHead>
+            <TableHead>{t('production:slaughter.animal')}</TableHead>
+            <TableHead>{t('production:slaughter.liveWeightKg')}</TableHead>
+            <TableHead>{t('production:slaughter.carcassWeightKg')}</TableHead>
+            <TableHead>{t('production:slaughter.yieldPct')}</TableHead>
+            <TableHead>{t('production:slaughter.grade')}</TableHead>
+            <TableHead>{t('production:slaughter.buyer')}</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
           {results.data?.map(s => (
-            <tr key={s.id} className="border-t">
-              <td className="p-2">{s.slaughteredAt}</td>
-              <td className="p-2">{s.animalId}</td>
-              <td className="p-2">{s.liveWeightKg ?? '-'}</td>
-              <td className="p-2">{s.carcassWeightKg ?? '-'}</td>
-              <td className="p-2">{s.yieldPct ?? '-'}</td>
-              <td className="p-2">{s.grade ?? '-'}</td>
-              <td className="p-2">{s.buyer ?? '-'}</td>
-            </tr>
+            <TableRow key={s.id}>
+              <TableCell>{s.slaughteredAt}</TableCell>
+              <TableCell>{s.animalId}</TableCell>
+              <TableCell>{s.liveWeightKg ?? '-'}</TableCell>
+              <TableCell>{s.carcassWeightKg ?? '-'}</TableCell>
+              <TableCell>
+                {s.yieldPct != null ? (
+                  <Badge tone={yieldTone(s.yieldPct)}>{s.yieldPct}%</Badge>
+                ) : '-'}
+              </TableCell>
+              <TableCell>{s.grade ?? '-'}</TableCell>
+              <TableCell>{s.buyer ?? '-'}</TableCell>
+            </TableRow>
           ))}
-        </tbody>
-      </table>
+        </TableBody>
+      </Table>
     </div>
   );
 }

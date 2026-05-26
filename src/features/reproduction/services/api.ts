@@ -34,6 +34,8 @@ export function useCreateServiceEvent() {
       qc.invalidateQueries({ queryKey: QK });
       qc.invalidateQueries({ queryKey: ['reproduction', 'semen-straws'] });
       qc.invalidateQueries({ queryKey: ['reproduction', 'alerts'] });
+      qc.invalidateQueries({ queryKey: ['dashboard', 'reproduction'] });
+      qc.invalidateQueries({ queryKey: ['reproduction', 'kpis'] });
       const aid = (body as { animalId?: number }).animalId;
       if (aid) qc.invalidateQueries({ queryKey: ['animal', aid] });
     }
@@ -49,6 +51,9 @@ export function useUpdateServiceEvent() {
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: QK });
       qc.invalidateQueries({ queryKey: ['animal'] });
+      qc.invalidateQueries({ queryKey: ['dashboard', 'reproduction'] });
+      qc.invalidateQueries({ queryKey: ['reproduction', 'alerts'] });
+      qc.invalidateQueries({ queryKey: ['reproduction', 'kpis'] });
     }
   });
 }
@@ -62,6 +67,9 @@ export function useDeleteServiceEvent() {
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: QK });
       qc.invalidateQueries({ queryKey: ['animal'] });
+      qc.invalidateQueries({ queryKey: ['dashboard', 'reproduction'] });
+      qc.invalidateQueries({ queryKey: ['reproduction', 'alerts'] });
+      qc.invalidateQueries({ queryKey: ['reproduction', 'kpis'] });
     }
   });
 }

@@ -30,6 +30,8 @@ export function useCreateMilkSale() {
       qc.invalidateQueries({ queryKey: QK });
       qc.invalidateQueries({ queryKey: ['finance', 'incomes'] });
       qc.invalidateQueries({ queryKey: ['dashboard', 'finance'] });
+      qc.invalidateQueries({ queryKey: ['finance', 'pnl'] });
+      qc.invalidateQueries({ queryKey: ['finance', 'cash-flow'] });
     }
   });
 }
@@ -40,7 +42,13 @@ export function useUpdateMilkSale() {
   return useMutation({
     mutationFn: async ({ id, body }: { id: number; body: Partial<MilkSaleCreate> }) =>
       (await http.patch<MilkSale>(`/finance/milk-sales/${id}`, body)).data,
-    onSuccess: () => qc.invalidateQueries({ queryKey: QK })
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: QK });
+      qc.invalidateQueries({ queryKey: ['finance', 'incomes'] });
+      qc.invalidateQueries({ queryKey: ['dashboard', 'finance'] });
+      qc.invalidateQueries({ queryKey: ['finance', 'pnl'] });
+      qc.invalidateQueries({ queryKey: ['finance', 'cash-flow'] });
+    }
   });
 }
 
@@ -53,6 +61,9 @@ export function useDeleteMilkSale() {
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: QK });
       qc.invalidateQueries({ queryKey: ['finance', 'incomes'] });
+      qc.invalidateQueries({ queryKey: ['dashboard', 'finance'] });
+      qc.invalidateQueries({ queryKey: ['finance', 'pnl'] });
+      qc.invalidateQueries({ queryKey: ['finance', 'cash-flow'] });
     }
   });
 }

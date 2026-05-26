@@ -78,5 +78,43 @@
     "label": "Etiqueta",
     "totalCost": "Costo total",
     "totalKg": "Total en kilogramos"
+  },
+  "panel": {
+    "items": { "title": "Alimentos", "desc": "Cosas que les das de comer y su precio por kilogramo." },
+    "plans": { "title": "Planes de alimentación", "desc": "Qué come cada lote y cuánto." },
+    "records": { "title": "Registros del día", "desc": "Lo que se les dio cada día." },
+    "cost": { "title": "Resumen de costo", "desc": "Cuánto cuesta alimentar tu rancho." }
+  },
+  "lotConditions": {
+    "title": "Condiciones del corral hoy",
+    "addOther": "Otra cosa",
+    "hint": "Toca una condición para registrarla con la fecha de hoy. Aparecerá debajo en el historial.",
+    "recentHistory": "Historial reciente",
+    "loading": "Cargando...",
+    "emptyTitle": "Aún no hay registros",
+    "emptyDesc": "Empieza a registrar lo que ves en el corral: lluvia, lodo, moscas y más.",
+    "save": "Guardar",
+    "customPlaceholder": "Ejemplo: el camino quedó intransitable",
+    "customFallback": "Otra condición",
+    "deleteAria": "Eliminar",
+    "helpText": "Registra lo que pasa en el corral día a día: lluvia, lodo, plagas, falta de agua, pasto bajo. Con el tiempo verás patrones (¿siempre hay lodo en julio? ¿las moscas pegan duro en marzo?) y podrás planear: mover ganado, comprar tratamientos antes de la temporada, reforzar infraestructura. Toca cualquier condición para guardarla con la fecha de hoy.",
+    "preset": {
+      "MUD_HIGH": "Lodo alto",
+      "MUD_MEDIUM": "Lodo medio",
+      "MUD_LOW": "Poco lodo",
+      "RAIN_HEAVY": "Lluvia fuerte",
+      "RAIN_LIGHT": "Lluvia ligera",
+      "DROUGHT": "Sequía",
+      "HEAT_WAVE": "Calor extremo",
+      "COLD": "Frío",
+      "FLIES": "Moscas",
+      "TICKS": "Garrapatas",
+      "OTHER_PEST": "Otra plaga",
+      "WATER_OUT": "Sin agua",
+      "WATER_LOW": "Agua baja",
+      "PASTURE_LOW": "Pasto bajo",
+      "PASTURE_GOOD": "Buen pasto",
+      "INFRA_DAMAGE": "Daño en cercas"
+    }
   }
 }

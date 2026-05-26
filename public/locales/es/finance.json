@@ -147,5 +147,33 @@
     "mtdMargin": "Margen del mes",
     "ytdMargin": "Margen del año",
     "topExpenseCategory": "Categoría principal de egresos"
+  },
+  "panel": {
+    "expenses": {
+      "title": "Gastos",
+      "desc": "Lo que pagaste por insumos, servicios y más."
+    },
+    "incomes": {
+      "title": "Ingresos",
+      "desc": "El dinero que recibiste."
+    },
+    "animalSales": {
+      "title": "Ventas de animales",
+      "desc": "Animales que vendiste y a quién."
+    },
+    "milkSales": {
+      "title": "Ventas de leche",
+      "desc": "Leche entregada al comprador y su precio."
+    }
+  },
+  "comparison": {
+    "title": "Comparación mes a mes",
+    "loading": "Cargando...",
+    "noData": "Aún no hay suficientes datos para comparar.",
+    "weight": "Peso (kilogramos)",
+    "feed": "Alimento del lote (kilogramos)",
+    "expense": "Gasto del mes",
+    "income": "Ingreso del mes",
+    "help": "Compara cuatro cosas del mismo animal en el mismo gráfico, mes a mes: cuánto pesa, cuánto alimento consumió su lote, cuánto te costó (medicinas, vacunas, gastos asignados) y cuánto te ha dado (ventas de leche, venta del animal). Sirve para responder: ¿esta vaca produce más de lo que cuesta? ¿está subiendo de peso? Toca los chips de arriba para encender o apagar cada serie."
   }
 }

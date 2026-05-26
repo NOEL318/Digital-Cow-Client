@@ -4,6 +4,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { useQueryClient } from '@tanstack/react-query';
 import { MinusCircle, Calendar, DollarSign, Tags } from 'lucide-react';
 import { WizardStep } from '@/components/ui/wizard-step';
 import { HelpfulField } from '@/components/ui/helpful-field';
@@ -16,8 +17,10 @@ import { useCreateExpense } from '@/features/finance/expenses/api';
  * la tabla de gastos completa si lo necesita.
  */
 export function GastarFlow() {
+  const { t } = useTranslation('wizard');
   const { t: tCommon } = useTranslation('common');
   const nav = useNavigate();
+  const qc = useQueryClient();
   const create = useCreateExpense();
   const categories = useExpenseCategories();
   const [step, setStep] = useState(1);
@@ -39,10 +42,14 @@ export function GastarFlow() {
         vendor: vendor || undefined,
         description: description || undefined
       });
+      qc.invalidateQueries({ queryKey: ['finance', 'expenses'] });
+      qc.invalidateQueries({ queryKey: ['dashboard', 'finance'] });
+      qc.invalidateQueries({ queryKey: ['finance', 'pnl'] });
+      qc.invalidateQueries({ queryKey: ['finance', 'cash-flow'] });
       nav('/inicio');
     } catch (e) {
       const msg = (e as { response?: { data?: { message?: string } } })?.response?.data?.message
-        ?? 'No pudimos guardar el gasto.';
+        ?? t('gastar.saveFailed');
       setError(msg);
     }
   }
@@ -52,12 +59,12 @@ export function GastarFlow() {
       <WizardStep
         current={1}
         total={2}
-        title="En que gastaste?"
-        subtitle="Elige una categoria, pon el monto y la fecha."
+        title={t('gastar.step1Title')}
+        subtitle={t('gastar.step1Subtitle')}
         canAdvance={!!categoryId && !!amount && Number(amount) > 0 && !!incurredAt}
         onNext={() => setStep(2)}
       >
-        <HelpfulField id="g-cat" label="Categoria del gasto" icon={Tags} required>
+        <HelpfulField id="g-cat" label={t('gastar.categoryLabel')} icon={Tags} required>
           <select
             id="g-cat"
             value={categoryId ?? ''}
@@ -71,7 +78,7 @@ export function GastarFlow() {
           </select>
         </HelpfulField>
 
-        <HelpfulField id="g-amount" label="Cuanto dinero gastaste?" icon={DollarSign} required example="450">
+        <HelpfulField id="g-amount" label={t('gastar.amountLabel')} icon={DollarSign} required example={t('gastar.amountExample')}>
           <input
             id="g-amount"
             type="number"
@@ -84,7 +91,7 @@ export function GastarFlow() {
           />
         </HelpfulField>
 
-        <HelpfulField id="g-date" label="Fecha del gasto" icon={Calendar} required>
+        <HelpfulField id="g-date" label={t('gastar.dateLabel')} icon={Calendar} required>
           <input
             id="g-date"
             type="date"
@@ -94,7 +101,7 @@ export function GastarFlow() {
           />
         </HelpfulField>
 
-        <HelpfulField id="g-vendor" label="A quien le pagaste" help="Para acordarte donde lo compraste." example="Veterinaria El Toro">
+        <HelpfulField id="g-vendor" label={t('gastar.vendorLabel')} help={t('gastar.vendorHelp')} example={t('gastar.vendorExample')}>
           <input
             id="g-vendor"
             value={vendor}
@@ -103,7 +110,7 @@ export function GastarFlow() {
           />
         </HelpfulField>
 
-        <HelpfulField id="g-desc" label="Nota corta" help="Para acordarte que era." example="Vacunas para los becerros nuevos">
+        <HelpfulField id="g-desc" label={t('gastar.noteLabel')} help={t('gastar.noteHelp')} example={t('gastar.noteExample')}>
           <input
             id="g-desc"
             value={description}
@@ -120,7 +127,7 @@ export function GastarFlow() {
     <WizardStep
       current={2}
       total={2}
-      title="Listo? Asi se guardara"
+      title={t('gastar.step2Title')}
       canAdvance={!create.isPending}
       onNext={save}
       onBack={() => setStep(1)}
@@ -128,10 +135,10 @@ export function GastarFlow() {
     >
       <div className="rounded-xl border p-4 space-y-2">
         <p className="text-2xl font-bold flex items-center gap-2"><MinusCircle className="h-6 w-6 text-destructive" aria-hidden /> {amount}</p>
-        <p><span className="text-muted-foreground">Categoria:</span> {cat?.nameEs}</p>
-        <p><span className="text-muted-foreground">Fecha:</span> {incurredAt}</p>
-        {vendor ? <p><span className="text-muted-foreground">Pagado a:</span> {vendor}</p> : null}
-        {description ? <p><span className="text-muted-foreground">Nota:</span> {description}</p> : null}
+        <p><span className="text-muted-foreground">{t('gastar.summaryCategory')}</span> {cat?.nameEs}</p>
+        <p><span className="text-muted-foreground">{t('gastar.summaryDate')}</span> {incurredAt}</p>
+        {vendor ? <p><span className="text-muted-foreground">{t('gastar.summaryVendor')}</span> {vendor}</p> : null}
+        {description ? <p><span className="text-muted-foreground">{t('gastar.summaryNote')}</span> {description}</p> : null}
       </div>
       {error ? <p role="alert" className="text-sm text-destructive">{error}</p> : null}
     </WizardStep>

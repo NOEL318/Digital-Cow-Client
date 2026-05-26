@@ -1,0 +1,356 @@
+{
+  "confirm": "¿Listo? Así se guardará",
+  "confirmShort": "Listo? Así se guardará",
+  "saveFailed": "No se pudo guardar.",
+  "noAnimalsActive": "No hay animales activos en este {{context}}.",
+  "lot": "lote",
+  "ranch": "rancho",
+  "optional": "(opcional)",
+  "location": {
+    "ranch": "Rancho",
+    "lot": "Lote / corral",
+    "ranchLabel": "Rancho: ",
+    "lotLabel": "Lote: ",
+    "noLot": "Sin lote",
+    "animal": "Animal",
+    "animalOptional": "Animal (opcional)"
+  },
+  "animalPicker": {
+    "placeholder": "Marca o nombre del animal"
+  },
+  "aborto": {
+    "step1Title": "¿Cuál vaca abortó?",
+    "step2Title": "¿Cuándo pasó?",
+    "step3Title": "¿Listo? Así se guardará",
+    "dateLabel": "Fecha del aborto",
+    "gestationLabel": "Días de gestación al abortar",
+    "gestationHelp": "Aproximado.",
+    "causeLabel": "Causa probable (si la sabes)",
+    "causeExample": "Infección uterina",
+    "summaryAbortion": "Aborto",
+    "summaryGestation": "Gestación: {{days}} días",
+    "summaryCause": "Causa: {{cause}}",
+    "saveFailed": "No pudimos guardar el aborto."
+  },
+  "alimentar": {
+    "step1Title": "¿A cuál vaca alimentaste?",
+    "step1Subtitle": "Cada vaca puede comer distinto aunque esté en el mismo corral.",
+    "step2Title": "¿Qué le diste y cuánto?",
+    "step3Title": "¿Listo? Así se guardará",
+    "feedLabel": "Alimento",
+    "kgLabel": "Kilogramos",
+    "kgExample": "3.5",
+    "dateLabel": "Fecha",
+    "saveFailed": "No se pudo guardar.",
+    "summaryOf": "de"
+  },
+  "celo": {
+    "step1Title": "¿A cuál vaca le viste el celo?",
+    "step2Title": "¿Cómo lo viste y qué tan fuerte?",
+    "step3Title": "¿Listo? Así se guardará",
+    "intensityLabel": "Intensidad",
+    "detectionLabel": "¿Cómo lo detectaste?",
+    "dateLabel": "Cuándo lo viste",
+    "summaryHeat": "Celo",
+    "saveFailed": "No pudimos guardar el celo.",
+    "intensity": {
+      "WEAK": "Débil",
+      "MODERATE": "Normal",
+      "STRONG": "Fuerte"
+    },
+    "intensityDesc": {
+      "WEAK": "Señales suaves.",
+      "MODERATE": "Claro pero tranquilo.",
+      "STRONG": "Muy notorio."
+    },
+    "method": {
+      "VISUAL": "A simple vista",
+      "PEDOMETER": "Podómetro",
+      "HEAT_PATCH": "Parche",
+      "CAMERA": "Cámara",
+      "OTHER": "Otro"
+    }
+  },
+  "comprar": {
+    "step1Title": "Como se llama este animal?",
+    "step1Subtitle": "Pon una marca corta (la que usas en el rancho) y opcionalmente un nombre.",
+    "step2Title": "Es hembra o macho?",
+    "step2Subtitle": "Y para que se usa el animal.",
+    "step3Title": "De donde viene?",
+    "step3Subtitle": "Elige el rancho. Si lo compraste, anota cuanto pagaste y a quien.",
+    "step4Title": "Listo? Asi se guardara",
+    "tagLabel": "Marca del animal",
+    "tagHelp": "Asi lo encuentras rapido en listas.",
+    "tagExample": "ESM-042",
+    "nameLabel": "Nombre",
+    "nameHelp": "Si tiene uno. Es opcional.",
+    "nameExample": "Estrella",
+    "breedLabel": "Raza",
+    "sexLabel": "Sexo",
+    "purposeLabel": "Para que es?",
+    "ranchWhereLabel": "Rancho donde va a vivir",
+    "purchaseCheck": "Si, lo compre y quiero registrar el gasto",
+    "purchaseDateLabel": "Fecha de compra",
+    "purchasePriceLabel": "Precio de compra",
+    "purchasePriceExample": "18000",
+    "sellerLabel": "Quien te lo vendio",
+    "sellerExample": "Don Manuel",
+    "purchaseNote": "Se va a registrar como gasto en la categoria \"Compra de animales\" automaticamente.",
+    "summaryRace": "Raza:",
+    "summarySex": "Sexo:",
+    "summaryPurpose": "Proposito:",
+    "summaryRanch": "Rancho:",
+    "summaryExpense": "Gasto a registrar:",
+    "sex": {
+      "FEMALE": "Hembra",
+      "MALE": "Macho"
+    },
+    "purpose": {
+      "BEEF": "Carne",
+      "DAIRY": "Leche",
+      "DUAL": "Doble proposito"
+    },
+    "purposeDesc": {
+      "BEEF": "Para engorda y venta de carne.",
+      "DAIRY": "Para produccion de leche.",
+      "DUAL": "Carne y leche."
+    },
+    "saveFailed": "No pudimos guardar el animal. Revisa los datos."
+  },
+  "destetar": {
+    "step1Title": "¿A cuál becerro destetaste?",
+    "step2Title": "¿Cuándo y a qué peso?",
+    "step3Title": "¿Listo? Así se guardará",
+    "dateLabel": "Fecha del destete",
+    "weightLabel": "Peso al destete (kg)",
+    "weightExample": "180",
+    "summaryWeaned": "Destetado",
+    "saveFailed": "No pudimos guardar el destete."
+  },
+  "diagnostique": {
+    "step1Title": "¿A cuál animal diagnosticaste?",
+    "step2Title": "¿Qué tiene?",
+    "step2Subtitle": "Elige la enfermedad y qué tan fuerte está.",
+    "step3Title": "¿Listo? Así se guardará",
+    "diseaseLabel": "Enfermedad",
+    "severityLabel": "Severidad",
+    "dateLabel": "Fecha",
+    "symptomsLabel": "Síntomas que ves",
+    "symptomsHelp": "Una línea corta describiendo lo que observas.",
+    "symptomsExample": "No quiere comer, ojos llorosos",
+    "summarySymptoms": "Síntomas: {{symptoms}}",
+    "saveFailed": "No pudimos guardar el diagnóstico.",
+    "severity": {
+      "LOW": "Leve",
+      "MEDIUM": "Media",
+      "HIGH": "Grave"
+    },
+    "severityDesc": {
+      "LOW": "Síntomas suaves.",
+      "MEDIUM": "Necesita atención.",
+      "HIGH": "Urgente, vet."
+    }
+  },
+  "gastar": {
+    "step1Title": "En que gastaste?",
+    "step1Subtitle": "Elige una categoria, pon el monto y la fecha.",
+    "step2Title": "Listo? Asi se guardara",
+    "categoryLabel": "Categoria del gasto",
+    "amountLabel": "Cuanto dinero gastaste?",
+    "amountExample": "450",
+    "dateLabel": "Fecha del gasto",
+    "vendorLabel": "A quien le pagaste",
+    "vendorHelp": "Para acordarte donde lo compraste.",
+    "vendorExample": "Veterinaria El Toro",
+    "noteLabel": "Nota corta",
+    "noteHelp": "Para acordarte que era.",
+    "noteExample": "Vacunas para los becerros nuevos",
+    "summaryCategory": "Categoria:",
+    "summaryDate": "Fecha:",
+    "summaryVendor": "Pagado a:",
+    "summaryNote": "Nota:",
+    "saveFailed": "No pudimos guardar el gasto."
+  },
+  "ordenar": {
+    "step1Title": "¿A cuál vaca ordeñaste?",
+    "step2Title": "¿Cuánta leche y cuándo?",
+    "step2Subtitle": "Toca un valor común o escribe el exacto.",
+    "step3Title": "Listo? Así se guardará",
+    "sessionLabel": "Sesión",
+    "litersLabel": "Litros",
+    "litersExample": "12.5",
+    "dateLabel": "Fecha",
+    "litersUnit": "litros",
+    "saveFailed": "No pudimos guardar el ordeño.",
+    "session": {
+      "AM": "Mañana",
+      "PM": "Tarde",
+      "TOTAL": "Total del día"
+    },
+    "sessionDesc": {
+      "AM": "Ordeño matutino.",
+      "PM": "Ordeño vespertino.",
+      "TOTAL": "Suma de mañana y tarde."
+    }
+  },
+  "parto": {
+    "step1Title": "¿Cuál vaca parió?",
+    "step2Title": "¿Cómo fue el parto?",
+    "step3Title": "¿Listo? Así se guardará",
+    "dateLabel": "Fecha del parto",
+    "easeLabel": "Dificultad",
+    "outcomeLabel": "Resultado",
+    "calfWeightLabel": "Peso del becerro (kg)",
+    "calfWeightExample": "35",
+    "summaryEase": "Dificultad: {{ease}}",
+    "summaryOutcome": "Resultado: {{outcome}}",
+    "summaryCalfFemale": "hembra",
+    "summaryCalfMale": "macho",
+    "summaryCalfWeight": " · {{weight}} kg",
+    "saveFailed": "No pudimos guardar el parto.",
+    "ease": {
+      "FREE": "Solita",
+      "EASY": "Fácil",
+      "ASSISTED": "Asistido",
+      "DIFFICULT": "Difícil",
+      "SURGERY": "Cesárea"
+    },
+    "easeDesc": {
+      "FREE": "Sin ayuda."
+    },
+    "outcome": {
+      "LIVE": "Vivo",
+      "STILLBORN": "Muerto",
+      "TWIN_LIVE": "Mellizos vivos",
+      "TWIN_MIXED": "Mellizos mixto",
+      "TWIN_STILLBORN": "Mellizos muertos"
+    }
+  },
+  "pesar": {
+    "step1Title": "¿A cuál vaca pesaste?",
+    "step2Title": "¿Cuánto peso?",
+    "step2Subtitle": "Toca un valor común o escribe el exacto.",
+    "step3Title": "Listo? Así se guardará",
+    "weightLabel": "Peso en kilogramos",
+    "weightExample": "420",
+    "dateLabel": "Fecha del pesaje",
+    "kgUnit": "kilogramos",
+    "saveFailed": "No pudimos guardar el pesaje."
+  },
+  "prenez": {
+    "step1Title": "¿A cuál vaca chequeaste?",
+    "step2Title": "¿Qué resultado dio?",
+    "step3Title": "¿Listo? Así se guardará",
+    "resultLabel": "Resultado",
+    "methodLabel": "¿Cómo lo chequeaste?",
+    "dateLabel": "Fecha del chequeo",
+    "gestationLabel": "Días de gestación estimados",
+    "gestationExample": "60",
+    "estimatedCalving": "Parto estimado: ",
+    "saveFailed": "No pudimos guardar el chequeo.",
+    "result": {
+      "POSITIVE": "Preñada",
+      "NEGATIVE": "Vacía",
+      "DOUBTFUL": "Dudoso"
+    },
+    "resultDesc": {
+      "POSITIVE": "Está esperando.",
+      "NEGATIVE": "No preñada.",
+      "DOUBTFUL": "No claro."
+    },
+    "method": {
+      "PALPATION": "Tacto",
+      "ULTRASOUND": "Ecografía",
+      "BLOOD_TEST": "Sangre",
+      "MILK_TEST": "Leche"
+    }
+  },
+  "recibirDinero": {
+    "step1Title": "De donde vino el dinero?",
+    "step1Subtitle": "Elige una categoria, pon el monto y la fecha.",
+    "step2Title": "Listo? Asi se guardara",
+    "categoryLabel": "Categoria del ingreso",
+    "amountLabel": "Cuanto dinero recibiste?",
+    "amountExample": "1500",
+    "dateLabel": "Fecha del ingreso",
+    "payerLabel": "Quien te pago",
+    "payerHelp": "Para acordarte de quien fue.",
+    "payerExample": "Carniceria El Llano",
+    "noteLabel": "Nota corta",
+    "noteExample": "Venta de leche del lunes",
+    "summaryCategory": "Categoria:",
+    "summaryDate": "Fecha:",
+    "summaryPayer": "Pagado por:",
+    "summaryNote": "Nota:",
+    "saveFailed": "No pudimos guardar el ingreso."
+  },
+  "secar": {
+    "step1Title": "¿A cuál vaca secaste?",
+    "step2Title": "¿Cuándo la secaste?",
+    "step3Title": "¿Listo? Así se guardará",
+    "dateLabel": "Fecha del secado",
+    "lactationLabel": "Días de lactancia (opcional)",
+    "lactationHelp": "Cuántos días lleva produciendo.",
+    "lactationExample": "305",
+    "summaryDried": "Secada",
+    "summaryLactation": "Lactancia: {{days}} días",
+    "saveFailed": "No pudimos guardar el secado."
+  },
+  "servir": {
+    "step1Title": "¿A cuál vaca le serviste?",
+    "step2Title": "¿Cómo fue el servicio?",
+    "step2Subtitle": "Inseminación, monta o transferencia.",
+    "step3Title": "¿Listo? Así se guardará",
+    "typeLabel": "Tipo",
+    "bullLabel": "Toro",
+    "strawLabel": "Pajilla",
+    "dateLabel": "Fecha del servicio",
+    "technicianLabel": "Quién lo hizo",
+    "technicianHelp": "Nombre del inseminador o de quien atendió.",
+    "estimatedCalving": "Fecha estimada de parto: ",
+    "summaryStraw": "Pajilla: ",
+    "summaryTechnician": "Hizo: ",
+    "summaryEstimatedCalving": "Parto estimado: ",
+    "saveFailed": "No pudimos guardar el servicio.",
+    "serviceType": {
+      "AI": "Inseminación",
+      "NATURAL": "Monta natural",
+      "EMBRYO_TRANSFER": "Embrión"
+    },
+    "serviceTypeDesc": {
+      "AI": "Con pajilla.",
+      "NATURAL": "Con toro.",
+      "EMBRYO_TRANSFER": "Transferencia."
+    },
+    "strawAvailable": "disp."
+  },
+  "tratar": {
+    "step1Title": "¿A cuál animal trataste?",
+    "step2Title": "¿Qué medicamento usaste?",
+    "step2Subtitle": "Elige del catálogo y pon la fecha.",
+    "step3Title": "¿Listo? Así se guardará",
+    "medicationLabel": "Medicamento",
+    "dateLabel": "Fecha en que empezó",
+    "doseLabel": "Dosis aplicada",
+    "doseHelp": "Cuánto le diste.",
+    "doseExample": "10 ml",
+    "withdrawalTitle": "Tiempos de retiro estimados:",
+    "withdrawalMilk": "Leche hasta: ",
+    "withdrawalMeat": "Carne hasta: ",
+    "summaryDose": "Dosis: {{dose}}",
+    "saveFailed": "No pudimos guardar el tratamiento."
+  },
+  "vacunar": {
+    "step1Title": "¿A cuál vaca vacunaste?",
+    "step2Title": "¿Qué vacuna le diste?",
+    "step2Subtitle": "Elige de tu catálogo y pon la fecha.",
+    "step3Title": "¿Listo? Así se guardará",
+    "vaccineLabel": "Vacuna",
+    "dateLabel": "Fecha de aplicación",
+    "batchLabel": "Número de lote del frasco",
+    "batchHelp": "Para rastreo si hay reacción.",
+    "batchExample": "L2024-A35",
+    "summaryBatch": "Lote del frasco: {{batch}}",
+    "saveFailed": "No pudimos guardar la vacunación."
+  }
+}

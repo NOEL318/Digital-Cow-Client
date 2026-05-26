@@ -3,6 +3,7 @@
  */
 import { useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useTranslation } from 'react-i18next';
 import { Camera, Plus, ImageIcon } from 'lucide-react';
 import { http } from '@/lib/http';
 import { AnimalAvatar } from '@/components/ui/animal-avatar';
@@ -28,6 +29,7 @@ interface AnimalHeroProps {
  */
 export function AnimalHero({ animalId, internalTag, name, coverPhotoId, knownCoverUrl }: AnimalHeroProps) {
   const qc = useQueryClient();
+  const { t } = useTranslation('animals');
   const photos = useQuery({
     queryKey: ['animal-photos', animalId],
     queryFn: () => http.get<AnimalPhoto[]>(`/animals/${animalId}/photos`).then(r => r.data)
@@ -62,7 +64,7 @@ export function AnimalHero({ animalId, internalTag, name, coverPhotoId, knownCov
         <button
           type="button"
           onClick={() => setLightboxOpen(true)}
-          aria-label="Ver foto en grande"
+          aria-label={t('photos.viewLarge')}
           className="w-full h-full block focus:outline-none"
         >
           <img
@@ -73,7 +75,7 @@ export function AnimalHero({ animalId, internalTag, name, coverPhotoId, knownCov
           {data.length > 1 ? (
             <span className="absolute top-3 left-3 inline-flex items-center gap-1 bg-black/60 text-white text-xs px-2 py-1 rounded-full pointer-events-none">
               <ImageIcon className="h-3 w-3" aria-hidden />
-              {data.length} fotos
+              {t('photos.count', { count: data.length })}
             </span>
           ) : null}
         </button>
@@ -87,7 +89,7 @@ export function AnimalHero({ animalId, internalTag, name, coverPhotoId, knownCov
           />
           <p className="text-sm text-muted-foreground inline-flex items-center gap-1">
             <Camera className="h-4 w-4" aria-hidden />
-            Aún no hay foto. Toca el botón de abajo para agregar una.
+            {t('photos.noPhoto')}
           </p>
         </div>
       )}
@@ -103,7 +105,7 @@ export function AnimalHero({ animalId, internalTag, name, coverPhotoId, knownCov
               className="inline-flex items-center gap-2 rounded-full bg-background text-foreground border shadow-lg px-4 py-2 text-sm font-semibold hover:bg-accent disabled:opacity-50"
             >
               <Camera className="h-4 w-4" aria-hidden />
-              Tomar foto
+              {t('photos.takePhoto')}
             </button>
             <button
               type="button"
@@ -112,14 +114,14 @@ export function AnimalHero({ animalId, internalTag, name, coverPhotoId, knownCov
               className="inline-flex items-center gap-2 rounded-full bg-background text-foreground border shadow-lg px-4 py-2 text-sm font-semibold hover:bg-accent disabled:opacity-50"
             >
               <ImageIcon className="h-4 w-4" aria-hidden />
-              Elegir de la galería
+              {t('photos.chooseGallery')}
             </button>
           </>
         ) : null}
         <button
           type="button"
           onClick={() => setShowActions(v => !v)}
-          aria-label="Agregar foto"
+          aria-label={t('photos.addPhoto')}
           disabled={busy}
           className="h-14 w-14 rounded-full bg-primary text-primary-foreground shadow-xl flex items-center justify-center hover:bg-primary/90 transition-colors disabled:opacity-50"
         >
@@ -133,11 +135,11 @@ export function AnimalHero({ animalId, internalTag, name, coverPhotoId, knownCov
 
       {state.busy === 'compress' ? (
         <span className="absolute bottom-3 left-3 bg-black/60 text-white text-xs px-2 py-1 rounded">
-          Optimizando foto...
+          {t('photos.optimizing')}
         </span>
       ) : state.busy === 'upload' ? (
         <span className="absolute bottom-3 left-3 bg-black/60 text-white text-xs px-2 py-1 rounded">
-          Subiendo...
+          {t('photos.uploading')}
         </span>
       ) : state.error ? (
         <span className="absolute bottom-3 left-3 bg-red-600 text-white text-xs px-2 py-1 rounded">

@@ -65,7 +65,6 @@ import { SecarFlow } from '@/features/wizard/SecarFlow';
 import { DestetarFlow } from '@/features/wizard/DestetarFlow';
 import { AbortoFlow } from '@/features/wizard/AbortoFlow';
 import AjustesIndexPage from '@/pages/ajustes/AjustesIndexPage';
-import AjustesIdiomaTemaPage from '@/pages/ajustes/AjustesIdiomaTemaPage';
 import AjustesMedicamentosPage from '@/pages/ajustes/AjustesMedicamentosPage';
 import { ProtectedRoute } from '@/components/protected-route';
 import { AnimalIdRedirect } from './AnimalIdRedirect';
@@ -152,7 +151,8 @@ export function AppRouter() {
           <Route path="/ajustes/ranchos/:id" element={<RanchDetailPage />} />
           <Route path="/ajustes/equipo" element={<TeamPage />} />
           <Route path="/ajustes/medicamentos" element={<AjustesMedicamentosPage />} />
-          <Route path="/ajustes/idioma-tema" element={<AjustesIdiomaTemaPage />} />
+          {/* Idioma y tema viven embebidos en /ajustes (seccion Preferencias). Redirigimos la ruta vieja. */}
+          <Route path="/ajustes/idioma-tema" element={<Navigate to="/ajustes" replace />} />
 
           <Route path="/dashboard" element={<Navigate to="/inicio" replace />} />
           <Route path="/animals" element={<Navigate to="/animales" replace />} />

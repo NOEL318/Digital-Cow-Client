@@ -15,32 +15,33 @@ import { BigButton } from '@/components/ui/big-button';
 import { EmptyState } from '@/components/ui/empty-state';
 import { PageHelp } from '@/components/ui/page-help';
 
-const PRESET: Array<{
+interface PresetEntry {
   kind: LotConditionKind;
-  label: string;
   icon: LucideIcon;
   color: string;
-}> = [
-  { kind: 'MUD_HIGH',    label: 'Lodo alto',         icon: Droplet,   color: 'text-amber-800' },
-  { kind: 'MUD_MEDIUM',  label: 'Lodo medio',        icon: Droplet,   color: 'text-amber-600' },
-  { kind: 'MUD_LOW',     label: 'Poco lodo',         icon: Droplet,   color: 'text-amber-400' },
-  { kind: 'RAIN_HEAVY',  label: 'Lluvia fuerte',     icon: CloudRain, color: 'text-sky-700' },
-  { kind: 'RAIN_LIGHT',  label: 'Lluvia ligera',     icon: Cloud,     color: 'text-sky-500' },
-  { kind: 'DROUGHT',     label: 'Sequía',            icon: Sun,       color: 'text-orange-600' },
-  { kind: 'HEAT_WAVE',   label: 'Calor extremo',     icon: Sun,       color: 'text-red-600' },
-  { kind: 'COLD',        label: 'Frío',              icon: Cloud,     color: 'text-blue-600' },
-  { kind: 'FLIES',       label: 'Moscas',            icon: Bug,       color: 'text-yellow-700' },
-  { kind: 'TICKS',       label: 'Garrapatas',        icon: Bug,       color: 'text-red-700' },
-  { kind: 'OTHER_PEST',  label: 'Otra plaga',        icon: Bug,       color: 'text-purple-700' },
-  { kind: 'WATER_OUT',   label: 'Sin agua',          icon: Droplet,   color: 'text-red-700' },
-  { kind: 'WATER_LOW',   label: 'Agua baja',         icon: Droplet,   color: 'text-orange-500' },
-  { kind: 'PASTURE_LOW', label: 'Pasto bajo',        icon: Wheat,     color: 'text-amber-700' },
-  { kind: 'PASTURE_GOOD',label: 'Buen pasto',        icon: Wheat,     color: 'text-green-700' },
-  { kind: 'INFRA_DAMAGE',label: 'Daño en cercas',    icon: Wrench,    color: 'text-orange-700' }
+}
+
+const PRESET: PresetEntry[] = [
+  { kind: 'MUD_HIGH',    icon: Droplet,   color: 'text-amber-800' },
+  { kind: 'MUD_MEDIUM',  icon: Droplet,   color: 'text-amber-600' },
+  { kind: 'MUD_LOW',     icon: Droplet,   color: 'text-amber-400' },
+  { kind: 'RAIN_HEAVY',  icon: CloudRain, color: 'text-sky-700' },
+  { kind: 'RAIN_LIGHT',  icon: Cloud,     color: 'text-sky-500' },
+  { kind: 'DROUGHT',     icon: Sun,       color: 'text-orange-600' },
+  { kind: 'HEAT_WAVE',   icon: Sun,       color: 'text-red-600' },
+  { kind: 'COLD',        icon: Cloud,     color: 'text-blue-600' },
+  { kind: 'FLIES',       icon: Bug,       color: 'text-yellow-700' },
+  { kind: 'TICKS',       icon: Bug,       color: 'text-red-700' },
+  { kind: 'OTHER_PEST',  icon: Bug,       color: 'text-purple-700' },
+  { kind: 'WATER_OUT',   icon: Droplet,   color: 'text-red-700' },
+  { kind: 'WATER_LOW',   icon: Droplet,   color: 'text-orange-500' },
+  { kind: 'PASTURE_LOW', icon: Wheat,     color: 'text-amber-700' },
+  { kind: 'PASTURE_GOOD',icon: Wheat,     color: 'text-green-700' },
+  { kind: 'INFRA_DAMAGE',icon: Wrench,    color: 'text-orange-700' }
 ];
 
-const KIND_META: Partial<Record<LotConditionKind, { label: string; icon: LucideIcon; color: string }>> =
-  Object.fromEntries(PRESET.map(p => [p.kind, p]));
+const KIND_META: Partial<Record<LotConditionKind, { icon: LucideIcon; color: string }>> =
+  Object.fromEntries(PRESET.map(p => [p.kind, { icon: p.icon, color: p.color }]));
 
 interface LotConditionsPanelProps {
   lotId: number;
@@ -53,7 +54,7 @@ interface LotConditionsPanelProps {
  * lo predefinido no aplica.
  */
 export function LotConditionsPanel({ lotId }: LotConditionsPanelProps) {
-  const { t } = useTranslation('common');
+  const { t } = useTranslation('feeding');
   const conditions = useLotConditions(lotId);
   const create = useCreateLotCondition(lotId);
   const del = useDeleteLotCondition(lotId);
@@ -84,9 +85,9 @@ export function LotConditionsPanel({ lotId }: LotConditionsPanelProps) {
   return (
     <section className="space-y-4">
       <header className="flex items-center justify-between flex-wrap gap-2">
-        <h2 className="text-lg font-semibold">{t('labels.lotConditionsToday')}</h2>
+        <h2 className="text-lg font-semibold">{t('lotConditions.title')}</h2>
         <BigButton
-          label="Otra cosa"
+          label={t('lotConditions.addOther')}
           icon={Plus}
           variant="outline"
           onClick={() => setCustomOpen(o => !o)}
@@ -94,13 +95,13 @@ export function LotConditionsPanel({ lotId }: LotConditionsPanelProps) {
       </header>
 
       <p className="text-sm text-muted-foreground">
-        Toca una condición para registrarla con la fecha de hoy. Aparecerá
-        debajo en el historial.
+        {t('lotConditions.hint')}
       </p>
 
       <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 gap-2">
         {PRESET.map(p => {
           const Icon = p.icon;
+          const label = t(`lotConditions.preset.${p.kind}`);
           return (
             <button
               key={p.kind}
@@ -109,7 +110,7 @@ export function LotConditionsPanel({ lotId }: LotConditionsPanelProps) {
               className="flex flex-col items-center justify-center gap-1 rounded-xl border p-3 hover:bg-accent transition-colors min-h-20 text-center"
             >
               <Icon className={`h-6 w-6 ${p.color}`} aria-hidden />
-              <span className="text-xs font-semibold leading-tight">{p.label}</span>
+              <span className="text-xs font-semibold leading-tight">{label}</span>
             </button>
           );
         })}
@@ -120,12 +121,12 @@ export function LotConditionsPanel({ lotId }: LotConditionsPanelProps) {
           <input
             value={customText}
             onChange={e => setCustomText(e.target.value)}
-            placeholder="Ejemplo: el camino quedó intransitable"
+            placeholder={t('lotConditions.customPlaceholder')}
             className="flex-1 border rounded-md px-3 py-2 text-base bg-background"
             autoFocus
           />
           <BigButton
-            label="Guardar"
+            label={t('lotConditions.save')}
             onClick={logCustom}
             disabled={!customText.trim() || create.isPending}
           />
@@ -134,34 +135,51 @@ export function LotConditionsPanel({ lotId }: LotConditionsPanelProps) {
 
       <div className="space-y-2">
         <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
-          Historial reciente
+          {t('lotConditions.recentHistory')}
         </h3>
         {conditions.isLoading ? (
-          <p className="text-muted-foreground">Cargando...</p>
+          <p className="text-muted-foreground">{t('lotConditions.loading')}</p>
         ) : !conditions.data || conditions.data.length === 0 ? (
           <EmptyState
             icon={Cloud}
-            title="Aún no hay registros"
-            description="Empieza a registrar lo que ves en el corral: lluvia, lodo, moscas y más."
+            title={t('lotConditions.emptyTitle')}
+            description={t('lotConditions.emptyDesc')}
           />
         ) : (
           <ul className="divide-y border rounded-xl overflow-hidden">
-            {conditions.data.map(c => <ConditionRow key={c.id} condition={c} onDelete={id => del.mutate(id)} />)}
+            {conditions.data.map(c => (
+              <ConditionRow
+                key={c.id}
+                condition={c}
+                onDelete={id => del.mutate(id)}
+                getLabel={(kind, customLabel) =>
+                  kind === 'CUSTOM'
+                    ? (customLabel ?? t('lotConditions.customFallback'))
+                    : t(`lotConditions.preset.${kind}`)
+                }
+                deleteAriaLabel={t('lotConditions.deleteAria')}
+              />
+            ))}
           </ul>
         )}
       </div>
 
-      <PageHelp text="Registra lo que pasa en el corral día a día: lluvia, lodo, plagas, falta de agua, pasto bajo. Con el tiempo verás patrones (¿siempre hay lodo en julio? ¿las moscas pegan duro en marzo?) y podrás planear: mover ganado, comprar tratamientos antes de la temporada, reforzar infraestructura. Toca cualquier condición para guardarla con la fecha de hoy." />
+      <PageHelp text={t('lotConditions.helpText')} />
     </section>
   );
 }
 
-function ConditionRow({ condition, onDelete }: { condition: LotCondition; onDelete: (id: number) => void }) {
+interface ConditionRowProps {
+  condition: LotCondition;
+  onDelete: (id: number) => void;
+  getLabel: (kind: LotConditionKind, customLabel?: string | null) => string;
+  deleteAriaLabel: string;
+}
+
+function ConditionRow({ condition, onDelete, getLabel, deleteAriaLabel }: ConditionRowProps) {
   const meta = KIND_META[condition.kind];
   const Icon = meta?.icon ?? Cloud;
-  const label = condition.kind === 'CUSTOM'
-    ? (condition.customLabel ?? 'Otra condición')
-    : (meta?.label ?? condition.kind);
+  const label = getLabel(condition.kind, condition.customLabel);
   return (
     <li className="flex items-center gap-3 px-3 py-2">
       <Icon className={`h-5 w-5 ${meta?.color ?? 'text-muted-foreground'}`} aria-hidden />
@@ -172,7 +190,7 @@ function ConditionRow({ condition, onDelete }: { condition: LotCondition; onDele
       <button
         type="button"
         onClick={() => onDelete(condition.id)}
-        aria-label="Eliminar"
+        aria-label={deleteAriaLabel}
         className="p-1 rounded hover:bg-accent"
       >
         <X className="h-4 w-4 text-muted-foreground" aria-hidden />

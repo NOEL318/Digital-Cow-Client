@@ -4,6 +4,7 @@
 import { useEffect, useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Move, X, MapPin, Map as MapIcon } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { animalsApi } from '@/features/animals/api';
 import { RanchPicker, LotPicker } from '@/components/ui/ranch-lot-picker';
 import { BigButton } from '@/components/ui/big-button';
@@ -34,6 +35,7 @@ export function MoveAnimalLotDialog({
   onClose,
   onMoved
 }: MoveAnimalLotDialogProps) {
+  const { t } = useTranslation('animals');
   const [ranchId, setRanchId] = useState<number | null>(currentRanchId);
   const [lotId, setLotId] = useState<number | null>(currentLotId ?? null);
   const [error, setError] = useState<string | null>(null);
@@ -57,7 +59,7 @@ export function MoveAnimalLotDialog({
     },
     onError: (e: unknown) => {
       const msg = (e as { response?: { data?: { message?: string } } })?.response?.data?.message
-        ?? 'No pudimos mover el animal. Intenta de nuevo.';
+        ?? t('move.saveError');
       setError(msg);
     }
   });
@@ -73,15 +75,15 @@ export function MoveAnimalLotDialog({
   function handleSubmit() {
     setError(null);
     if (!ranchId) {
-      setError('Elige un rancho para el animal.');
+      setError(t('move.ranchRequired'));
       return;
     }
     if (!lotId) {
-      setError('Elige el lote destino.');
+      setError(t('move.lotRequired'));
       return;
     }
     if (ranchId === currentRanchId && lotId === (currentLotId ?? null)) {
-      setError('El animal ya esta en ese lote.');
+      setError(t('move.alreadyThere'));
       return;
     }
     move.mutate();
@@ -91,19 +93,19 @@ export function MoveAnimalLotDialog({
     <div
       role="dialog"
       aria-modal="true"
-      aria-label={`Mover ${internalTag} de lote`}
+      aria-label={t('move.title', { tag: internalTag })}
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4"
     >
       <div className="bg-background rounded-2xl shadow-xl w-full max-w-md p-5 space-y-4 max-h-[90vh] overflow-y-auto">
         <header className="flex items-center justify-between">
           <h2 className="text-lg font-bold flex items-center gap-2">
             <Move className="h-5 w-5 text-primary" aria-hidden />
-            Mover {internalTag} de lote
+            {t('move.title', { tag: internalTag })}
           </h2>
           <button
             type="button"
             onClick={onClose}
-            aria-label="Cerrar"
+            aria-label={t('move.close')}
             className="p-2 rounded-full hover:bg-accent"
           >
             <X className="h-5 w-5" aria-hidden />
@@ -111,13 +113,13 @@ export function MoveAnimalLotDialog({
         </header>
 
         <p className="text-sm text-muted-foreground">
-          Elige a que rancho y a que lote pasa el animal.
+          {t('move.description')}
         </p>
 
         <HelpfulField
           id="move-ranch"
-          label="Rancho"
-          help="Donde quedara el animal."
+          label={t('move.ranchLabel')}
+          help={t('move.ranchHelp')}
           icon={MapPin}
           required
         >
@@ -126,8 +128,8 @@ export function MoveAnimalLotDialog({
 
         <HelpfulField
           id="move-lot"
-          label="Lote destino"
-          help="Donde quedara el animal dentro del rancho."
+          label={t('move.lotLabel')}
+          help={t('move.lotHelp')}
           icon={MapIcon}
           required
         >
@@ -141,9 +143,9 @@ export function MoveAnimalLotDialog({
         ) : null}
 
         <div className="flex justify-between gap-3 pt-2">
-          <BigButton label="Cancelar" variant="outline" onClick={onClose} />
+          <BigButton label={t('move.cancel')} variant="outline" onClick={onClose} />
           <BigButton
-            label="Guardar cambio"
+            label={t('move.submit')}
             icon={Move}
             onClick={handleSubmit}
             disabled={move.isPending}

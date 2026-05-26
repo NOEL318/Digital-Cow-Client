@@ -34,6 +34,8 @@ export function useCreateCalving() {
       qc.invalidateQueries({ queryKey: QK });
       qc.invalidateQueries({ queryKey: ['animals'] });
       qc.invalidateQueries({ queryKey: ['reproduction', 'alerts'] });
+      qc.invalidateQueries({ queryKey: ['dashboard', 'reproduction'] });
+      qc.invalidateQueries({ queryKey: ['reproduction', 'kpis'] });
       if (body.animalId) {
         qc.invalidateQueries({ queryKey: ['animal', body.animalId] });
       }
@@ -49,6 +51,9 @@ export function useUpdateCalving() {
       (await http.patch<Calving>(`/reproduction/calvings/${id}`, body)).data,
     onSuccess: (_data, vars) => {
       qc.invalidateQueries({ queryKey: QK });
+      qc.invalidateQueries({ queryKey: ['dashboard', 'reproduction'] });
+      qc.invalidateQueries({ queryKey: ['reproduction', 'alerts'] });
+      qc.invalidateQueries({ queryKey: ['reproduction', 'kpis'] });
       if (vars.body.animalId) {
         qc.invalidateQueries({ queryKey: ['animal', vars.body.animalId] });
       }
@@ -65,6 +70,9 @@ export function useDeleteCalving() {
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: QK });
       qc.invalidateQueries({ queryKey: ['animal'] });
+      qc.invalidateQueries({ queryKey: ['dashboard', 'reproduction'] });
+      qc.invalidateQueries({ queryKey: ['reproduction', 'alerts'] });
+      qc.invalidateQueries({ queryKey: ['reproduction', 'kpis'] });
     }
   });
 }

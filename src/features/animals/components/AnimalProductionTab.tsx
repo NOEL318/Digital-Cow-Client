@@ -14,6 +14,9 @@ import { useAnimalMilkings } from '@/features/production/milkings/api';
 import { useAnimalMilkSamples } from '@/features/production/milkSamples/api';
 import { useAnimalSlaughterResults } from '@/features/production/slaughter/api';
 import { useGrowthCurve } from '@/features/production/growthCurve/api';
+import {
+  Table, TableBody, TableCell, TableHead, TableHeader, TableRow
+} from '@/components/ui/table';
 
 /**
  * Tab Produccion del detalle de animal: weighings con mini-chart, milkings recientes
@@ -47,28 +50,30 @@ export function AnimalProductionTab() {
     <div className="space-y-6">
       <section>
         <h3 className="font-semibold mb-2">{t('production:tab.weighings')}</h3>
-        <table className="w-full border rounded">
-          <thead>
-            <tr className="bg-muted">
-              <th className="p-2 text-left">{t('production:weighing.weighedAt')}</th>
-              <th className="p-2 text-left">{t('production:weighing.weightKg')}</th>
-              <th className="p-2 text-left">{t('production:weighing.method')}</th>
-              <th className="p-2 text-left">{t('production:weighing.bodyConditionScore')}</th>
-            </tr>
-          </thead>
-          <tbody>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>{t('production:weighing.weighedAt')}</TableHead>
+              <TableHead>{t('production:weighing.weightKg')}</TableHead>
+              <TableHead>{t('production:weighing.method')}</TableHead>
+              <TableHead>{t('production:weighing.bodyConditionScore')}</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
             {weighings.data?.length === 0 ? (
-              <tr><td colSpan={4} className="p-2 text-sm text-muted-foreground">{t('production:tab.empty')}</td></tr>
+              <TableRow>
+                <TableCell colSpan={4} className="text-muted-foreground">{t('production:tab.empty')}</TableCell>
+              </TableRow>
             ) : weighings.data?.map(w => (
-              <tr key={w.id} className="border-t">
-                <td className="p-2">{w.weighedAt}</td>
-                <td className="p-2">{w.weightKg}</td>
-                <td className="p-2">{w.method ? t(`production:weighing.methodValue.${w.method}`) : '-'}</td>
-                <td className="p-2">{w.bodyConditionScore ?? '-'}</td>
-              </tr>
+              <TableRow key={w.id}>
+                <TableCell>{w.weighedAt}</TableCell>
+                <TableCell>{w.weightKg}</TableCell>
+                <TableCell>{w.method ? t(`production:weighing.methodValue.${w.method}`) : '-'}</TableCell>
+                <TableCell>{w.bodyConditionScore ?? '-'}</TableCell>
+              </TableRow>
             ))}
-          </tbody>
-        </table>
+          </TableBody>
+        </Table>
       </section>
 
       {curveData.length > 0 && (
@@ -91,86 +96,90 @@ export function AnimalProductionTab() {
       {isDairy && (
         <section>
           <h3 className="font-semibold mb-2">{t('production:tab.milkings')}</h3>
-          <table className="w-full border rounded">
-            <thead>
-              <tr className="bg-muted">
-                <th className="p-2 text-left">{t('production:milking.milkingDate')}</th>
-                <th className="p-2 text-left">{t('production:milking.session')}</th>
-                <th className="p-2 text-left">{t('production:milking.liters')}</th>
-              </tr>
-            </thead>
-            <tbody>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>{t('production:milking.milkingDate')}</TableHead>
+                <TableHead>{t('production:milking.session')}</TableHead>
+                <TableHead>{t('production:milking.liters')}</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
               {last30Milkings.length === 0 ? (
-                <tr><td colSpan={3} className="p-2 text-sm text-muted-foreground">{t('production:tab.empty')}</td></tr>
+                <TableRow>
+                  <TableCell colSpan={3} className="text-muted-foreground">{t('production:tab.empty')}</TableCell>
+                </TableRow>
               ) : last30Milkings.map(m => (
-                <tr key={m.id} className="border-t">
-                  <td className="p-2">{m.milkingDate}</td>
-                  <td className="p-2">{t(`production:milking.sessionValue.${m.session}`)}</td>
-                  <td className="p-2">{m.liters}</td>
-                </tr>
+                <TableRow key={m.id}>
+                  <TableCell>{m.milkingDate}</TableCell>
+                  <TableCell>{t(`production:milking.sessionValue.${m.session}`)}</TableCell>
+                  <TableCell>{m.liters}</TableCell>
+                </TableRow>
               ))}
-            </tbody>
-          </table>
+            </TableBody>
+          </Table>
         </section>
       )}
 
       {isDairy && (
         <section>
           <h3 className="font-semibold mb-2">{t('production:tab.milkSamples')}</h3>
-          <table className="w-full border rounded">
-            <thead>
-              <tr className="bg-muted">
-                <th className="p-2 text-left">{t('production:milkSample.sampledAt')}</th>
-                <th className="p-2 text-left">{t('production:milkSample.scc')}</th>
-                <th className="p-2 text-left">{t('production:milkSample.fatPct')}</th>
-                <th className="p-2 text-left">{t('production:milkSample.proteinPct')}</th>
-                <th className="p-2 text-left">{t('production:milkSample.lactosePct')}</th>
-              </tr>
-            </thead>
-            <tbody>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>{t('production:milkSample.sampledAt')}</TableHead>
+                <TableHead>{t('production:milkSample.scc')}</TableHead>
+                <TableHead>{t('production:milkSample.fatPct')}</TableHead>
+                <TableHead>{t('production:milkSample.proteinPct')}</TableHead>
+                <TableHead>{t('production:milkSample.lactosePct')}</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
               {samples.data?.length === 0 ? (
-                <tr><td colSpan={5} className="p-2 text-sm text-muted-foreground">{t('production:tab.empty')}</td></tr>
+                <TableRow>
+                  <TableCell colSpan={5} className="text-muted-foreground">{t('production:tab.empty')}</TableCell>
+                </TableRow>
               ) : samples.data?.map(s => (
-                <tr key={s.id} className="border-t">
-                  <td className="p-2">{s.sampledAt}</td>
-                  <td className="p-2">{s.sccCellsPerMl ?? '-'}</td>
-                  <td className="p-2">{s.fatPct ?? '-'}</td>
-                  <td className="p-2">{s.proteinPct ?? '-'}</td>
-                  <td className="p-2">{s.lactosePct ?? '-'}</td>
-                </tr>
+                <TableRow key={s.id}>
+                  <TableCell>{s.sampledAt}</TableCell>
+                  <TableCell>{s.sccCellsPerMl ?? '-'}</TableCell>
+                  <TableCell>{s.fatPct ?? '-'}</TableCell>
+                  <TableCell>{s.proteinPct ?? '-'}</TableCell>
+                  <TableCell>{s.lactosePct ?? '-'}</TableCell>
+                </TableRow>
               ))}
-            </tbody>
-          </table>
+            </TableBody>
+          </Table>
         </section>
       )}
 
       {slaughter.data && slaughter.data.length > 0 && (
         <section>
           <h3 className="font-semibold mb-2">{t('production:tab.slaughter')}</h3>
-          <table className="w-full border rounded">
-            <thead>
-              <tr className="bg-muted">
-                <th className="p-2 text-left">{t('production:slaughter.slaughteredAt')}</th>
-                <th className="p-2 text-left">{t('production:slaughter.liveWeightKg')}</th>
-                <th className="p-2 text-left">{t('production:slaughter.carcassWeightKg')}</th>
-                <th className="p-2 text-left">{t('production:slaughter.yieldPct')}</th>
-                <th className="p-2 text-left">{t('production:slaughter.grade')}</th>
-                <th className="p-2 text-left">{t('production:slaughter.buyer')}</th>
-              </tr>
-            </thead>
-            <tbody>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>{t('production:slaughter.slaughteredAt')}</TableHead>
+                <TableHead>{t('production:slaughter.liveWeightKg')}</TableHead>
+                <TableHead>{t('production:slaughter.carcassWeightKg')}</TableHead>
+                <TableHead>{t('production:slaughter.yieldPct')}</TableHead>
+                <TableHead>{t('production:slaughter.grade')}</TableHead>
+                <TableHead>{t('production:slaughter.buyer')}</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
               {slaughter.data.map(s => (
-                <tr key={s.id} className="border-t">
-                  <td className="p-2">{s.slaughteredAt}</td>
-                  <td className="p-2">{s.liveWeightKg ?? '-'}</td>
-                  <td className="p-2">{s.carcassWeightKg ?? '-'}</td>
-                  <td className="p-2">{s.yieldPct ?? '-'}</td>
-                  <td className="p-2">{s.grade ?? '-'}</td>
-                  <td className="p-2">{s.buyer ?? '-'}</td>
-                </tr>
+                <TableRow key={s.id}>
+                  <TableCell>{s.slaughteredAt}</TableCell>
+                  <TableCell>{s.liveWeightKg ?? '-'}</TableCell>
+                  <TableCell>{s.carcassWeightKg ?? '-'}</TableCell>
+                  <TableCell>{s.yieldPct ?? '-'}</TableCell>
+                  <TableCell>{s.grade ?? '-'}</TableCell>
+                  <TableCell>{s.buyer ?? '-'}</TableCell>
+                </TableRow>
               ))}
-            </tbody>
-          </table>
+            </TableBody>
+          </Table>
         </section>
       )}
     </div>

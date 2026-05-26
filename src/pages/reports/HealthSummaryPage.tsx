@@ -7,6 +7,9 @@ import { Download } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import {
+  Table, TableHeader, TableBody, TableRow, TableHead, TableCell
+} from '@/components/ui/table';
 import { useHealthSummary } from '@/features/reports/healthSummary/api';
 import { downloadCsv } from '@/lib/csv';
 
@@ -59,32 +62,34 @@ export default function HealthSummaryPage() {
         </div>
       </div>
       {summary.data && (
-        <table className="w-full border rounded">
-          <thead>
-            <tr className="bg-muted">
-              <th className="p-2 text-left">{t('reports:healthSummary.month')}</th>
-              <th className="p-2 text-right">{t('reports:healthSummary.vaccinations')}</th>
-              <th className="p-2 text-right">{t('reports:healthSummary.diagnosesMild')}</th>
-              <th className="p-2 text-right">{t('reports:healthSummary.diagnosesModerate')}</th>
-              <th className="p-2 text-right">{t('reports:healthSummary.diagnosesSevere')}</th>
-              <th className="p-2 text-right">{t('reports:healthSummary.treatments')}</th>
-              <th className="p-2 text-right">{t('reports:healthSummary.totalCost')}</th>
-            </tr>
-          </thead>
-          <tbody>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>{t('reports:healthSummary.month')}</TableHead>
+              <TableHead className="text-right">{t('reports:healthSummary.vaccinations')}</TableHead>
+              <TableHead className="text-right">{t('reports:healthSummary.diagnosesMild')}</TableHead>
+              <TableHead className="text-right">{t('reports:healthSummary.diagnosesModerate')}</TableHead>
+              <TableHead className="text-right">{t('reports:healthSummary.diagnosesSevere')}</TableHead>
+              <TableHead className="text-right">{t('reports:healthSummary.treatments')}</TableHead>
+              <TableHead className="text-right">{t('reports:healthSummary.totalCost')}</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
             {summary.data.months.map(m => (
-              <tr key={m.month} className="border-t">
-                <td className="p-2">{m.month}</td>
-                <td className="p-2 text-right">{m.vaccinations}</td>
-                <td className="p-2 text-right">{m.diagnosesMild}</td>
-                <td className="p-2 text-right">{m.diagnosesModerate}</td>
-                <td className="p-2 text-right">{m.diagnosesSevere}</td>
-                <td className="p-2 text-right">{m.treatments}</td>
-                <td className="p-2 text-right">{Number(m.totalCost).toFixed(2)}</td>
-              </tr>
+              <TableRow key={m.month}>
+                <TableCell className="font-medium">{m.month}</TableCell>
+                <TableCell className="text-right text-blue-700 dark:text-blue-400">{m.vaccinations}</TableCell>
+                <TableCell className="text-right text-amber-600 dark:text-amber-400">{m.diagnosesMild}</TableCell>
+                <TableCell className="text-right text-orange-600 dark:text-orange-400">{m.diagnosesModerate}</TableCell>
+                <TableCell className="text-right text-red-700 dark:text-red-400 font-semibold">{m.diagnosesSevere}</TableCell>
+                <TableCell className="text-right text-amber-700 dark:text-amber-400">{m.treatments}</TableCell>
+                <TableCell className="text-right font-semibold text-red-700 dark:text-red-400">
+                  {Number(m.totalCost).toFixed(2)}
+                </TableCell>
+              </TableRow>
             ))}
-          </tbody>
-        </table>
+          </TableBody>
+        </Table>
       )}
     </div>
   );

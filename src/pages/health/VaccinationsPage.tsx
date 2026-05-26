@@ -7,6 +7,14 @@ import { useToast } from '@/components/ui/toast';
 import i18n from '@/lib/i18n';
 import { Button } from '@/components/ui/button';
 import {
+  Table,
+  TableHeader,
+  TableBody,
+  TableRow,
+  TableHead,
+  TableCell
+} from '@/components/ui/table';
+import {
   useCreateVaccination,
   useCreateVaccinationBulk,
   useVaccinations
@@ -72,28 +80,28 @@ export default function VaccinationsPage() {
         )}
       </div>
 
-      <table className="w-full border rounded">
-        <thead>
-          <tr className="bg-muted">
-            <th className="p-2 text-left">{t('health:vaccination.appliedAt')}</th>
-            <th className="p-2 text-left">{t('health:vaccination.vaccine')}</th>
-            <th className="p-2 text-left">{t('health:vaccination.batch')}</th>
-            <th className="p-2 text-left">{t('health:vaccination.nextDose')}</th>
-            <th className="p-2 text-right">{t('health:vaccination.cost')}</th>
-          </tr>
-        </thead>
-        <tbody>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>{t('health:vaccination.appliedAt')}</TableHead>
+            <TableHead>{t('health:vaccination.vaccine')}</TableHead>
+            <TableHead>{t('health:vaccination.batch')}</TableHead>
+            <TableHead>{t('health:vaccination.nextDose')}</TableHead>
+            <TableHead className="text-right">{t('health:vaccination.cost')}</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
           {list.data?.map(v => (
-            <tr key={v.id} className="border-t">
-              <td className="p-2">{v.appliedAt}</td>
-              <td className="p-2">{vaccineName(v.vaccineId)}</td>
-              <td className="p-2">{v.batchNumber ?? '-'}</td>
-              <td className="p-2">{v.nextDoseDue ?? '-'}</td>
-              <td className="p-2 text-right">{v.cost ?? '-'}</td>
-            </tr>
+            <TableRow key={v.id}>
+              <TableCell>{v.appliedAt}</TableCell>
+              <TableCell>{vaccineName(v.vaccineId)}</TableCell>
+              <TableCell>{v.batchNumber ?? '-'}</TableCell>
+              <TableCell>{v.nextDoseDue ?? '-'}</TableCell>
+              <TableCell className="text-right">{v.cost ?? '-'}</TableCell>
+            </TableRow>
           ))}
-        </tbody>
-      </table>
+        </TableBody>
+      </Table>
 
       <div>
         <Button variant="outline" onClick={() => list.refetch()}>{t('common:actions.search')}</Button>

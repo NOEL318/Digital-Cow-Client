@@ -18,6 +18,15 @@
     --accent-foreground: 222.2 47.4% 11.2%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
+    /* Colores semanticos vivos para acentos por dominio (KPIs, paneles, badges). */
+    --info: 217 91% 55%;
+    --info-foreground: 0 0% 100%;
+    --success: 142 71% 38%;
+    --success-foreground: 0 0% 100%;
+    --warning: 38 92% 48%;
+    --warning-foreground: 222.2 47.4% 11.2%;
+    --danger: 0 72% 51%;
+    --danger-foreground: 0 0% 100%;
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
     --ring: 222.2 84% 4.9%;
@@ -38,6 +47,15 @@
     --accent-foreground: 210 40% 98%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
+    /* Variantes mas claras en modo oscuro para que resalten sobre fondo oscuro. */
+    --info: 213 94% 68%;
+    --info-foreground: 222.2 47.4% 11.2%;
+    --success: 142 69% 58%;
+    --success-foreground: 222.2 47.4% 11.2%;
+    --warning: 45 93% 58%;
+    --warning-foreground: 222.2 47.4% 11.2%;
+    --danger: 0 84% 65%;
+    --danger-foreground: 222.2 47.4% 11.2%;
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
     --ring: 212.7 26.8% 83.9%;

@@ -38,7 +38,11 @@ export function useCreateHealthPlan() {
   return useMutation({
     mutationFn: async (body: HealthPlanCreate) =>
       (await http.post<HealthPlan>('/health/plans', body)).data,
-    onSuccess: () => qc.invalidateQueries({ queryKey: QK })
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: QK });
+      qc.invalidateQueries({ queryKey: ['health', 'alerts'] });
+      qc.invalidateQueries({ queryKey: ['dashboard', 'health'] });
+    }
   });
 }
 
@@ -48,7 +52,11 @@ export function useUpdateHealthPlan() {
   return useMutation({
     mutationFn: async ({ id, body }: { id: number; body: Partial<HealthPlanCreate> }) =>
       (await http.patch<HealthPlan>(`/health/plans/${id}`, body)).data,
-    onSuccess: () => qc.invalidateQueries({ queryKey: QK })
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: QK });
+      qc.invalidateQueries({ queryKey: ['health', 'alerts'] });
+      qc.invalidateQueries({ queryKey: ['dashboard', 'health'] });
+    }
   });
 }
 
@@ -58,7 +66,11 @@ export function useDeleteHealthPlan() {
   return useMutation({
     mutationFn: async (id: number) =>
       (await http.delete(`/health/plans/${id}`)).data,
-    onSuccess: () => qc.invalidateQueries({ queryKey: QK })
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: QK });
+      qc.invalidateQueries({ queryKey: ['health', 'alerts'] });
+      qc.invalidateQueries({ queryKey: ['dashboard', 'health'] });
+    }
   });
 }
 

@@ -4,7 +4,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { useQuery } from '@tanstack/react-query';
+import { useQueryClient, useQuery } from '@tanstack/react-query';
 import { ShoppingCart, Calendar, DollarSign, User, Tag } from 'lucide-react';
 import { WizardStep } from '@/components/ui/wizard-step';
 import { HelpfulField } from '@/components/ui/helpful-field';
@@ -24,8 +24,10 @@ type Purpose = 'BEEF' | 'DAIRY' | 'DUAL';
  * /animals/with-purchase crea el animal y el gasto en una transaccion.
  */
 export function ComprarAnimalFlow() {
+  const { t } = useTranslation('wizard');
   const { t: tCommon } = useTranslation('common');
   const nav = useNavigate();
+  const qc = useQueryClient();
   const create = useCreateAnimalWithPurchase();
   const breeds = useQuery({ queryKey: ['breeds'], queryFn: breedsApi.list });
   const ranches = useQuery({ queryKey: ['ranches'], queryFn: ranchApi.list });
@@ -46,9 +48,7 @@ export function ComprarAnimalFlow() {
 
   const [error, setError] = useState<string | null>(null);
 
-  // Selecciona el rancho cuando solo hay uno disponible. Se hace en un efecto
-  // en lugar de durante el render para evitar el warning de React 18 sobre
-  // actualizaciones de estado fuera de useEffect o de un manejador de evento.
+  // Selecciona el rancho cuando solo hay uno disponible.
   useEffect(() => {
     if (step === 3 && ranchId === null && ranches.data && ranches.data.length === 1) {
       setRanchId(ranches.data[0].id);
@@ -72,10 +72,13 @@ export function ComprarAnimalFlow() {
         purchasePrice: isPurchase && purchasePrice ? Number(purchasePrice) : undefined,
         seller: isPurchase ? seller || undefined : undefined
       });
+      qc.invalidateQueries({ queryKey: ['animals'] });
+      qc.invalidateQueries({ queryKey: ['finance', 'expenses'] });
+      qc.invalidateQueries({ queryKey: ['dashboard'] });
       nav('/animales');
     } catch (e) {
       const msg = (e as { response?: { data?: { message?: string } } })?.response?.data?.message
-        ?? 'No pudimos guardar el animal. Revisa los datos.';
+        ?? t('comprar.saveFailed');
       setError(msg);
     }
   }
@@ -85,12 +88,12 @@ export function ComprarAnimalFlow() {
       <WizardStep
         current={1}
         total={4}
-        title="Como se llama este animal?"
-        subtitle="Pon una marca corta (la que usas en el rancho) y opcionalmente un nombre."
+        title={t('comprar.step1Title')}
+        subtitle={t('comprar.step1Subtitle')}
         canAdvance={!!internalTag.trim() && !!breedId}
         onNext={() => setStep(2)}
       >
-        <HelpfulField id="ca-tag" label="Marca del animal" icon={Tag} required example="ESM-042" help="Asi lo encuentras rapido en listas.">
+        <HelpfulField id="ca-tag" label={t('comprar.tagLabel')} icon={Tag} required example={t('comprar.tagExample')} help={t('comprar.tagHelp')}>
           <input
             id="ca-tag"
             value={internalTag}
@@ -99,7 +102,7 @@ export function ComprarAnimalFlow() {
             autoFocus
           />
         </HelpfulField>
-        <HelpfulField id="ca-name" label="Nombre" help="Si tiene uno. Es opcional." example="Estrella">
+        <HelpfulField id="ca-name" label={t('comprar.nameLabel')} help={t('comprar.nameHelp')} example={t('comprar.nameExample')}>
           <input
             id="ca-name"
             value={name}
@@ -107,7 +110,7 @@ export function ComprarAnimalFlow() {
             className="w-full border rounded-md px-3 py-2 text-base bg-background"
           />
         </HelpfulField>
-        <HelpfulField id="ca-breed" label="Raza" required>
+        <HelpfulField id="ca-breed" label={t('comprar.breedLabel')} required>
           <select
             id="ca-breed"
             value={breedId ?? ''}
@@ -129,35 +132,35 @@ export function ComprarAnimalFlow() {
       <WizardStep
         current={2}
         total={4}
-        title="Es hembra o macho?"
-        subtitle="Y para que se usa el animal."
+        title={t('comprar.step2Title')}
+        subtitle={t('comprar.step2Subtitle')}
         canAdvance={!!sex && !!purpose}
         onNext={() => setStep(3)}
         onBack={() => setStep(1)}
       >
         <div className="space-y-2">
-          <p className="text-sm font-semibold">Sexo</p>
+          <p className="text-sm font-semibold">{t('comprar.sexLabel')}</p>
           <BigPicker<Sex>
             options={[
-              { value: 'FEMALE', label: 'Hembra' },
-              { value: 'MALE', label: 'Macho' }
+              { value: 'FEMALE', label: t('comprar.sex.FEMALE') },
+              { value: 'MALE', label: t('comprar.sex.MALE') }
             ]}
             value={sex}
             onChange={setSex}
-            ariaLabel="Sexo del animal"
+            ariaLabel={t('comprar.sexLabel')}
           />
         </div>
         <div className="space-y-2">
-          <p className="text-sm font-semibold">Para que es?</p>
+          <p className="text-sm font-semibold">{t('comprar.purposeLabel')}</p>
           <BigPicker<Purpose>
             options={[
-              { value: 'BEEF', label: 'Carne', description: 'Para engorda y venta de carne.' },
-              { value: 'DAIRY', label: 'Leche', description: 'Para produccion de leche.' },
-              { value: 'DUAL', label: 'Doble proposito', description: 'Carne y leche.' }
+              { value: 'BEEF', label: t('comprar.purpose.BEEF'), description: t('comprar.purposeDesc.BEEF') },
+              { value: 'DAIRY', label: t('comprar.purpose.DAIRY'), description: t('comprar.purposeDesc.DAIRY') },
+              { value: 'DUAL', label: t('comprar.purpose.DUAL'), description: t('comprar.purposeDesc.DUAL') }
             ]}
             value={purpose}
             onChange={setPurpose}
-            ariaLabel="Proposito del animal"
+            ariaLabel={t('comprar.purposeLabel')}
           />
         </div>
       </WizardStep>
@@ -169,14 +172,14 @@ export function ComprarAnimalFlow() {
       <WizardStep
         current={3}
         total={4}
-        title="De donde viene?"
-        subtitle="Elige el rancho. Si lo compraste, anota cuanto pagaste y a quien."
+        title={t('comprar.step3Title')}
+        subtitle={t('comprar.step3Subtitle')}
         canAdvance={!!ranchId}
         onNext={() => setStep(4)}
         onBack={() => setStep(2)}
       >
         <div className="space-y-2">
-          <p className="text-sm font-semibold">Rancho donde va a vivir <span className="text-destructive">*</span></p>
+          <p className="text-sm font-semibold">{t('comprar.ranchWhereLabel')} <span className="text-destructive">*</span></p>
           <RanchPicker value={ranchId} onChange={setRanchId} />
         </div>
 
@@ -188,12 +191,12 @@ export function ComprarAnimalFlow() {
               onChange={e => setIsPurchase(e.target.checked)}
               className="h-5 w-5"
             />
-            <span className="font-semibold">Si, lo compre y quiero registrar el gasto</span>
+            <span className="font-semibold">{t('comprar.purchaseCheck')}</span>
           </label>
 
           {isPurchase ? (
             <div className="space-y-3 pl-7">
-              <HelpfulField id="ca-pdate" label="Fecha de compra" icon={Calendar}>
+              <HelpfulField id="ca-pdate" label={t('comprar.purchaseDateLabel')} icon={Calendar}>
                 <input
                   id="ca-pdate"
                   type="date"
@@ -202,7 +205,7 @@ export function ComprarAnimalFlow() {
                   className="w-full border rounded-md px-3 py-2 text-base bg-background"
                 />
               </HelpfulField>
-              <HelpfulField id="ca-price" label="Precio de compra" icon={DollarSign} example="18000">
+              <HelpfulField id="ca-price" label={t('comprar.purchasePriceLabel')} icon={DollarSign} example={t('comprar.purchasePriceExample')}>
                 <input
                   id="ca-price"
                   type="number"
@@ -214,7 +217,7 @@ export function ComprarAnimalFlow() {
                   className="w-full border rounded-md px-3 py-2 text-base bg-background"
                 />
               </HelpfulField>
-              <HelpfulField id="ca-seller" label="Quien te lo vendio" icon={User} example="Don Manuel">
+              <HelpfulField id="ca-seller" label={t('comprar.sellerLabel')} icon={User} example={t('comprar.sellerExample')}>
                 <input
                   id="ca-seller"
                   value={seller}
@@ -223,7 +226,7 @@ export function ComprarAnimalFlow() {
                 />
               </HelpfulField>
               <p className="text-xs text-muted-foreground">
-                Se va a registrar como gasto en la categoria "Compra de animales" automaticamente.
+                {t('comprar.purchaseNote')}
               </p>
             </div>
           ) : null}
@@ -238,7 +241,7 @@ export function ComprarAnimalFlow() {
     <WizardStep
       current={4}
       total={4}
-      title="Listo? Asi se guardara"
+      title={t('comprar.step4Title')}
       canAdvance={!create.isPending}
       onNext={save}
       onBack={() => setStep(3)}
@@ -249,15 +252,13 @@ export function ComprarAnimalFlow() {
           <ShoppingCart className="h-5 w-5 text-primary" aria-hidden />
           {internalTag} {name ? `- ${name}` : ''}
         </p>
-        <p><span className="text-muted-foreground">Raza:</span> {breed?.nameEs}</p>
-        <p><span className="text-muted-foreground">Sexo:</span> {sex === 'FEMALE' ? 'Hembra' : 'Macho'}</p>
-        <p><span className="text-muted-foreground">Proposito:</span> {
-          purpose === 'BEEF' ? 'Carne' : purpose === 'DAIRY' ? 'Leche' : 'Doble proposito'
-        }</p>
-        <p><span className="text-muted-foreground">Rancho:</span> {ranch?.name}</p>
+        <p><span className="text-muted-foreground">{t('comprar.summaryRace')}</span> {breed?.nameEs}</p>
+        <p><span className="text-muted-foreground">{t('comprar.summarySex')}</span> {sex ? t(`comprar.sex.${sex}` as const) : ''}</p>
+        <p><span className="text-muted-foreground">{t('comprar.summaryPurpose')}</span> {purpose ? t(`comprar.purpose.${purpose}` as const) : ''}</p>
+        <p><span className="text-muted-foreground">{t('comprar.summaryRanch')}</span> {ranch?.name}</p>
         {isPurchase && purchasePrice ? (
           <p className="pt-2 border-t mt-2">
-            <span className="text-muted-foreground">Gasto a registrar:</span> {purchasePrice}
+            <span className="text-muted-foreground">{t('comprar.summaryExpense')}</span> {purchasePrice}
             {seller ? <span className="text-muted-foreground"> ({seller})</span> : null}
           </p>
         ) : null}

@@ -5,9 +5,18 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/ui/table';
 import { useHeats, useCreateHeat } from '@/features/reproduction/heats/api';
 import { HeatForm } from '@/features/reproduction/heats/components/HeatForm';
+import type { HeatIntensity } from '@/features/reproduction/heats/types';
+
+function intensityTone(intensity: HeatIntensity): 'pink' | 'warning' | 'neutral' {
+  if (intensity === 'STRONG') return 'pink';
+  if (intensity === 'MODERATE') return 'warning';
+  return 'neutral';
+}
 
 /** Pagina de listado de celos. */
 export default function HeatsPage() {
@@ -33,26 +42,30 @@ export default function HeatsPage() {
           </DialogContent>
         </Dialog>
       </div>
-      <table className="w-full border rounded">
-        <thead>
-          <tr className="bg-muted">
-            <th className="p-2 text-left">{t('reproduction:heat.animal')}</th>
-            <th className="p-2 text-left">{t('reproduction:heat.detectedAt')}</th>
-            <th className="p-2 text-left">{t('reproduction:heat.detectionMethod')}</th>
-            <th className="p-2 text-left">{t('reproduction:heat.intensity')}</th>
-          </tr>
-        </thead>
-        <tbody>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>{t('reproduction:heat.animal')}</TableHead>
+            <TableHead>{t('reproduction:heat.detectedAt')}</TableHead>
+            <TableHead>{t('reproduction:heat.detectionMethod')}</TableHead>
+            <TableHead>{t('reproduction:heat.intensity')}</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
           {heats.data?.map(h => (
-            <tr key={h.id} className="border-t">
-              <td className="p-2">#{h.animalId}</td>
-              <td className="p-2">{h.detectedAt}</td>
-              <td className="p-2">{h.detectionMethod ? t(`reproduction:heat.method.${h.detectionMethod}`) : '-'}</td>
-              <td className="p-2">{h.intensity ? t(`reproduction:heat.intensityValue.${h.intensity}`) : '-'}</td>
-            </tr>
+            <TableRow key={h.id}>
+              <TableCell>#{h.animalId}</TableCell>
+              <TableCell>{h.detectedAt}</TableCell>
+              <TableCell>{h.detectionMethod ? t(`reproduction:heat.method.${h.detectionMethod}`) : '-'}</TableCell>
+              <TableCell>
+                {h.intensity
+                  ? <Badge tone={intensityTone(h.intensity)}>{t(`reproduction:heat.intensityValue.${h.intensity}`)}</Badge>
+                  : '-'}
+              </TableCell>
+            </TableRow>
           ))}
-        </tbody>
-      </table>
+        </TableBody>
+      </Table>
     </div>
   );
 }

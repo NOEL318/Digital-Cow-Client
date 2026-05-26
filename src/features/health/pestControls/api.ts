@@ -33,6 +33,7 @@ export function useCreatePestControl() {
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: QK });
       qc.invalidateQueries({ queryKey: ['health', 'alerts'] });
+      qc.invalidateQueries({ queryKey: ['dashboard', 'health'] });
     }
   });
 }
@@ -43,7 +44,11 @@ export function useUpdatePestControl() {
   return useMutation({
     mutationFn: async ({ id, body }: { id: number; body: Partial<PestControlCreate> }) =>
       (await http.patch<PestControl>(`/health/pest-controls/${id}`, body)).data,
-    onSuccess: () => qc.invalidateQueries({ queryKey: QK })
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: QK });
+      qc.invalidateQueries({ queryKey: ['health', 'alerts'] });
+      qc.invalidateQueries({ queryKey: ['dashboard', 'health'] });
+    }
   });
 }
 
@@ -53,6 +58,10 @@ export function useDeletePestControl() {
   return useMutation({
     mutationFn: async (id: number) =>
       (await http.delete(`/health/pest-controls/${id}`)).data,
-    onSuccess: () => qc.invalidateQueries({ queryKey: QK })
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: QK });
+      qc.invalidateQueries({ queryKey: ['health', 'alerts'] });
+      qc.invalidateQueries({ queryKey: ['dashboard', 'health'] });
+    }
   });
 }

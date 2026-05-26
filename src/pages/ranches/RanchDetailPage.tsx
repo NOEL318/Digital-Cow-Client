@@ -84,7 +84,7 @@ export default function RanchDetailPage() {
           <RanchLotsTable ranchId={ranchId} />
           {lots.data && lots.data.length > 0 ? (
             <div className="mt-3 flex flex-wrap gap-2">
-              <span className="text-sm text-muted-foreground">Condiciones del corral:</span>
+              <span className="text-sm text-muted-foreground">{t('ranches:lots.corralConditions')}</span>
               {lots.data.map(lot => (
                 <button
                   key={lot.id}

@@ -34,7 +34,11 @@
     "severity": "Severidad",
     "symptoms": "Síntomas",
     "status": "Estado",
-    "resolvedAt": "Resuelto el"
+    "resolvedAt": "Resuelto el",
+    "status_active": "Activo",
+    "status_recovered": "Recuperado",
+    "status_chronic": "Crónico",
+    "status_deceased": "Fallecido"
   },
   "treatment": {
     "title": "Tratamientos",
@@ -49,7 +53,8 @@
     "withdrawalMilk": "Retiro de leche hasta",
     "withdrawalMeat": "Retiro de carne hasta",
     "withdrawalActive": "Retiro activo",
-    "prescribedBy": "Prescrito por"
+    "prescribedBy": "Prescrito por",
+    "cost": "Costo"
   },
   "pest": {
     "title": "Control de plagas",
@@ -57,11 +62,14 @@
     "pest": "Plaga",
     "product": "Producto utilizado",
     "appliedAt": "Aplicado el",
-    "nextApplication": "Próxima aplicación"
+    "nextApplication": "Próxima aplicación",
+    "dose": "Dosis",
+    "cost": "Costo"
   },
   "visit": {
     "title": "Visitas veterinarias",
     "new": "Nueva visita",
+    "visitedAt": "Fecha de visita",
     "vetName": "Veterinario",
     "vetContact": "Contacto",
     "reason": "Motivo",
@@ -78,11 +86,26 @@
     "addStep": "Agregar paso",
     "ageMonthsMin": "Edad mínima en meses",
     "recurrenceMonths": "Recurrencia en meses",
-    "assign": "Asignar a animales o lotes"
+    "assign": "Asignar a animales o lotes",
+    "name": "Nombre",
+    "description": "Descripción",
+    "animals": "Animales",
+    "lots": "Lotes"
   },
   "tab": {
     "health": "Salud",
     "timeline": "Línea de tiempo",
     "print": "Vista imprimible"
+  },
+  "animal": "Animal",
+  "panel": {
+    "detailHeading": "Salud en detalle",
+    "viewAll": "Ver todo",
+    "vaccinationsDesc": "Ver todas las vacunas aplicadas y programadas.",
+    "diagnosesDesc": "Enfermedades detectadas en el rancho.",
+    "treatmentsDesc": "Medicinas aplicadas y en curso.",
+    "pestControlsDesc": "Aplicaciones para garrapatas, moscas y más.",
+    "vetVisitsDesc": "Historial de visitas y notas.",
+    "plansDesc": "Calendarios de vacunación por lote."
   }
 }

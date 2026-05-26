@@ -9,6 +9,9 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import {
+  Table, TableHeader, TableBody, TableRow, TableHead, TableCell
+} from '@/components/ui/table';
 import { localizedName } from '@/lib/catalog';
 import { toArray } from '@/lib/page';
 import { useIncomes, useCreateIncome, type IncomeFilters } from '@/features/finance/incomes/api';
@@ -77,32 +80,36 @@ export default function IncomesPage() {
         </div>
       </div>
 
-      <div className="text-sm text-muted-foreground">{t('finance:income.total')}: <span className="font-semibold">{total.toFixed(2)}</span></div>
+      <div className="text-sm text-muted-foreground">
+        {t('finance:income.total')}: <span className="font-semibold text-green-700 dark:text-green-400">{total.toFixed(2)}</span>
+      </div>
 
-      <table className="w-full border rounded">
-        <thead>
-          <tr className="bg-muted">
-            <th className="p-2 text-left">{t('finance:income.receivedAt')}</th>
-            <th className="p-2 text-left">{t('finance:income.category')}</th>
-            <th className="p-2 text-left">{t('finance:income.description')}</th>
-            <th className="p-2 text-left">{t('finance:income.payer')}</th>
-            <th className="p-2 text-left">{t('finance:income.sourceType')}</th>
-            <th className="p-2 text-right">{t('finance:income.amount')}</th>
-          </tr>
-        </thead>
-        <tbody>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>{t('finance:income.receivedAt')}</TableHead>
+            <TableHead>{t('finance:income.category')}</TableHead>
+            <TableHead>{t('finance:income.description')}</TableHead>
+            <TableHead>{t('finance:income.payer')}</TableHead>
+            <TableHead>{t('finance:income.sourceType')}</TableHead>
+            <TableHead className="text-right">{t('finance:income.amount')}</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
           {incomeRows.map(i => (
-            <tr key={i.id} className="border-t">
-              <td className="p-2">{i.receivedAt}</td>
-              <td className="p-2">{categoryName(i.incomeCategoryId)}</td>
-              <td className="p-2">{i.description ?? '-'}</td>
-              <td className="p-2">{i.payer ?? '-'}</td>
-              <td className="p-2">{t(`finance:income.sourceTypeValue.${i.sourceType}`)}</td>
-              <td className="p-2 text-right">{Number(i.amount).toFixed(2)} {i.currency}</td>
-            </tr>
+            <TableRow key={i.id}>
+              <TableCell>{i.receivedAt}</TableCell>
+              <TableCell>{categoryName(i.incomeCategoryId)}</TableCell>
+              <TableCell>{i.description ?? '-'}</TableCell>
+              <TableCell>{i.payer ?? '-'}</TableCell>
+              <TableCell>{t(`finance:income.sourceTypeValue.${i.sourceType}`)}</TableCell>
+              <TableCell className="text-right font-semibold text-green-700 dark:text-green-400">
+                {Number(i.amount).toFixed(2)} {i.currency}
+              </TableCell>
+            </TableRow>
           ))}
-        </tbody>
-      </table>
+        </TableBody>
+      </Table>
     </div>
   );
 }

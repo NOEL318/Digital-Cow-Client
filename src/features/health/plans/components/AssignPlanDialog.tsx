@@ -54,8 +54,8 @@ export function AssignPlanDialog({ planId, trigger }: Props) {
       <DialogContent className="max-w-2xl">
         <DialogHeader><DialogTitle>{t('health:plan.assign')}</DialogTitle></DialogHeader>
         <div className="flex gap-2">
-          <button type="button" className={tabBtn('animals')} onClick={() => setTab('animals')}>Animals</button>
-          <button type="button" className={tabBtn('lots')} onClick={() => setTab('lots')}>Lots</button>
+          <button type="button" className={tabBtn('animals')} onClick={() => setTab('animals')}>{t('health:plan.animals')}</button>
+          <button type="button" className={tabBtn('lots')} onClick={() => setTab('lots')}>{t('health:plan.lots')}</button>
         </div>
         {tab === 'animals' ? (
           <div className="max-h-64 overflow-y-auto border rounded p-2 space-y-1">

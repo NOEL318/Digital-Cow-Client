@@ -8,6 +8,9 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import {
+  Table, TableHeader, TableBody, TableRow, TableHead, TableCell
+} from '@/components/ui/table';
 import { usePnlReport } from '@/features/reports/pnlReport/api';
 import type { PnlGroupBy } from '@/features/finance/pnl/api';
 import { downloadCsv } from '@/lib/csv';
@@ -43,6 +46,8 @@ export default function PnlReportPage() {
     downloadCsv(rows, `pnl-${from}-${to}.csv`);
   };
 
+  const margin = report.data ? Number(report.data.margin) : null;
+
   return (
     <div className="p-6 space-y-6">
       <div className="flex items-center justify-between">
@@ -77,18 +82,43 @@ export default function PnlReportPage() {
 
       {report.data && (
         <>
+          {/* KPI cards with semantic colors */}
           <div className="grid gap-3 grid-cols-1 md:grid-cols-3">
-            <Card>
-              <CardHeader><CardTitle className="text-sm text-muted-foreground">{t('reports:pnl.totalIncome')}</CardTitle></CardHeader>
-              <CardContent className="text-2xl font-bold">{Number(report.data.totalIncome).toFixed(2)}</CardContent>
+            <Card className="border-green-200 dark:border-green-800">
+              <CardHeader>
+                <CardTitle className="text-sm font-medium text-green-700 dark:text-green-400">
+                  {t('reports:pnl.totalIncome')}
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="text-2xl font-bold text-green-700 dark:text-green-400">
+                {Number(report.data.totalIncome).toFixed(2)}
+              </CardContent>
             </Card>
-            <Card>
-              <CardHeader><CardTitle className="text-sm text-muted-foreground">{t('reports:pnl.totalExpense')}</CardTitle></CardHeader>
-              <CardContent className="text-2xl font-bold">{Number(report.data.totalExpense).toFixed(2)}</CardContent>
+            <Card className="border-red-200 dark:border-red-800">
+              <CardHeader>
+                <CardTitle className="text-sm font-medium text-red-700 dark:text-red-400">
+                  {t('reports:pnl.totalExpense')}
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="text-2xl font-bold text-red-700 dark:text-red-400">
+                {Number(report.data.totalExpense).toFixed(2)}
+              </CardContent>
             </Card>
-            <Card>
-              <CardHeader><CardTitle className="text-sm text-muted-foreground">{t('reports:pnl.margin')}</CardTitle></CardHeader>
-              <CardContent className="text-2xl font-bold">{Number(report.data.margin).toFixed(2)}</CardContent>
+            <Card className={margin !== null && margin >= 0
+              ? 'border-blue-200 dark:border-blue-800'
+              : 'border-amber-200 dark:border-amber-800'}>
+              <CardHeader>
+                <CardTitle className={`text-sm font-medium ${margin !== null && margin >= 0
+                  ? 'text-blue-700 dark:text-blue-400'
+                  : 'text-amber-700 dark:text-amber-400'}`}>
+                  {t('reports:pnl.margin')}
+                </CardTitle>
+              </CardHeader>
+              <CardContent className={`text-2xl font-bold ${margin !== null && margin >= 0
+                ? 'text-blue-700 dark:text-blue-400'
+                : 'text-amber-700 dark:text-amber-400'}`}>
+                {Number(report.data.margin).toFixed(2)}
+              </CardContent>
             </Card>
           </div>
 
@@ -96,38 +126,49 @@ export default function PnlReportPage() {
             <CardHeader><CardTitle>{t('reports:pnl.importedCosts')}</CardTitle></CardHeader>
             <CardContent>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-2 text-sm">
-                <div>{t('reports:pnl.treatments')}: <span className="font-semibold">{Number(report.data.importedCosts.treatments).toFixed(2)}</span></div>
-                <div>{t('reports:pnl.vaccinations')}: <span className="font-semibold">{Number(report.data.importedCosts.vaccinations).toFixed(2)}</span></div>
-                <div>{t('reports:pnl.pestControls')}: <span className="font-semibold">{Number(report.data.importedCosts.pestControls).toFixed(2)}</span></div>
-                <div>{t('reports:pnl.vetVisits')}: <span className="font-semibold">{Number(report.data.importedCosts.vetVisits).toFixed(2)}</span></div>
-                <div>{t('reports:pnl.feedingRecords')}: <span className="font-semibold">{Number(report.data.importedCosts.feedingRecords).toFixed(2)}</span></div>
-                <div>{t('reports:pnl.services')}: <span className="font-semibold">{Number(report.data.importedCosts.services).toFixed(2)}</span></div>
+                <div>{t('reports:pnl.treatments')}: <span className="font-semibold text-red-700 dark:text-red-400">{Number(report.data.importedCosts.treatments).toFixed(2)}</span></div>
+                <div>{t('reports:pnl.vaccinations')}: <span className="font-semibold text-red-700 dark:text-red-400">{Number(report.data.importedCosts.vaccinations).toFixed(2)}</span></div>
+                <div>{t('reports:pnl.pestControls')}: <span className="font-semibold text-red-700 dark:text-red-400">{Number(report.data.importedCosts.pestControls).toFixed(2)}</span></div>
+                <div>{t('reports:pnl.vetVisits')}: <span className="font-semibold text-red-700 dark:text-red-400">{Number(report.data.importedCosts.vetVisits).toFixed(2)}</span></div>
+                <div>{t('reports:pnl.feedingRecords')}: <span className="font-semibold text-amber-700 dark:text-amber-400">{Number(report.data.importedCosts.feedingRecords).toFixed(2)}</span></div>
+                <div>{t('reports:pnl.services')}: <span className="font-semibold text-amber-700 dark:text-amber-400">{Number(report.data.importedCosts.services).toFixed(2)}</span></div>
               </div>
             </CardContent>
           </Card>
 
-          <table className="w-full border rounded">
-            <thead>
-              <tr className="bg-muted">
-                <th className="p-2 text-left">{t('reports:pnl.key')}</th>
-                <th className="p-2 text-left">{t('reports:pnl.label')}</th>
-                <th className="p-2 text-right">{t('reports:pnl.income')}</th>
-                <th className="p-2 text-right">{t('reports:pnl.expense')}</th>
-                <th className="p-2 text-right">{t('reports:pnl.margin')}</th>
-              </tr>
-            </thead>
-            <tbody>
-              {report.data.buckets.map(b => (
-                <tr key={b.key} className="border-t">
-                  <td className="p-2">{b.key}</td>
-                  <td className="p-2">{b.label}</td>
-                  <td className="p-2 text-right">{Number(b.income).toFixed(2)}</td>
-                  <td className="p-2 text-right">{Number(b.expense).toFixed(2)}</td>
-                  <td className="p-2 text-right">{Number(b.margin).toFixed(2)}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>{t('reports:pnl.key')}</TableHead>
+                <TableHead>{t('reports:pnl.label')}</TableHead>
+                <TableHead className="text-right">{t('reports:pnl.income')}</TableHead>
+                <TableHead className="text-right">{t('reports:pnl.expense')}</TableHead>
+                <TableHead className="text-right">{t('reports:pnl.margin')}</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {report.data.buckets.map(b => {
+                const bMargin = Number(b.margin);
+                return (
+                  <TableRow key={b.key}>
+                    <TableCell>{b.key}</TableCell>
+                    <TableCell>{b.label}</TableCell>
+                    <TableCell className="text-right text-green-700 dark:text-green-400 font-medium">
+                      {Number(b.income).toFixed(2)}
+                    </TableCell>
+                    <TableCell className="text-right text-red-700 dark:text-red-400 font-medium">
+                      {Number(b.expense).toFixed(2)}
+                    </TableCell>
+                    <TableCell className={`text-right font-semibold ${bMargin >= 0
+                      ? 'text-blue-700 dark:text-blue-400'
+                      : 'text-amber-700 dark:text-amber-400'}`}>
+                      {bMargin.toFixed(2)}
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+          </Table>
         </>
       )}
     </div>

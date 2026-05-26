@@ -7,6 +7,9 @@ import { Plus } from 'lucide-react';
 import i18n from '@/lib/i18n';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import {
+  Table, TableHeader, TableBody, TableRow, TableHead, TableCell
+} from '@/components/ui/table';
 import { localizedName } from '@/lib/catalog';
 import { useFeedingRecords, useCreateFeedingRecord } from '@/features/feeding/records/api';
 import { useFeedItems } from '@/features/feeding/items/api';
@@ -38,31 +41,32 @@ export default function FeedingRecordsPage() {
           </DialogContent>
         </Dialog>
       </div>
-      <table className="w-full border rounded">
-        <thead>
-          <tr className="bg-muted">
-            <th className="p-2 text-left">{t('feeding:record.consumedAt')}</th>
-            <th className="p-2 text-left">{t('feeding:record.lot')}</th>
-            <th className="p-2 text-left">{t('feeding:record.feedItem')}</th>
-            <th className="p-2 text-left">{t('feeding:record.totalKg')}</th>
-            <th className="p-2 text-left">{t('feeding:record.cost')}</th>
-          </tr>
-        </thead>
-        <tbody>
+
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>{t('feeding:record.consumedAt')}</TableHead>
+            <TableHead>{t('feeding:record.lot')}</TableHead>
+            <TableHead>{t('feeding:record.feedItem')}</TableHead>
+            <TableHead>{t('feeding:record.totalKg')}</TableHead>
+            <TableHead>{t('feeding:record.cost')}</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
           {records.data?.map(r => {
             const f = items.data?.find(x => x.id === r.feedItemId);
             return (
-              <tr key={r.id} className="border-t">
-                <td className="p-2">{r.consumedAt}</td>
-                <td className="p-2">{r.lotId}</td>
-                <td className="p-2">{f ? localizedName(f, locale) : `#${r.feedItemId}`}</td>
-                <td className="p-2">{r.totalKg}</td>
-                <td className="p-2">{r.cost ?? '-'}</td>
-              </tr>
+              <TableRow key={r.id}>
+                <TableCell>{r.consumedAt}</TableCell>
+                <TableCell>{r.lotId}</TableCell>
+                <TableCell>{f ? localizedName(f, locale) : `#${r.feedItemId}`}</TableCell>
+                <TableCell>{r.totalKg}</TableCell>
+                <TableCell>{r.cost ?? '-'}</TableCell>
+              </TableRow>
             );
           })}
-        </tbody>
-      </table>
+        </TableBody>
+      </Table>
     </div>
   );
 }

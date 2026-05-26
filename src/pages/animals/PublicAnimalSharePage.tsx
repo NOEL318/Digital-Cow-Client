@@ -13,10 +13,12 @@ import {
 } from 'recharts';
 import { fetchPublicAnimalShare, type PublicAnimalShareResponse } from '@/features/animals/share/api';
 import { AnimalAvatar } from '@/components/ui/animal-avatar';
+import { Badge } from '@/components/ui/badge';
+import { sexStyle } from '@/features/animals/sex-style';
 
 export default function PublicAnimalSharePage() {
   const { token } = useParams<{ token: string }>();
-  const { t } = useTranslation(['common', 'animals']);
+  const { t } = useTranslation(['animals', 'common']);
 
   const q = useQuery({
     queryKey: ['public', 'animal-share', token],
@@ -32,9 +34,9 @@ export default function PublicAnimalSharePage() {
     return (
       <PageShell>
         <div className="text-center space-y-2">
-          <p className="text-lg font-semibold">Enlace no valido o expirado</p>
+          <p className="text-lg font-semibold">{t('animals:publicShare.invalidLink')}</p>
           <p className="text-sm text-muted-foreground">
-            Pidele al dueño del rancho que te genere un nuevo enlace.
+            {t('animals:publicShare.invalidLinkDesc')}
           </p>
         </div>
       </PageShell>
@@ -42,6 +44,8 @@ export default function PublicAnimalSharePage() {
   }
 
   const a = q.data;
+  const sx = sexStyle(a.sex);
+
   return (
     <PageShell>
       <article className="space-y-6">
@@ -50,7 +54,7 @@ export default function PublicAnimalSharePage() {
             <img
               src={a.coverPhotoUrl}
               alt={a.name ? `${a.name} (${a.internalTag})` : a.internalTag}
-              className="w-40 h-40 mx-auto rounded-full object-cover ring-4 ring-primary/30 shadow-md"
+              className={`w-40 h-40 mx-auto rounded-full object-cover ring-4 ${sx.ring} shadow-md`}
             />
           ) : (
             <div className="w-40 h-40 mx-auto flex items-center justify-center">
@@ -67,10 +71,12 @@ export default function PublicAnimalSharePage() {
             {a.name ? <p className="text-lg text-muted-foreground">{a.name}</p> : null}
           </div>
           <div className="flex flex-wrap justify-center gap-2 text-sm">
-            <Chip label={a.sex === 'FEMALE' ? 'Hembra' : 'Macho'} />
-            <Chip label={a.purpose === 'DAIRY' ? 'Leche' : a.purpose === 'BEEF' ? 'Carne' : 'Doble propósito'} />
+            <Badge tone={a.sex === 'FEMALE' ? 'pink' : 'graphite'}>
+              {t(`animals:sex.${a.sex}`)}
+            </Badge>
+            <Chip label={t(`animals:purpose.${a.purpose}`)} />
             {a.breedName ? <Chip label={a.breedName} /> : null}
-            <Chip label={statusLabel(a.status)} />
+            <Chip label={t(`animals:status.${a.status}`)} />
           </div>
         </header>
 
@@ -80,7 +86,7 @@ export default function PublicAnimalSharePage() {
         <MilkingsSection animal={a} />
 
         <footer className="text-center text-xs text-muted-foreground pt-8 border-t">
-          Información compartida desde Digital Cow. Solo lectura.
+          {t('animals:publicShare.footer')}
         </footer>
       </article>
     </PageShell>
@@ -103,28 +109,26 @@ function Chip({ label }: { label: string }) {
   );
 }
 
-function statusLabel(s: string): string {
-  switch (s) {
-    case 'ACTIVE': return 'Activo';
-    case 'SOLD': return 'Vendido';
-    case 'DEAD': return 'Fallecido';
-    case 'MISSING': return 'Perdido';
-    case 'TRANSFERRED': return 'Transferido';
-    default: return s;
-  }
-}
-
 function IdentitySection({ animal: a }: { animal: PublicAnimalShareResponse }) {
+  const { t } = useTranslation('animals');
   return (
     <section className="rounded-xl border bg-card p-4 space-y-2">
       <h2 className="flex items-center gap-2 text-lg font-semibold">
-        <Activity className="h-5 w-5 text-primary" aria-hidden /> Identificación
+        <Activity className="h-5 w-5 text-primary" aria-hidden /> {t('publicShare.sections.identity')}
       </h2>
       <div className="grid grid-cols-2 gap-y-2 text-sm">
-        <Field label="Nacimiento" value={a.birthDate ? `${a.birthDate}${a.birthDateEstimated ? ' (estimada)' : ''}` : '—'} />
-        <Field label="Edad" value={a.ageMonths != null ? `${a.ageMonths} meses` : '—'} />
-        {a.lastCalving ? <Field label="Último parto" value={a.lastCalving} /> : null}
-        {a.daysInMilk != null ? <Field label="Días en leche" value={`${a.daysInMilk}`} /> : null}
+        <Field
+          label={t('publicShare.fields.birth')}
+          value={a.birthDate
+            ? `${a.birthDate}${a.birthDateEstimated ? t('publicShare.fields.estimatedSuffix') : ''}`
+            : '—'}
+        />
+        <Field
+          label={t('publicShare.fields.age')}
+          value={a.ageMonths != null ? t('publicShare.fields.ageValue', { months: a.ageMonths }) : '—'}
+        />
+        {a.lastCalving ? <Field label={t('publicShare.fields.lastCalving')} value={a.lastCalving} /> : null}
+        {a.daysInMilk != null ? <Field label={t('publicShare.fields.daysInMilk')} value={`${a.daysInMilk}`} /> : null}
       </div>
     </section>
   );
@@ -140,16 +144,17 @@ function Field({ label, value }: { label: string; value: string }) {
 }
 
 function WeighingsSection({ animal: a }: { animal: PublicAnimalShareResponse }) {
+  const { t } = useTranslation('animals');
   if (a.weighings.length === 0) return null;
   const last = a.weighings[a.weighings.length - 1];
   const chartData = a.weighings.map(w => ({ date: w.weighedAt, kg: Number(w.weightKg) }));
   return (
     <section className="rounded-xl border bg-card p-4 space-y-3">
       <h2 className="flex items-center gap-2 text-lg font-semibold">
-        <Scale className="h-5 w-5 text-primary" aria-hidden /> Pesajes
+        <Scale className="h-5 w-5 text-primary" aria-hidden /> {t('publicShare.sections.weighings')}
       </h2>
       <p className="text-sm">
-        Último peso: <strong>{last.weightKg} kilogramos</strong> · {last.weighedAt}
+        {t('publicShare.fields.lastWeight', { kg: last.weightKg, date: last.weighedAt })}
       </p>
       <div className="h-48">
         <ResponsiveContainer width="100%" height="100%">
@@ -167,11 +172,12 @@ function WeighingsSection({ animal: a }: { animal: PublicAnimalShareResponse }) 
 }
 
 function VaccinationsSection({ animal: a }: { animal: PublicAnimalShareResponse }) {
+  const { t } = useTranslation('animals');
   if (a.vaccinations.length === 0) return null;
   return (
     <section className="rounded-xl border bg-card p-4 space-y-3">
       <h2 className="flex items-center gap-2 text-lg font-semibold">
-        <Syringe className="h-5 w-5 text-primary" aria-hidden /> Vacunas aplicadas
+        <Syringe className="h-5 w-5 text-primary" aria-hidden /> {t('publicShare.sections.vaccinations')}
       </h2>
       <ul className="divide-y">
         {a.vaccinations.slice().reverse().map((v, i) => (
@@ -179,7 +185,7 @@ function VaccinationsSection({ animal: a }: { animal: PublicAnimalShareResponse 
             <span className="flex items-center gap-2">
               <Calendar className="h-3 w-3 text-muted-foreground" aria-hidden /> {v.appliedAt}
             </span>
-            <span className="font-medium text-right">{v.vaccineName ?? 'Vacuna'}</span>
+            <span className="font-medium text-right">{v.vaccineName ?? t('print.sections.vaccinations')}</span>
           </li>
         ))}
       </ul>
@@ -188,6 +194,7 @@ function VaccinationsSection({ animal: a }: { animal: PublicAnimalShareResponse 
 }
 
 function MilkingsSection({ animal: a }: { animal: PublicAnimalShareResponse }) {
+  const { t } = useTranslation('animals');
   if (a.milkings.length === 0) return null;
   const totalLiters = a.milkings.reduce((acc, m) => acc + Number(m.liters), 0);
   const avg = totalLiters / a.milkings.length;
@@ -195,10 +202,10 @@ function MilkingsSection({ animal: a }: { animal: PublicAnimalShareResponse }) {
   return (
     <section className="rounded-xl border bg-card p-4 space-y-3">
       <h2 className="flex items-center gap-2 text-lg font-semibold">
-        <Milk className="h-5 w-5 text-primary" aria-hidden /> Producción de leche
+        <Milk className="h-5 w-5 text-primary" aria-hidden /> {t('publicShare.sections.milkings')}
       </h2>
       <p className="text-sm text-muted-foreground">
-        Promedio reciente: <strong>{avg.toFixed(1)} litros/día</strong> en {a.milkings.length} registros
+        {t('publicShare.fields.recentAvg', { avg: avg.toFixed(1), count: a.milkings.length })}
       </p>
       <div className="h-48">
         <ResponsiveContainer width="100%" height="100%">

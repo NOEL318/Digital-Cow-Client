@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { BrowserMultiFormatReader, type IScannerControls } from '@zxing/browser';
 import { ScanLine, X, AlertTriangle } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { BigButton } from './big-button';
 import { cn } from '@/lib/utils';
 
@@ -22,6 +23,7 @@ interface BarcodeScannerProps {
  * aperturas; cada apertura inicializa el reader fresco.
  */
 export function BarcodeScanner({ open, onClose, onDetected, title }: BarcodeScannerProps) {
+  const { t } = useTranslation('common');
   const videoRef = useRef<HTMLVideoElement>(null);
   const controlsRef = useRef<IScannerControls | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -38,7 +40,7 @@ export function BarcodeScanner({ open, onClose, onDetected, title }: BarcodeScan
       try {
         const devices = await BrowserMultiFormatReader.listVideoInputDevices();
         if (devices.length === 0) {
-          setError('No encontramos una camara en este dispositivo. Puedes escribir el codigo a mano.');
+          setError(t('scanner.noCamera'));
           return;
         }
         const preferred =
@@ -62,9 +64,9 @@ export function BarcodeScanner({ open, onClose, onDetected, title }: BarcodeScan
       } catch (e) {
         const msg = (e as Error)?.message ?? '';
         if (/Permission/i.test(msg) || /denied/i.test(msg)) {
-          setError('No nos diste permiso para usar la camara. Puedes escribir el codigo a mano.');
+          setError(t('scanner.permissionDenied'));
         } else {
-          setError('No pudimos abrir la camara. Puedes escribir el codigo a mano.');
+          setError(t('scanner.cameraError'));
         }
       }
     })();
@@ -74,27 +76,29 @@ export function BarcodeScanner({ open, onClose, onDetected, title }: BarcodeScan
       controlsRef.current?.stop();
       controlsRef.current = null;
     };
-  }, [open, onDetected]);
+  }, [open, onDetected, t]);
 
   if (!open) return null;
+
+  const modalTitle = title ?? t('scanner.defaultTitle');
 
   return (
     <div
       role="dialog"
       aria-modal="true"
-      aria-label={title ?? 'Escanear codigo de barras'}
+      aria-label={modalTitle}
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4"
     >
       <div className="bg-background rounded-2xl shadow-xl w-full max-w-md p-4 space-y-4">
         <header className="flex items-center justify-between">
           <h2 className="text-lg font-bold flex items-center gap-2">
             <ScanLine className="h-5 w-5" aria-hidden />
-            {title ?? 'Escanear codigo de barras'}
+            {modalTitle}
           </h2>
           <button
             type="button"
             onClick={onClose}
-            aria-label="Cerrar"
+            aria-label={t('actions.close')}
             className="p-2 rounded-full hover:bg-accent"
           >
             <X className="h-5 w-5" aria-hidden />
@@ -117,7 +121,7 @@ export function BarcodeScanner({ open, onClose, onDetected, title }: BarcodeScan
 
         <div className="space-y-2">
           <label htmlFor="manual-barcode" className="text-sm font-semibold">
-            Escribir codigo a mano
+            {t('scanner.manualLabel')}
           </label>
           <div className="flex gap-2">
             <input
@@ -127,11 +131,11 @@ export function BarcodeScanner({ open, onClose, onDetected, title }: BarcodeScan
               autoComplete="off"
               value={manualCode}
               onChange={e => setManualCode(e.target.value)}
-              placeholder="Ejemplo: 7501234567890"
+              placeholder={t('scanner.manualPlaceholder')}
               className="flex-1 border rounded-md px-3 py-2 text-base bg-background"
             />
             <BigButton
-              label="Usar"
+              label={t('scanner.useBtn')}
               onClick={() => {
                 const code = manualCode.trim();
                 if (code) onDetected(code);

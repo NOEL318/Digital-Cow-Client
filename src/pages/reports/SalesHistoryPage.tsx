@@ -7,6 +7,9 @@ import { Download } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import {
+  Table, TableHeader, TableBody, TableRow, TableHead, TableCell
+} from '@/components/ui/table';
 import { useSalesHistory } from '@/features/reports/salesHistory/api';
 import { downloadCsv } from '@/lib/csv';
 
@@ -57,28 +60,30 @@ export default function SalesHistoryPage() {
         </div>
       </div>
       {history.data && (
-        <table className="w-full border rounded">
-          <thead>
-            <tr className="bg-muted">
-              <th className="p-2 text-left">{t('reports:salesHistory.kind')}</th>
-              <th className="p-2 text-left">{t('reports:salesHistory.date')}</th>
-              <th className="p-2 text-left">{t('reports:salesHistory.description')}</th>
-              <th className="p-2 text-left">{t('reports:salesHistory.buyer')}</th>
-              <th className="p-2 text-right">{t('reports:salesHistory.amount')}</th>
-            </tr>
-          </thead>
-          <tbody>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>{t('reports:salesHistory.kind')}</TableHead>
+              <TableHead>{t('reports:salesHistory.date')}</TableHead>
+              <TableHead>{t('reports:salesHistory.description')}</TableHead>
+              <TableHead>{t('reports:salesHistory.buyer')}</TableHead>
+              <TableHead className="text-right">{t('reports:salesHistory.amount')}</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
             {history.data.rows.map(r => (
-              <tr key={`${r.kind}-${r.id}`} className="border-t">
-                <td className="p-2">{r.kind === 'ANIMAL_SALE' ? t('reports:salesHistory.animalSale') : t('reports:salesHistory.milkSale')}</td>
-                <td className="p-2">{r.date}</td>
-                <td className="p-2">{r.description ?? '-'}</td>
-                <td className="p-2">{r.buyer ?? '-'}</td>
-                <td className="p-2 text-right">{Number(r.amount).toFixed(2)}</td>
-              </tr>
+              <TableRow key={`${r.kind}-${r.id}`}>
+                <TableCell>{r.kind === 'ANIMAL_SALE' ? t('reports:salesHistory.animalSale') : t('reports:salesHistory.milkSale')}</TableCell>
+                <TableCell>{r.date}</TableCell>
+                <TableCell>{r.description ?? '-'}</TableCell>
+                <TableCell>{r.buyer ?? '-'}</TableCell>
+                <TableCell className="text-right font-semibold text-green-700 dark:text-green-400">
+                  {Number(r.amount).toFixed(2)}
+                </TableCell>
+              </TableRow>
             ))}
-          </tbody>
-        </table>
+          </TableBody>
+        </Table>
       )}
     </div>
   );

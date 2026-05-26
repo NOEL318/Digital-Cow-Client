@@ -58,7 +58,7 @@
   "labels": {
     "calfSex": "Calf sex",
     "mapLocation": "Map location",
-    "accountName": "Account name",
+    "accountName": "Ranch / account name",
     "defaultLocale": "Default locale",
     "signIn": "Sign in",
     "bySex": "By sex",
@@ -67,5 +67,103 @@
     "animalPhotos": "Animal photos",
     "moneyDetail": "Money in detail",
     "lotConditionsToday": "Lot conditions today"
+  },
+  "ajustes": {
+    "subtitle": "All your account and ranch settings in one place.",
+    "categoriesAria": "Settings categories",
+    "groupAccount": "My account",
+    "groupRanch": "My ranch",
+    "groupCatalogs": "Catalogs",
+    "groupPreferences": "Preferences"
+  },
+  "notifications": {
+    "title": "Notifications",
+    "unsupported": "Your browser does not support notifications.",
+    "active": "Notifications enabled.",
+    "pitch": "We'll let you know when something important happens even if the app is closed.",
+    "enable": "Enable notifications",
+    "enableFailed": "Notifications were not enabled. Check your browser permissions."
+  },
+  "profile": {
+    "yourName": "Your name",
+    "email": "Email"
+  },
+  "scanner": {
+    "defaultTitle": "Scan barcode",
+    "noCamera": "No camera found on this device. You can type the code manually.",
+    "permissionDenied": "Camera permission was denied. You can type the code manually.",
+    "cameraError": "Could not open camera. You can type the code manually.",
+    "manualLabel": "Type code manually",
+    "manualPlaceholder": "Example: 7501234567890",
+    "useBtn": "Use"
+  },
+  "ranchPicker": {
+    "noRanches": "You have no ranches registered yet.",
+    "allLabel": "All",
+    "ariaLabel": "Ranch"
+  },
+  "lotPicker": {
+    "pickRanchFirst": "Choose a ranch first.",
+    "noLots": "This ranch has no lots yet.",
+    "allLabel": "All lots",
+    "ariaLabel": "Lot"
+  },
+  "offline": {
+    "noConnection": "No connection",
+    "pendingSync": "{{count}} to sync",
+    "retrySync": "Retry sync"
+  },
+  "map": {
+    "loading": "Loading map...",
+    "noRanchesTitle": "No ranches on map yet",
+    "noRanchesDesc": "Add the location (latitude and longitude) of each ranch in Settings to see them here.",
+    "goToRanches": "Go to ranches",
+    "viewAnimals": "View animals here"
+  },
+  "lightbox": {
+    "ariaLabel": "Photo viewer",
+    "close": "Close",
+    "download": "Download photo",
+    "prev": "Previous",
+    "next": "Next",
+    "photoAlt": "Photo {{n}}"
+  },
+  "wizard": {
+    "stepOf": "Step {{current}} of {{total}}",
+    "back": "Back",
+    "next": "Next",
+    "save": "Save"
+  },
+  "hacerNota": {
+    "subtitle": "Choose what you want to do. We'll guide you step by step.",
+    "registrar": "Record",
+    "ver": "View",
+    "act": {
+      "vacune": { "label": "Vaccinated", "desc": "Record a vaccine you applied." },
+      "pese": { "label": "Weighed", "desc": "Note how much an animal weighs." },
+      "ordene": { "label": "Milked", "desc": "Record a cow's milking." },
+      "diagnostique": { "label": "Diagnosed", "desc": "Record a disease or symptom." },
+      "trate": { "label": "Treated", "desc": "Apply a treatment with medication." },
+      "alimentar": { "label": "Fed", "desc": "Record feed given to a lot." },
+      "celo": { "label": "Saw a heat", "desc": "Note a heat detection." },
+      "servi": { "label": "Inseminated / served", "desc": "Insemination or mating." },
+      "prenez": { "label": "Detected pregnancy", "desc": "Record a pregnancy check." },
+      "parto": { "label": "A cow calved", "desc": "Note a calving." },
+      "seque": { "label": "Dried off", "desc": "Mark a cow as dry." },
+      "destete": { "label": "Weaned", "desc": "Record a calf's weaning." },
+      "aborto": { "label": "Abortion", "desc": "Note the loss of a pregnancy." },
+      "compre": { "label": "Bought animal", "desc": "Add an animal to the ranch." },
+      "vendi": { "label": "Sold animal", "desc": "Record the sale of an animal." },
+      "gaste": { "label": "Spent", "desc": "Note money that went out." },
+      "recibi": { "label": "Received money", "desc": "Note money that came in." }
+    },
+    "sec": {
+      "salud": { "label": "Health", "desc": "Vaccines, diagnoses, treatments and alerts." },
+      "alimentacion": { "label": "Feeding", "desc": "Inputs, plans and ranch consumption." },
+      "dinero": { "label": "Money", "desc": "Expenses, income and financial summary." },
+      "produccion": { "label": "Production", "desc": "Weighings, milkings and production curves." },
+      "reproduccion": { "label": "Reproduction", "desc": "Heats, services, pregnancies and calvings." },
+      "reportes": { "label": "Reports", "desc": "Inventory, history and monthly summary." }
+    }
   }
 }

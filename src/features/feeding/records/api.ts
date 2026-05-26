@@ -34,7 +34,10 @@ export function useUpdateFeedingRecord() {
   return useMutation({
     mutationFn: async ({ id, body }: { id: number; body: Partial<FeedingRecordCreate> }) =>
       (await http.patch<FeedingRecord>(`/feeding/records/${id}`, body)).data,
-    onSuccess: () => qc.invalidateQueries({ queryKey: QK })
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: QK });
+      qc.invalidateQueries({ queryKey: ['feeding', 'cost-summary'] });
+    }
   });
 }
 
@@ -44,6 +47,9 @@ export function useDeleteFeedingRecord() {
   return useMutation({
     mutationFn: async (id: number) =>
       (await http.delete(`/feeding/records/${id}`)).data,
-    onSuccess: () => qc.invalidateQueries({ queryKey: QK })
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: QK });
+      qc.invalidateQueries({ queryKey: ['feeding', 'cost-summary'] });
+    }
   });
 }

@@ -64,6 +64,7 @@ export function useUpdateMilking() {
       (await http.patch<Milking>(`/production/milkings/${id}`, body)).data,
     onSuccess: (_data, vars) => {
       qc.invalidateQueries({ queryKey: QK });
+      qc.invalidateQueries({ queryKey: ['production', 'lactation-curve'] });
       if (vars.body.animalId) {
         qc.invalidateQueries({ queryKey: ['animal', vars.body.animalId] });
       }
@@ -79,6 +80,8 @@ export function useDeleteMilking() {
       (await http.delete(`/production/milkings/${id}`)).data,
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: QK });
+      qc.invalidateQueries({ queryKey: ['dashboard', 'production'] });
+      qc.invalidateQueries({ queryKey: ['production', 'lactation-curve'] });
       qc.invalidateQueries({ queryKey: ['animal'] });
     }
   });

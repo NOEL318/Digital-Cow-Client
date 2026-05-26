@@ -9,6 +9,8 @@ import i18n from '@/lib/i18n';
 import { animalsApi } from '@/features/animals/api';
 import { breedsApi } from '@/features/breeds/api';
 import { useLots } from '../api';
+import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/ui/table';
+import { sexStyle } from '@/features/animals/sex-style';
 import type { AnimalListItem, Page } from '@/features/animals/types';
 
 interface Props {
@@ -47,31 +49,44 @@ export function RanchAnimalsTable({ ranchId }: Props) {
   };
 
   return (
-    <div className="overflow-x-auto">
-      <table className="w-full text-sm border">
-        <thead>
-          <tr className="border-b text-left bg-muted">
-            <th className="p-2">{t('animals:fields.internalTag')}</th>
-            <th className="p-2">{t('animals:fields.breed')}</th>
-            <th className="p-2">{t('animals:fields.sex')}</th>
-            <th className="p-2">{t('animals:fields.status')}</th>
-            <th className="p-2">{t('ranches:lots.name')}</th>
-          </tr>
-        </thead>
-        <tbody>
-          {recent.length === 0 ? (
-            <tr><td colSpan={5} className="p-4 text-center text-muted-foreground">{t('ranches:detail.noAnimals')}</td></tr>
-          ) : recent.map(a => (
-            <tr key={a.id} className="border-b hover:bg-accent">
-              <td className="p-2"><Link to={`/animals/${a.id}`} className="underline">{a.internalTag}</Link></td>
-              <td className="p-2">{breedName(a.breedId)}</td>
-              <td className="p-2">{t(`animals:sex.${a.sex}`)}</td>
-              <td className="p-2">{t(`animals:status.${a.status}`)}</td>
-              <td className="p-2">{lotName(a.lotId)}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+    <Table>
+      <TableHeader>
+        <TableRow>
+          <TableHead>{t('animals:fields.internalTag')}</TableHead>
+          <TableHead>{t('animals:fields.breed')}</TableHead>
+          <TableHead>{t('animals:fields.sex')}</TableHead>
+          <TableHead>{t('animals:fields.status')}</TableHead>
+          <TableHead>{t('ranches:lots.name')}</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {recent.length === 0 ? (
+          <TableRow>
+            <TableCell colSpan={5} className="py-6 text-center text-muted-foreground">
+              {t('ranches:detail.noAnimals')}
+            </TableCell>
+          </TableRow>
+        ) : recent.map(a => {
+          const ss = sexStyle(a.sex);
+          return (
+            <TableRow key={a.id}>
+              <TableCell>
+                <Link to={`/animals/${a.id}`} className="underline font-medium">
+                  {a.internalTag}
+                </Link>
+              </TableCell>
+              <TableCell>{breedName(a.breedId)}</TableCell>
+              <TableCell>
+                <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold ${ss.badge}`}>
+                  {t(`animals:sex.${a.sex}`)}
+                </span>
+              </TableCell>
+              <TableCell>{t(`animals:status.${a.status}`)}</TableCell>
+              <TableCell>{lotName(a.lotId)}</TableCell>
+            </TableRow>
+          );
+        })}
+      </TableBody>
+    </Table>
   );
 }

@@ -15,10 +15,10 @@ import FinanceOverviewPage from './FinanceOverviewPage';
 export default function FinancePanelPage() {
   const { t } = useTranslation(['finance', 'common']);
   const sections = [
-    { to: '/panel/dinero/gastos', icon: MinusCircle, title: t('finance:panel.expenses.title', { defaultValue: 'Gastos' }), description: t('finance:panel.expenses.desc', { defaultValue: 'Lo que pagaste por insumos, servicios y mas.' }) },
-    { to: '/panel/dinero/ingresos', icon: PlusCircle, title: t('finance:panel.incomes.title', { defaultValue: 'Ingresos' }), description: t('finance:panel.incomes.desc', { defaultValue: 'El dinero que recibiste.' }) },
-    { to: '/panel/dinero/ventas-animales', icon: Handshake, title: t('finance:panel.animalSales.title', { defaultValue: 'Ventas de animales' }), description: t('finance:panel.animalSales.desc', { defaultValue: 'Animales que vendiste y a quien.' }) },
-    { to: '/panel/dinero/ventas-leche', icon: Milk, title: t('finance:panel.milkSales.title', { defaultValue: 'Ventas de leche' }), description: t('finance:panel.milkSales.desc', { defaultValue: 'Leche entregada al comprador y su precio.' }) }
+    { to: '/panel/dinero/gastos', icon: MinusCircle, title: t('finance:panel.expenses.title'), description: t('finance:panel.expenses.desc') },
+    { to: '/panel/dinero/ingresos', icon: PlusCircle, title: t('finance:panel.incomes.title'), description: t('finance:panel.incomes.desc') },
+    { to: '/panel/dinero/ventas-animales', icon: Handshake, title: t('finance:panel.animalSales.title'), description: t('finance:panel.animalSales.desc') },
+    { to: '/panel/dinero/ventas-leche', icon: Milk, title: t('finance:panel.milkSales.title'), description: t('finance:panel.milkSales.desc') }
   ];
 
   return (

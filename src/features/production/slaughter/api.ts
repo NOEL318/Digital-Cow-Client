@@ -37,7 +37,13 @@ export function useCreateSlaughterResult() {
   return useMutation({
     mutationFn: async (body: SlaughterResultCreate) =>
       (await http.post<SlaughterResult>('/production/slaughter-results', body)).data,
-    onSuccess: () => qc.invalidateQueries({ queryKey: QK })
+    onSuccess: (_data, body) => {
+      qc.invalidateQueries({ queryKey: QK });
+      qc.invalidateQueries({ queryKey: ['dashboard', 'production'] });
+      if (body.animalId) {
+        qc.invalidateQueries({ queryKey: ['animal', body.animalId] });
+      }
+    }
   });
 }
 
@@ -47,7 +53,12 @@ export function useUpdateSlaughterResult() {
   return useMutation({
     mutationFn: async ({ id, body }: { id: number; body: Partial<SlaughterResultCreate> }) =>
       (await http.patch<SlaughterResult>(`/production/slaughter-results/${id}`, body)).data,
-    onSuccess: () => qc.invalidateQueries({ queryKey: QK })
+    onSuccess: (_data, vars) => {
+      qc.invalidateQueries({ queryKey: QK });
+      if (vars.body.animalId) {
+        qc.invalidateQueries({ queryKey: ['animal', vars.body.animalId] });
+      }
+    }
   });
 }
 
@@ -57,6 +68,9 @@ export function useDeleteSlaughterResult() {
   return useMutation({
     mutationFn: async (id: number) =>
       (await http.delete(`/production/slaughter-results/${id}`)).data,
-    onSuccess: () => qc.invalidateQueries({ queryKey: QK })
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: QK });
+      qc.invalidateQueries({ queryKey: ['animal'] });
+    }
   });
 }

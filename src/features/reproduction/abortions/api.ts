@@ -33,6 +33,8 @@ export function useCreateAbortion() {
     onSuccess: (_data, body) => {
       qc.invalidateQueries({ queryKey: QK });
       qc.invalidateQueries({ queryKey: ['reproduction', 'alerts'] });
+      qc.invalidateQueries({ queryKey: ['dashboard', 'reproduction'] });
+      qc.invalidateQueries({ queryKey: ['reproduction', 'kpis'] });
       if (body.animalId) qc.invalidateQueries({ queryKey: ['animal', body.animalId] });
     }
   });
@@ -46,6 +48,9 @@ export function useUpdateAbortion() {
       (await http.patch<Abortion>(`/reproduction/abortions/${id}`, body)).data,
     onSuccess: (_data, vars) => {
       qc.invalidateQueries({ queryKey: QK });
+      qc.invalidateQueries({ queryKey: ['dashboard', 'reproduction'] });
+      qc.invalidateQueries({ queryKey: ['reproduction', 'alerts'] });
+      qc.invalidateQueries({ queryKey: ['reproduction', 'kpis'] });
       if (vars.body.animalId) qc.invalidateQueries({ queryKey: ['animal', vars.body.animalId] });
     }
   });
@@ -60,6 +65,9 @@ export function useDeleteAbortion() {
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: QK });
       qc.invalidateQueries({ queryKey: ['animal'] });
+      qc.invalidateQueries({ queryKey: ['dashboard', 'reproduction'] });
+      qc.invalidateQueries({ queryKey: ['reproduction', 'alerts'] });
+      qc.invalidateQueries({ queryKey: ['reproduction', 'kpis'] });
     }
   });
 }

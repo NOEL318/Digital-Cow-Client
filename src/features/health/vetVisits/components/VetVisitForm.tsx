@@ -42,7 +42,7 @@ export function VetVisitForm({ defaultValues, onSubmit, submitting }: Props) {
         {errors.ranchId && <p className="text-destructive text-sm">{errors.ranchId.message}</p>}
       </div>
       <div>
-        <Label htmlFor="visitedAt">{t('health:visit.title')}</Label>
+        <Label htmlFor="visitedAt">{t('health:visit.visitedAt')}</Label>
         <Input id="visitedAt" type="date" {...register('visitedAt')} />
       </div>
       <div>

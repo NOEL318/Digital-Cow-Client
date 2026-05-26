@@ -5,7 +5,9 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/ui/table';
 import { useSemenStraws, useCreateSemenStraw } from '@/features/reproduction/semen/api';
 import { useBulls } from '@/features/reproduction/bulls/api';
 import { SemenStrawForm } from '@/features/reproduction/semen/components/SemenStrawForm';
@@ -39,28 +41,32 @@ export default function SemenPage() {
           </DialogContent>
         </Dialog>
       </div>
-      <table className="w-full border rounded">
-        <thead>
-          <tr className="bg-muted">
-            <th className="p-2 text-left">{t('reproduction:semen.bull')}</th>
-            <th className="p-2 text-left">{t('reproduction:semen.batchNumber')}</th>
-            <th className="p-2 text-right">{t('reproduction:semen.availableQuantity')}</th>
-            <th className="p-2 text-right">{t('reproduction:semen.totalQuantity')}</th>
-            <th className="p-2 text-left">{t('reproduction:semen.expiresAt')}</th>
-          </tr>
-        </thead>
-        <tbody>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>{t('reproduction:semen.bull')}</TableHead>
+            <TableHead>{t('reproduction:semen.batchNumber')}</TableHead>
+            <TableHead className="text-right">{t('reproduction:semen.availableQuantity')}</TableHead>
+            <TableHead className="text-right">{t('reproduction:semen.totalQuantity')}</TableHead>
+            <TableHead>{t('reproduction:semen.expiresAt')}</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
           {straws.data?.map(s => (
-            <tr key={s.id} className="border-t">
-              <td className="p-2">{bullName(s.bullId)}</td>
-              <td className="p-2">{s.batchNumber ?? '-'}</td>
-              <td className="p-2 text-right">{s.availableQuantity}</td>
-              <td className="p-2 text-right">{s.totalQuantity}</td>
-              <td className="p-2">{s.expiresAt ?? '-'}</td>
-            </tr>
+            <TableRow key={s.id}>
+              <TableCell>{bullName(s.bullId)}</TableCell>
+              <TableCell>{s.batchNumber ?? '-'}</TableCell>
+              <TableCell className="text-right">
+                <Badge tone={s.availableQuantity === 0 ? 'danger' : s.availableQuantity < 5 ? 'warning' : 'success'}>
+                  {s.availableQuantity}
+                </Badge>
+              </TableCell>
+              <TableCell className="text-right">{s.totalQuantity}</TableCell>
+              <TableCell>{s.expiresAt ?? '-'}</TableCell>
+            </TableRow>
           ))}
-        </tbody>
-      </table>
+        </TableBody>
+      </Table>
     </div>
   );
 }

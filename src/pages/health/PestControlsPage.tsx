@@ -6,6 +6,15 @@ import { useTranslation } from 'react-i18next';
 import { Plus } from 'lucide-react';
 import i18n from '@/lib/i18n';
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import {
+  Table,
+  TableHeader,
+  TableBody,
+  TableRow,
+  TableHead,
+  TableCell
+} from '@/components/ui/table';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { useCreatePestControl, usePestControls } from '@/features/health/pestControls/api';
 import { PestControlForm } from '@/features/health/pestControls/components/PestControlForm';
@@ -23,9 +32,21 @@ export default function PestControlsPage() {
   const create = useCreatePestControl();
   const locale = i18n.language;
 
+  const today = new Date().toISOString().slice(0, 10);
+
   const pestName = (id: number) => {
     const p = pests.data?.find(x => x.id === id);
     return p ? localizedName(p, locale) : '-';
+  };
+
+  const nextApplicationBadge = (date: string | null | undefined) => {
+    if (!date) return <span className="text-muted-foreground">-</span>;
+    if (date < today) return <Badge tone="danger">{date}</Badge>;
+    const soon = new Date(today);
+    soon.setDate(soon.getDate() + 7);
+    const soonStr = soon.toISOString().slice(0, 10);
+    if (date <= soonStr) return <Badge tone="warning">{date}</Badge>;
+    return <Badge tone="success">{date}</Badge>;
   };
 
   return (
@@ -45,26 +66,26 @@ export default function PestControlsPage() {
           </DialogContent>
         </Dialog>
       </div>
-      <table className="w-full border rounded">
-        <thead>
-          <tr className="bg-muted">
-            <th className="p-2 text-left">{t('health:pest.appliedAt')}</th>
-            <th className="p-2 text-left">{t('health:pest.pest')}</th>
-            <th className="p-2 text-left">{t('health:pest.product')}</th>
-            <th className="p-2 text-left">{t('health:pest.nextApplication')}</th>
-          </tr>
-        </thead>
-        <tbody>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>{t('health:pest.appliedAt')}</TableHead>
+            <TableHead>{t('health:pest.pest')}</TableHead>
+            <TableHead>{t('health:pest.product')}</TableHead>
+            <TableHead>{t('health:pest.nextApplication')}</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
           {list.data?.map(p => (
-            <tr key={p.id} className="border-t">
-              <td className="p-2">{p.appliedAt}</td>
-              <td className="p-2">{pestName(p.pestId)}</td>
-              <td className="p-2">{p.productUsed}</td>
-              <td className="p-2">{p.nextApplicationAt ?? '-'}</td>
-            </tr>
+            <TableRow key={p.id}>
+              <TableCell>{p.appliedAt}</TableCell>
+              <TableCell>{pestName(p.pestId)}</TableCell>
+              <TableCell>{p.productUsed}</TableCell>
+              <TableCell>{nextApplicationBadge(p.nextApplicationAt)}</TableCell>
+            </TableRow>
           ))}
-        </tbody>
-      </table>
+        </TableBody>
+      </Table>
     </div>
   );
 }

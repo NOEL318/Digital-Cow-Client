@@ -3,6 +3,7 @@
  * que muestra peso, alimento, gastos e ingresos mes a mes.
  */
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   ResponsiveContainer, ComposedChart, Line, Bar, CartesianGrid,
   XAxis, YAxis, Tooltip, Legend
@@ -12,11 +13,12 @@ import { PageHelp } from '@/components/ui/page-help';
 
 type Series = 'weight' | 'feed' | 'expense' | 'income';
 
-const SERIES_META: Record<Series, { label: string; color: string; unit: string; kind: 'line' | 'bar' }> = {
-  weight: { label: 'Peso (kilogramos)', color: '#0f766e', unit: 'kg', kind: 'line' },
-  feed: { label: 'Alimento del lote (kilogramos)', color: '#a16207', unit: 'kg', kind: 'bar' },
-  expense: { label: 'Gasto del mes', color: '#be185d', unit: '$', kind: 'bar' },
-  income: { label: 'Ingreso del mes', color: '#0369a1', unit: '$', kind: 'bar' }
+// Semantic colors: income=success/green, expense=danger/red, weight=info/blue, feed=amber
+const SERIES_COLORS: Record<Series, string> = {
+  weight:  '#0ea5e9', // info blue
+  feed:    '#f59e0b', // amber/warning
+  expense: '#dc2626', // danger red
+  income:  '#16a34a'  // success green
 };
 
 const DEFAULT_SELECTED: Record<Series, boolean> = {
@@ -36,8 +38,16 @@ interface ComparisonChartProps {
  * leyenda interactiva con tooltips claros y unidades completas.
  */
 export function ComparisonChart({ animalId }: ComparisonChartProps) {
+  const { t } = useTranslation(['finance']);
   const { data, isLoading } = useAnimalComparison({ animalId });
   const [selected, setSelected] = useState<Record<Series, boolean>>(DEFAULT_SELECTED);
+
+  const SERIES_META: Record<Series, { label: string; unit: string; kind: 'line' | 'bar' }> = {
+    weight:  { label: t('finance:comparison.weight'),  unit: 'kg', kind: 'line' },
+    feed:    { label: t('finance:comparison.feed'),    unit: 'kg', kind: 'bar' },
+    expense: { label: t('finance:comparison.expense'), unit: '$',  kind: 'bar' },
+    income:  { label: t('finance:comparison.income'),  unit: '$',  kind: 'bar' }
+  };
 
   function toggle(s: Series) {
     setSelected(prev => ({ ...prev, [s]: !prev[s] }));
@@ -54,7 +64,7 @@ export function ComparisonChart({ animalId }: ComparisonChartProps) {
   return (
     <section className="space-y-3 rounded-2xl border p-4">
       <header className="flex flex-wrap items-center justify-between gap-3">
-        <h2 className="text-lg font-bold">Comparacion mes a mes</h2>
+        <h2 className="text-lg font-bold">{t('finance:comparison.title')}</h2>
         <div className="flex flex-wrap gap-2">
           {(Object.keys(SERIES_META) as Series[]).map(s => (
             <button
@@ -68,7 +78,7 @@ export function ComparisonChart({ animalId }: ComparisonChartProps) {
             >
               <span
                 className="inline-block h-3 w-3 rounded-full"
-                style={{ backgroundColor: SERIES_META[s].color }}
+                style={{ backgroundColor: SERIES_COLORS[s] }}
                 aria-hidden
               />
               {SERIES_META[s].label}
@@ -78,10 +88,10 @@ export function ComparisonChart({ animalId }: ComparisonChartProps) {
       </header>
 
       {isLoading ? (
-        <p className="text-muted-foreground py-8 text-center">Cargando...</p>
+        <p className="text-muted-foreground py-8 text-center">{t('finance:comparison.loading')}</p>
       ) : !data || chartData.length === 0 ? (
         <p className="text-muted-foreground py-8 text-center">
-          Aun no hay suficientes datos para comparar.
+          {t('finance:comparison.noData')}
         </p>
       ) : (
         <div style={{ width: '100%', height: 320 }}>
@@ -98,23 +108,23 @@ export function ComparisonChart({ animalId }: ComparisonChartProps) {
               }} />
               <Legend />
               {selected.weight ? (
-                <Line yAxisId="left" type="monotone" dataKey="weight" name={SERIES_META.weight.label} stroke={SERIES_META.weight.color} strokeWidth={2} dot={{ r: 3 }} connectNulls />
+                <Line yAxisId="left" type="monotone" dataKey="weight" name={SERIES_META.weight.label} stroke={SERIES_COLORS.weight} strokeWidth={2} dot={{ r: 3 }} connectNulls />
               ) : null}
               {selected.feed ? (
-                <Bar yAxisId="left" dataKey="feed" name={SERIES_META.feed.label} fill={SERIES_META.feed.color} />
+                <Bar yAxisId="left" dataKey="feed" name={SERIES_META.feed.label} fill={SERIES_COLORS.feed} />
               ) : null}
               {selected.expense ? (
-                <Bar yAxisId="right" dataKey="expense" name={SERIES_META.expense.label} fill={SERIES_META.expense.color} />
+                <Bar yAxisId="right" dataKey="expense" name={SERIES_META.expense.label} fill={SERIES_COLORS.expense} />
               ) : null}
               {selected.income ? (
-                <Bar yAxisId="right" dataKey="income" name={SERIES_META.income.label} fill={SERIES_META.income.color} />
+                <Bar yAxisId="right" dataKey="income" name={SERIES_META.income.label} fill={SERIES_COLORS.income} />
               ) : null}
             </ComposedChart>
           </ResponsiveContainer>
         </div>
       )}
 
-      <PageHelp text="Compara cuatro cosas del mismo animal en el mismo gráfico, mes a mes: cuánto pesa, cuánto alimento consumió su lote, cuánto te costó (medicinas, vacunas, gastos asignados) y cuánto te ha dado (ventas de leche, venta del animal). Sirve para responder: ¿esta vaca produce más de lo que cuesta? ¿está subiendo de peso? Toca los chips de arriba para encender o apagar cada serie." />
+      <PageHelp text={t('finance:comparison.help')} />
     </section>
   );
 }

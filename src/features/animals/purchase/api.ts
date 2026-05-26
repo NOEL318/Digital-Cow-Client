@@ -49,8 +49,9 @@ export function useCreateAnimalWithPurchase() {
       const { data } = await http.post<AnimalPurchaseResponse>('/animals/with-purchase', body);
       return data;
     },
-    onSuccess: () => {
+    onSuccess: (r) => {
       qc.invalidateQueries({ queryKey: ['animals'] });
+      qc.invalidateQueries({ queryKey: ['animal', r.animal.id] });
       qc.invalidateQueries({ queryKey: ['finance', 'expenses'] });
       qc.invalidateQueries({ queryKey: ['dashboard'] });
     }

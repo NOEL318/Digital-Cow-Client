@@ -86,7 +86,7 @@ export function PestControlForm({ defaultValues, onSubmit, submitting }: Props) 
         <Input id="productUsed" {...register('productUsed')} />
       </div>
       <div>
-        <Label htmlFor="dose">Dose</Label>
+        <Label htmlFor="dose">{t('health:pest.dose')}</Label>
         <Input id="dose" {...register('dose')} />
       </div>
       <div>
@@ -98,7 +98,7 @@ export function PestControlForm({ defaultValues, onSubmit, submitting }: Props) 
         <Input id="nextApplicationAt" type="date" {...register('nextApplicationAt')} />
       </div>
       <div>
-        <Label htmlFor="cost">Cost</Label>
+        <Label htmlFor="cost">{t('health:pest.cost')}</Label>
         <Input
           id="cost"
           type="number"

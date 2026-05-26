@@ -3,6 +3,7 @@
  */
 import { useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { useTranslation } from 'react-i18next';
 import { MapPin, Boxes } from 'lucide-react';
 import { ranchApi } from '@/features/ranches/api';
 import { useAnimals } from '@/features/animals/api';
@@ -33,6 +34,7 @@ interface WizardLocationSelectorProps {
  * estetica del wizard de ordeno: rapido, simple, visual.
  */
 export function WizardLocationSelector({ value, onChange, optionalAnimal, sexFilter }: WizardLocationSelectorProps) {
+  const { t } = useTranslation('wizard');
   const ranches = useQuery({ queryKey: ['ranches'], queryFn: ranchApi.list });
   const lots = useQuery({
     queryKey: ['ranches', value.ranchId, 'lots'],
@@ -74,7 +76,7 @@ export function WizardLocationSelector({ value, onChange, optionalAnimal, sexFil
         <section className="space-y-2">
           <p className="text-sm font-semibold flex items-center gap-1">
             <MapPin className="h-4 w-4 text-primary" aria-hidden />
-            Rancho
+            {t('location.ranch')}
           </p>
           <ChipRow
             options={ranchesList.map(r => ({ id: r.id, label: r.name }))}
@@ -85,7 +87,7 @@ export function WizardLocationSelector({ value, onChange, optionalAnimal, sexFil
       ) : ranchesList.length === 1 && value.ranchId != null ? (
         <p className="text-xs text-muted-foreground inline-flex items-center gap-1">
           <MapPin className="h-3 w-3" aria-hidden />
-          Rancho: <span className="font-semibold text-foreground">{ranchesList[0].name}</span>
+          {t('location.ranchLabel')}<span className="font-semibold text-foreground">{ranchesList[0].name}</span>
         </p>
       ) : null}
 
@@ -94,11 +96,11 @@ export function WizardLocationSelector({ value, onChange, optionalAnimal, sexFil
         <section className="space-y-2">
           <p className="text-sm font-semibold flex items-center gap-1">
             <Boxes className="h-4 w-4 text-primary" aria-hidden />
-            Lote / corral
+            {t('location.lot')}
           </p>
           <ChipRow
             options={[
-              { id: null, label: 'Sin lote' },
+              { id: null, label: t('location.noLot') },
               ...lotsList.map(l => ({ id: l.id, label: l.name }))
             ]}
             value={value.lotId}
@@ -108,7 +110,7 @@ export function WizardLocationSelector({ value, onChange, optionalAnimal, sexFil
       ) : value.ranchId != null && lotsList.length === 1 && value.lotId != null ? (
         <p className="text-xs text-muted-foreground inline-flex items-center gap-1">
           <Boxes className="h-3 w-3" aria-hidden />
-          Lote: <span className="font-semibold text-foreground">{lotsList[0].name}</span>
+          {t('location.lotLabel')}<span className="font-semibold text-foreground">{lotsList[0].name}</span>
         </p>
       ) : null}
 
@@ -116,11 +118,11 @@ export function WizardLocationSelector({ value, onChange, optionalAnimal, sexFil
       {value.ranchId != null ? (
         <section className="space-y-2">
           <p className="text-sm font-semibold">
-            {optionalAnimal ? 'Animal (opcional)' : 'Animal'}
+            {optionalAnimal ? t('location.animalOptional') : t('location.animal')}
           </p>
           {animalsList.length === 0 ? (
             <p className="text-sm text-muted-foreground">
-              No hay animales activos en este {value.lotId ? 'lote' : 'rancho'}.
+              {t('noAnimalsActive', { context: value.lotId ? t('lot') : t('ranch') })}
             </p>
           ) : (
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 max-h-96 overflow-y-auto">

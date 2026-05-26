@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { useTranslation } from 'react-i18next';
 import { Map as MapIcon, MapPin } from 'lucide-react';
 import { ranchApi } from '@/features/ranches/api';
 import type { Ranch, Lot } from '@/features/ranches/types';
@@ -19,17 +20,18 @@ interface RanchPickerProps {
  * el ranchero ve y elige sin tener que desplegar listas.
  */
 export function RanchPicker({ value, onChange, allowAll }: RanchPickerProps) {
+  const { t } = useTranslation('common');
   const ranches = useQuery({ queryKey: ['ranches'], queryFn: ranchApi.list });
   const items = ranches.data ?? [];
 
   if (items.length === 0) {
-    return <p className="text-sm text-muted-foreground">Aún no tienes ranchos registrados.</p>;
+    return <p className="text-sm text-muted-foreground">{t('ranchPicker.noRanches')}</p>;
   }
 
   return (
-    <div role="radiogroup" aria-label="Rancho" className="flex flex-wrap gap-2">
+    <div role="radiogroup" aria-label={t('ranchPicker.ariaLabel')} className="flex flex-wrap gap-2">
       {allowAll ? (
-        <Chip selected={value == null} onClick={() => onChange(null)} label="Todos" icon={MapIcon} />
+        <Chip selected={value == null} onClick={() => onChange(null)} label={t('ranchPicker.allLabel')} icon={MapIcon} />
       ) : null}
       {items.map(r => (
         <Chip
@@ -56,6 +58,7 @@ interface LotPickerProps {
  * ranchId que se le pasa. Si no hay rancho elegido, muestra ayuda.
  */
 export function LotPicker({ ranchId, value, onChange, allowAll }: LotPickerProps) {
+  const { t } = useTranslation('common');
   const lots = useQuery({
     queryKey: ['ranches', ranchId, 'lots'],
     queryFn: () => ranchApi.listLots(ranchId as number),
@@ -64,16 +67,16 @@ export function LotPicker({ ranchId, value, onChange, allowAll }: LotPickerProps
   const items = lots.data ?? [];
 
   if (!ranchId) {
-    return <p className="text-sm text-muted-foreground">Elige primero un rancho.</p>;
+    return <p className="text-sm text-muted-foreground">{t('lotPicker.pickRanchFirst')}</p>;
   }
   if (items.length === 0) {
-    return <p className="text-sm text-muted-foreground">Este rancho aún no tiene lotes.</p>;
+    return <p className="text-sm text-muted-foreground">{t('lotPicker.noLots')}</p>;
   }
 
   return (
-    <div role="radiogroup" aria-label="Lote" className="flex flex-wrap gap-2">
+    <div role="radiogroup" aria-label={t('lotPicker.ariaLabel')} className="flex flex-wrap gap-2">
       {allowAll ? (
-        <Chip selected={value == null} onClick={() => onChange(null)} label="Todos los lotes" icon={MapIcon} />
+        <Chip selected={value == null} onClick={() => onChange(null)} label={t('lotPicker.allLabel')} icon={MapIcon} />
       ) : null}
       {items.map(l => (
         <Chip

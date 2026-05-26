@@ -14,7 +14,7 @@ void i18n
   .init({
     fallbackLng: 'es',
     supportedLngs: ['es', 'en'],
-    ns: ['common', 'auth', 'animals', 'dashboard', 'team', 'ranches', 'errors', 'health', 'catalog', 'alerts', 'reproduction', 'reproductionAlerts', 'production', 'feeding', 'finance', 'reports'],
+    ns: ['common', 'auth', 'animals', 'dashboard', 'team', 'ranches', 'errors', 'health', 'catalog', 'alerts', 'reproduction', 'reproductionAlerts', 'production', 'feeding', 'finance', 'reports', 'wizard'],
     defaultNS: 'common',
     backend: { loadPath: '/locales/{{lng}}/{{ns}}.json' },
     detection: { order: ['localStorage', 'navigator'], caches: ['localStorage'] },

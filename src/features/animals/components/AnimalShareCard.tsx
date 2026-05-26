@@ -4,10 +4,13 @@
 import { useEffect, useRef, useState } from 'react';
 import { QRCodeSVG } from 'qrcode.react';
 import { Share2, Printer, MessageCircle, X } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import type { AnimalResponse } from '@/features/animals/types';
 import { AnimalAvatar } from '@/components/ui/animal-avatar';
 import { BigButton } from '@/components/ui/big-button';
+import { Badge } from '@/components/ui/badge';
 import { useShareToken } from '@/features/animals/share/api';
+import { sexStyle } from '@/features/animals/sex-style';
 
 interface AnimalShareCardProps {
   open: boolean;
@@ -27,10 +30,12 @@ interface AnimalShareCardProps {
 export function AnimalShareCard({
   open, animal, coverPhotoUrl, daysInMilk, lastCalving, onClose
 }: AnimalShareCardProps) {
+  const { t } = useTranslation('animals');
   const cardRef = useRef<HTMLDivElement>(null);
   const tokenMutation = useShareToken();
   const [publicUrl, setPublicUrl] = useState<string | null>(null);
   const [tokenError, setTokenError] = useState<string | null>(null);
+  const sx = sexStyle(animal.sex);
 
   useEffect(() => {
     if (!open) {
@@ -45,7 +50,7 @@ export function AnimalShareCard({
         setPublicUrl(`${window.location.origin}/compartir/animal/${r.shareToken}`);
       })
       .catch(() => {
-        if (!cancelled) setTokenError('No pudimos generar el enlace.');
+        if (!cancelled) setTokenError(t('share.linkError'));
       });
     return () => { cancelled = true; };
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -57,13 +62,13 @@ export function AnimalShareCard({
     if (!publicUrl) return;
     const lines = [
       `*${animal.internalTag}* ${animal.name ? `· ${animal.name}` : ''}`.trim(),
-      `Sexo: ${animal.sex === 'FEMALE' ? 'Hembra' : 'Macho'}`,
-      `Estado: ${animal.status}`
+      t('share.sex', { value: t(`sex.${animal.sex}`) }),
+      t('share.status', { value: t(`status.${animal.status}`) })
     ];
-    if (animal.birthDate) lines.push(`Nació: ${animal.birthDate}`);
-    if (daysInMilk != null) lines.push(`Días en leche: ${daysInMilk}`);
-    if (lastCalving) lines.push(`Último parto: ${lastCalving}`);
-    lines.push('', `Ve sus estadísticas: ${publicUrl}`);
+    if (animal.birthDate) lines.push(t('share.born', { date: animal.birthDate }));
+    if (daysInMilk != null) lines.push(t('share.daysInMilk', { days: daysInMilk }));
+    if (lastCalving) lines.push(t('share.lastCalving', { date: lastCalving }));
+    lines.push('', t('share.statsLink', { url: publicUrl }));
     const url = `https://wa.me/?text=${encodeURIComponent(lines.join('\n'))}`;
     window.open(url, '_blank');
   }
@@ -84,12 +89,12 @@ export function AnimalShareCard({
         <header className="flex items-center justify-between print:hidden">
           <h2 className="text-lg font-bold flex items-center gap-2">
             <Share2 className="h-5 w-5 text-primary" aria-hidden />
-            Compartir / Imprimir
+            {t('share.title')}
           </h2>
           <button
             type="button"
             onClick={onClose}
-            aria-label="Cerrar"
+            aria-label={t('share.close')}
             className="p-2 rounded-full hover:bg-accent"
           >
             <X className="h-5 w-5" aria-hidden />
@@ -107,16 +112,27 @@ export function AnimalShareCard({
             <div className="flex-1 min-w-0">
               <p className="text-2xl font-bold leading-tight">{animal.internalTag}</p>
               {animal.name ? <p className="text-base">{animal.name}</p> : null}
-              <p className="text-xs text-muted-foreground">
-                {animal.sex === 'FEMALE' ? 'Hembra' : 'Macho'} · {animal.status}
-              </p>
+              <div className="flex items-center gap-2 mt-1 flex-wrap">
+                <Badge tone={animal.sex === 'FEMALE' ? 'pink' : 'graphite'}>
+                  {t(`sex.${animal.sex}`)}
+                </Badge>
+                <span className={`text-xs font-medium ${sx.text}`}>
+                  {t(`status.${animal.status}`)}
+                </span>
+              </div>
             </div>
           </div>
 
           <div className="text-sm space-y-1">
-            {animal.birthDate ? <p><span className="text-muted-foreground">Nació:</span> {animal.birthDate}</p> : null}
-            {daysInMilk != null ? <p><span className="text-muted-foreground">Días en leche:</span> {daysInMilk}</p> : null}
-            {lastCalving ? <p><span className="text-muted-foreground">Último parto:</span> {lastCalving}</p> : null}
+            {animal.birthDate ? (
+              <p><span className="text-muted-foreground">{t('print.rows.birthDate')}:</span> {animal.birthDate}</p>
+            ) : null}
+            {daysInMilk != null ? (
+              <p><span className="text-muted-foreground">{t('publicShare.fields.daysInMilk')}:</span> {daysInMilk}</p>
+            ) : null}
+            {lastCalving ? (
+              <p><span className="text-muted-foreground">{t('print.rows.lastCalving')}:</span> {lastCalving}</p>
+            ) : null}
           </div>
 
           <div className="flex justify-center pt-2">
@@ -124,7 +140,7 @@ export function AnimalShareCard({
               <QRCodeSVG value={publicUrl} size={140} includeMargin />
             ) : (
               <div className="h-[140px] w-[140px] flex items-center justify-center text-xs text-muted-foreground">
-                Generando enlace...
+                {t('share.generatingLink')}
               </div>
             )}
           </div>
@@ -135,13 +151,13 @@ export function AnimalShareCard({
             <p role="alert" className="text-xs text-center text-destructive">{tokenError}</p>
           ) : null}
           <p className="text-[11px] text-center text-muted-foreground italic">
-            Quien reciba el enlace verá solo las estadísticas del animal, sin poder modificar nada.
+            {t('share.disclaimer')}
           </p>
         </div>
 
         <div className="flex justify-between gap-3 print:hidden">
-          <BigButton label="Imprimir PDF" icon={Printer} variant="outline" onClick={printCard} />
-          <BigButton label="WhatsApp" icon={MessageCircle} onClick={shareWhatsApp} disabled={!publicUrl} />
+          <BigButton label={t('share.printPdf')} icon={Printer} variant="outline" onClick={printCard} />
+          <BigButton label={t('share.whatsapp')} icon={MessageCircle} onClick={shareWhatsApp} disabled={!publicUrl} />
         </div>
       </div>
     </div>

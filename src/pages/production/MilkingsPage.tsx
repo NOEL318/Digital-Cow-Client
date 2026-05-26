@@ -3,6 +3,7 @@
  */
 import { useQuery } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { Plus, Milk, Sun, Moon } from 'lucide-react';
 import { useMilkings } from '@/features/production/milkings/api';
 import { animalsApi } from '@/features/animals/api';
@@ -11,6 +12,7 @@ import type { AnimalListItem } from '@/features/animals/types';
 import { BigButton } from '@/components/ui/big-button';
 import { EmptyState } from '@/components/ui/empty-state';
 import { AnimalAvatar } from '@/components/ui/animal-avatar';
+import { Badge } from '@/components/ui/badge';
 
 /**
  * Listado simple de ordeños. La captura se hace via wizard
@@ -18,6 +20,7 @@ import { AnimalAvatar } from '@/components/ui/animal-avatar';
  * foto del animal, fecha y litros.
  */
 export default function MilkingsPage() {
+  const { t } = useTranslation(['production', 'common']);
   const milkings = useMilkings();
   const animals = useQuery({
     queryKey: ['animals', { size: 999 }],
@@ -32,28 +35,30 @@ export default function MilkingsPage() {
       <header className="flex flex-wrap items-center justify-between gap-3">
         <h1 className="text-2xl font-bold flex items-center gap-2">
           <Milk className="h-6 w-6 text-primary" aria-hidden />
-          Ordeños
+          {t('production:milking.title')}
         </h1>
         <BigButton
-          label="Nuevo ordeño"
+          label={t('production:milking.new')}
           icon={Plus}
           onClick={() => window.location.assign('/hacer-nota/ordene')}
         />
       </header>
 
       {milkings.isLoading ? (
-        <p className="text-muted-foreground">Cargando...</p>
+        <p className="text-muted-foreground">{t('common:loading')}</p>
       ) : !milkings.data || milkings.data.length === 0 ? (
         <EmptyState
           icon={Milk}
-          title="Aún no hay ordeños registrados"
-          description="Cuando ordeñes una vaca, registralo desde Hacer una nota."
-          ctaLabel="Registrar ordeño"
+          title={t('production:tab.empty')}
+          description={t('production:milking.noActiveAnimals')}
+          ctaLabel={t('production:milking.new')}
           onCta={() => window.location.assign('/hacer-nota/ordene')}
         />
       ) : (
         <ul className="divide-y border rounded-xl overflow-hidden">
-          {milkings.data.map(m => <MilkingRow key={m.id} milking={m} animal={animalsById.get(m.animalId)} />)}
+          {milkings.data.map(m => (
+            <MilkingRow key={m.id} milking={m} animal={animalsById.get(m.animalId)} />
+          ))}
         </ul>
       )}
     </div>
@@ -61,8 +66,18 @@ export default function MilkingsPage() {
 }
 
 function MilkingRow({ milking, animal }: { milking: Milking; animal?: AnimalListItem }) {
+  const { t } = useTranslation('production');
   const SessionIcon = milking.session === 'AM' ? Sun : milking.session === 'PM' ? Moon : Milk;
-  const sessionLabel = milking.session === 'AM' ? 'Mañana' : milking.session === 'PM' ? 'Tarde' : 'Día';
+  const sessionLabel =
+    milking.session === 'AM'
+      ? t('milkingRow.morning')
+      : milking.session === 'PM'
+      ? t('milkingRow.afternoon')
+      : t('milkingRow.day');
+
+  const sessionTone =
+    milking.session === 'AM' ? 'warning' : milking.session === 'PM' ? 'info' : 'neutral';
+
   return (
     <li>
       <Link
@@ -87,10 +102,19 @@ function MilkingRow({ milking, animal }: { milking: Milking; animal?: AnimalList
             {animal?.name ? <span className="text-muted-foreground"> · {animal.name}</span> : null}
           </p>
           <p className="text-xs text-muted-foreground inline-flex items-center gap-1">
-            <SessionIcon className="h-3 w-3" aria-hidden /> {sessionLabel} · {milking.milkingDate}
+            <SessionIcon className="h-3 w-3" aria-hidden />
+            <Badge tone={sessionTone}>{sessionLabel}</Badge>
+            <span>{milking.milkingDate}</span>
           </p>
         </div>
-        <span className="text-2xl font-bold text-primary">{milking.liters}<span className="text-xs text-muted-foreground font-normal"> litros</span></span>
+        <div className="text-right">
+          <span className="text-2xl font-bold text-green-700 dark:text-green-400">
+            {milking.liters}
+          </span>
+          <span className="text-xs text-muted-foreground font-normal ml-1">
+            {t('milkingRow.liters')}
+          </span>
+        </div>
       </Link>
     </li>
   );

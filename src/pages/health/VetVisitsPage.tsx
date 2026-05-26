@@ -5,6 +5,14 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import {
+  Table,
+  TableHeader,
+  TableBody,
+  TableRow,
+  TableHead,
+  TableCell
+} from '@/components/ui/table';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { useCreateVetVisit, useVetVisits } from '@/features/health/vetVisits/api';
 import { VetVisitForm } from '@/features/health/vetVisits/components/VetVisitForm';
@@ -35,26 +43,26 @@ export default function VetVisitsPage() {
           </DialogContent>
         </Dialog>
       </div>
-      <table className="w-full border rounded">
-        <thead>
-          <tr className="bg-muted">
-            <th className="p-2 text-left">{t('health:visit.title')}</th>
-            <th className="p-2 text-left">{t('health:visit.vetName')}</th>
-            <th className="p-2 text-left">{t('health:visit.reason')}</th>
-            <th className="p-2 text-right">{t('health:visit.totalCost')}</th>
-          </tr>
-        </thead>
-        <tbody>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>{t('health:visit.visitedAt')}</TableHead>
+            <TableHead>{t('health:visit.vetName')}</TableHead>
+            <TableHead>{t('health:visit.reason')}</TableHead>
+            <TableHead className="text-right">{t('health:visit.totalCost')}</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
           {visits.data?.map(v => (
-            <tr key={v.id} className="border-t">
-              <td className="p-2">{v.visitedAt}</td>
-              <td className="p-2">{v.vetName}</td>
-              <td className="p-2">{v.reason}</td>
-              <td className="p-2 text-right">{v.totalCost ?? '-'}</td>
-            </tr>
+            <TableRow key={v.id}>
+              <TableCell>{v.visitedAt}</TableCell>
+              <TableCell>{v.vetName}</TableCell>
+              <TableCell>{v.reason}</TableCell>
+              <TableCell className="text-right">{v.totalCost ?? '-'}</TableCell>
+            </TableRow>
           ))}
-        </tbody>
-      </table>
+        </TableBody>
+      </Table>
     </div>
   );
 }

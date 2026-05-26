@@ -31,7 +31,11 @@ export function useUpdateFeedItem() {
   return useMutation({
     mutationFn: async ({ id, body }: { id: number; body: Partial<FeedItemCreate> }) =>
       (await http.patch<FeedItem>(`/feeding/items/${id}`, body)).data,
-    onSuccess: () => qc.invalidateQueries({ queryKey: QK })
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: QK });
+      qc.invalidateQueries({ queryKey: ['feeding', 'plans'] });
+      qc.invalidateQueries({ queryKey: ['feeding', 'cost-summary'] });
+    }
   });
 }
 
@@ -41,6 +45,10 @@ export function useDeleteFeedItem() {
   return useMutation({
     mutationFn: async (id: number) =>
       (await http.delete(`/feeding/items/${id}`)).data,
-    onSuccess: () => qc.invalidateQueries({ queryKey: QK })
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: QK });
+      qc.invalidateQueries({ queryKey: ['feeding', 'plans'] });
+      qc.invalidateQueries({ queryKey: ['feeding', 'cost-summary'] });
+    }
   });
 }

@@ -6,6 +6,9 @@ import { useTranslation } from 'react-i18next';
 import { Plus, Upload } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import {
+  Table, TableHeader, TableBody, TableRow, TableHead, TableCell
+} from '@/components/ui/table';
 import { useWeighings, useCreateWeighing, useBulkCreateWeighings } from '@/features/production/weighings/api';
 import { WeighingForm } from '@/features/production/weighings/components/WeighingForm';
 import { CsvImportDialog } from '@/features/csv-import/CsvImportDialog';
@@ -29,7 +32,7 @@ export default function WeighingsPage() {
         <h1 className="text-2xl font-bold">{t('production:weighing.title')}</h1>
         <div className="flex gap-2 flex-wrap">
           <Button variant="outline" onClick={() => setImportOpen(true)}>
-            <Upload className="h-4 w-4 mr-2" />Importar CSV
+            <Upload className="h-4 w-4 mr-2" />{t('production:csvImport.importCsv')}
           </Button>
           <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
@@ -45,40 +48,41 @@ export default function WeighingsPage() {
           </Dialog>
         </div>
       </div>
-      <table className="w-full border rounded">
-        <thead>
-          <tr className="bg-muted">
-            <th className="p-2 text-left">{t('production:weighing.weighedAt')}</th>
-            <th className="p-2 text-left">{t('production:weighing.animal')}</th>
-            <th className="p-2 text-left">{t('production:weighing.weightKg')}</th>
-            <th className="p-2 text-left">{t('production:weighing.method')}</th>
-            <th className="p-2 text-left">{t('production:weighing.bodyConditionScore')}</th>
-          </tr>
-        </thead>
-        <tbody>
+
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>{t('production:weighing.weighedAt')}</TableHead>
+            <TableHead>{t('production:weighing.animal')}</TableHead>
+            <TableHead>{t('production:weighing.weightKg')}</TableHead>
+            <TableHead>{t('production:weighing.method')}</TableHead>
+            <TableHead>{t('production:weighing.bodyConditionScore')}</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
           {weighings.data?.map(w => (
-            <tr key={w.id} className="border-t">
-              <td className="p-2">{w.weighedAt}</td>
-              <td className="p-2">{w.animalId}</td>
-              <td className="p-2">{w.weightKg}</td>
-              <td className="p-2">{w.method ? t(`production:weighing.methodValue.${w.method}`) : '-'}</td>
-              <td className="p-2">{w.bodyConditionScore ?? '-'}</td>
-            </tr>
+            <TableRow key={w.id}>
+              <TableCell>{w.weighedAt}</TableCell>
+              <TableCell>{w.animalId}</TableCell>
+              <TableCell>{w.weightKg}</TableCell>
+              <TableCell>{w.method ? t(`production:weighing.methodValue.${w.method}`) : '-'}</TableCell>
+              <TableCell>{w.bodyConditionScore ?? '-'}</TableCell>
+            </TableRow>
           ))}
-        </tbody>
-      </table>
+        </TableBody>
+      </Table>
 
       <CsvImportDialog<WeighingCreate>
         open={importOpen}
-        title="Importar pesajes desde CSV"
-        columnsHelp="Columnas requeridas: animalId, weighedAt (YYYY-MM-DD), weightKg. Opcionales: method, bodyConditionScore, notes."
+        title={t('production:csvImport.importWeighings')}
+        columnsHelp={t('production:csvImport.weighingsHelp')}
         parseRow={(row) => {
           const animalId = Number(row.animalId);
           const weightKg = Number(row.weightKg);
           const weighedAt = row.weighedAt?.trim();
-          if (!Number.isFinite(animalId) || animalId <= 0) return 'animalId inválido';
-          if (!Number.isFinite(weightKg) || weightKg <= 0) return 'weightKg inválido';
-          if (!weighedAt || !/^\d{4}-\d{2}-\d{2}$/.test(weighedAt)) return 'weighedAt debe ser YYYY-MM-DD';
+          if (!Number.isFinite(animalId) || animalId <= 0) return t('production:csvImport.invalidAnimalId');
+          if (!Number.isFinite(weightKg) || weightKg <= 0) return t('production:csvImport.invalidWeightKg');
+          if (!weighedAt || !/^\d{4}-\d{2}-\d{2}$/.test(weighedAt)) return t('production:csvImport.invalidWeighedAt');
           const bcs = row.bodyConditionScore ? Number(row.bodyConditionScore) : undefined;
           return {
             animalId,

@@ -13,37 +13,37 @@ import {
 interface Tile {
   to: string;
   icon: typeof Syringe;
-  label: string;
-  description: string;
+  /** id de traduccion bajo hacerNota.act.* o hacerNota.sec.* */
+  id: string;
 }
 
 const acciones: Tile[] = [
-  { to: '/hacer-nota/vacune', icon: Syringe, label: 'Vacuné', description: 'Registrar una vacuna que aplicaste.' },
-  { to: '/hacer-nota/pese', icon: Scale, label: 'Pesé', description: 'Anotar cuánto pesa un animal.' },
-  { to: '/hacer-nota/ordene', icon: Milk, label: 'Ordeñé', description: 'Registrar el ordeño de una vaca.' },
-  { to: '/hacer-nota/diagnostique', icon: Stethoscope, label: 'Diagnostiqué', description: 'Registrar una enfermedad o síntoma.' },
-  { to: '/hacer-nota/trate', icon: Pill, label: 'Traté', description: 'Aplicar un tratamiento con medicamento.' },
-  { to: '/hacer-nota/alimentar', icon: Wheat, label: 'Alimenté', description: 'Registrar comida dada a un lote.' },
-  { to: '/hacer-nota/celo', icon: Heart, label: 'Vi un celo', description: 'Anotar la detección de un celo.' },
-  { to: '/hacer-nota/servi', icon: Droplet, label: 'Inseminé / serví', description: 'Inseminación o monta.' },
-  { to: '/hacer-nota/preñez', icon: Sparkles, label: 'Detecté preñez', description: 'Registrar un chequeo de preñez.' },
-  { to: '/hacer-nota/parto', icon: Baby, label: 'Parió una vaca', description: 'Anotar un parto.' },
-  { to: '/hacer-nota/seque', icon: MilkOff, label: 'Sequé', description: 'Marcar una vaca como seca.' },
-  { to: '/hacer-nota/destete', icon: GraduationCap, label: 'Desteté', description: 'Registrar el destete de un becerro.' },
-  { to: '/hacer-nota/aborto', icon: HeartCrack, label: 'Aborto', description: 'Anotar la pérdida de una gestación.' },
-  { to: '/animales/nuevo', icon: ShoppingCart, label: 'Compré animal', description: 'Agregar un animal al rancho.' },
-  { to: '/panel/dinero/ventas-animales', icon: Handshake, label: 'Vendí animal', description: 'Registrar la venta de un animal.' },
-  { to: '/hacer-nota/gaste', icon: MinusCircle, label: 'Gasté', description: 'Anotar dinero que salió.' },
-  { to: '/hacer-nota/recibi', icon: PlusCircle, label: 'Recibí dinero', description: 'Anotar dinero que entró.' }
+  { to: '/hacer-nota/vacune', icon: Syringe, id: 'vacune' },
+  { to: '/hacer-nota/pese', icon: Scale, id: 'pese' },
+  { to: '/hacer-nota/ordene', icon: Milk, id: 'ordene' },
+  { to: '/hacer-nota/diagnostique', icon: Stethoscope, id: 'diagnostique' },
+  { to: '/hacer-nota/trate', icon: Pill, id: 'trate' },
+  { to: '/hacer-nota/alimentar', icon: Wheat, id: 'alimentar' },
+  { to: '/hacer-nota/celo', icon: Heart, id: 'celo' },
+  { to: '/hacer-nota/servi', icon: Droplet, id: 'servi' },
+  { to: '/hacer-nota/preñez', icon: Sparkles, id: 'prenez' },
+  { to: '/hacer-nota/parto', icon: Baby, id: 'parto' },
+  { to: '/hacer-nota/seque', icon: MilkOff, id: 'seque' },
+  { to: '/hacer-nota/destete', icon: GraduationCap, id: 'destete' },
+  { to: '/hacer-nota/aborto', icon: HeartCrack, id: 'aborto' },
+  { to: '/animales/nuevo', icon: ShoppingCart, id: 'compre' },
+  { to: '/panel/dinero/ventas-animales', icon: Handshake, id: 'vendi' },
+  { to: '/hacer-nota/gaste', icon: MinusCircle, id: 'gaste' },
+  { to: '/hacer-nota/recibi', icon: PlusCircle, id: 'recibi' }
 ];
 
 const verSecciones: Tile[] = [
-  { to: '/panel/salud', icon: HeartPulse, label: 'Salud', description: 'Vacunas, diagnósticos, tratamientos y alertas.' },
-  { to: '/panel/alimentacion', icon: Wheat, label: 'Alimentación', description: 'Insumos, planes y consumo del rancho.' },
-  { to: '/panel/dinero', icon: DollarSign, label: 'Dinero', description: 'Gastos, ingresos y resumen financiero.' },
-  { to: '/panel/produccion', icon: Beef, label: 'Producción', description: 'Pesajes, ordeños y curvas de producción.' },
-  { to: '/panel/reproduccion', icon: Baby, label: 'Reproducción', description: 'Celos, servicios, gestaciones y partos.' },
-  { to: '/panel/reportes', icon: FileBarChart, label: 'Reportes', description: 'Inventario, históricos y resumen mensual.' }
+  { to: '/panel/salud', icon: HeartPulse, id: 'salud' },
+  { to: '/panel/alimentacion', icon: Wheat, id: 'alimentacion' },
+  { to: '/panel/dinero', icon: DollarSign, id: 'dinero' },
+  { to: '/panel/produccion', icon: Beef, id: 'produccion' },
+  { to: '/panel/reproduccion', icon: Baby, id: 'reproduccion' },
+  { to: '/panel/reportes', icon: FileBarChart, id: 'reportes' }
 ];
 
 /**
@@ -60,34 +60,40 @@ export default function HacerNotaPage() {
       <header className="space-y-1">
         <h1 className="text-2xl font-bold">{t('nav.hacerNota')}</h1>
         <p className="text-muted-foreground">
-          Elige qué quieres hacer. Te guiamos paso a paso.
+          {t('hacerNota.subtitle')}
         </p>
       </header>
 
       <section className="space-y-3">
         <h2 className="text-xl font-semibold flex items-center gap-2">
           <Egg className="h-5 w-5 text-primary" aria-hidden />
-          Registrar
+          {t('hacerNota.registrar')}
         </h2>
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
-          {acciones.map(a => <TileLink key={a.label} {...a} />)}
+          {acciones.map(a => (
+            <TileLink key={a.to} to={a.to} icon={a.icon}
+              label={t(`hacerNota.act.${a.id}.label`)} description={t(`hacerNota.act.${a.id}.desc`)} />
+          ))}
         </div>
       </section>
 
       <section className="space-y-3">
         <h2 className="text-xl font-semibold flex items-center gap-2">
           <FileBarChart className="h-5 w-5 text-primary" aria-hidden />
-          Ver
+          {t('hacerNota.ver')}
         </h2>
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 gap-3">
-          {verSecciones.map(s => <TileLink key={s.label} {...s} />)}
+          {verSecciones.map(s => (
+            <TileLink key={s.to} to={s.to} icon={s.icon}
+              label={t(`hacerNota.sec.${s.id}.label`)} description={t(`hacerNota.sec.${s.id}.desc`)} />
+          ))}
         </div>
       </section>
     </div>
   );
 }
 
-function TileLink({ to, icon: Icon, label, description }: Tile) {
+function TileLink({ to, icon: Icon, label, description }: { to: string; icon: typeof Syringe; label: string; description: string }) {
   return (
     <Link
       to={to}

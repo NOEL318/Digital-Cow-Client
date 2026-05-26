@@ -7,7 +7,15 @@ import { useTranslation } from 'react-i18next';
 import { teamApi } from '@/features/team/api';
 import { InviteUserDialog } from '@/features/team/components/InviteUserDialog';
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/ui/table';
 import type { UserRole } from '@/features/auth/types';
+
+const STATUS_TONE = {
+  ACTIVE: 'success',
+  INVITED: 'info',
+  DISABLED: 'neutral'
+} as const;
 
 /** Pagina de equipo: usuarios + invitaciones pendientes. */
 export default function TeamPage() {
@@ -30,39 +38,70 @@ export default function TeamPage() {
         <Button onClick={() => setOpen(true)}>{t('team:invite')}</Button>
       </div>
 
-      <table className="w-full text-sm border">
-        <thead><tr className="border-b"><th className="p-2 text-left">Email</th><th>Nombre</th><th>Rol</th><th>Status</th></tr></thead>
-        <tbody>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>{t('team:fields.email')}</TableHead>
+            <TableHead>{t('team:fields.name')}</TableHead>
+            <TableHead>{t('team:fields.role')}</TableHead>
+            <TableHead>{t('team:fields.status')}</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
           {(users.data ?? []).map(u => (
-            <tr key={u.id} className="border-b">
-              <td className="p-2">{u.email}</td><td>{u.fullName}</td>
-              <td>
-                <select value={u.role} onChange={e => update.mutate({ id: u.id, role: e.target.value as UserRole })}
-                  className="border rounded px-2 py-1 bg-background">
-                  {(['OWNER','ADMIN','MANAGER','WORKER','VIEWER'] as const).map(r =>
-                    <option key={r} value={r}>{t(`team:roles.${r}`)}</option>)}
+            <TableRow key={u.id}>
+              <TableCell>{u.email}</TableCell>
+              <TableCell>{u.fullName}</TableCell>
+              <TableCell>
+                <select
+                  value={u.role}
+                  onChange={e => update.mutate({ id: u.id, role: e.target.value as UserRole })}
+                  className="border rounded px-2 py-1 bg-background text-sm"
+                >
+                  {(['OWNER', 'ADMIN', 'MANAGER', 'WORKER', 'VIEWER'] as const).map(r =>
+                    <option key={r} value={r}>{t(`team:roles.${r}`)}</option>
+                  )}
                 </select>
-              </td>
-              <td>
-                <select value={u.status === 'INVITED' ? 'INVITED' : u.status}
-                  onChange={e => update.mutate({ id: u.id, status: e.target.value as 'ACTIVE' | 'DISABLED' })}
-                  className="border rounded px-2 py-1 bg-background">
-                  <option value="ACTIVE">{t('team:status.ACTIVE')}</option>
-                  <option value="DISABLED">{t('team:status.DISABLED')}</option>
-                </select>
-              </td>
-            </tr>
+              </TableCell>
+              <TableCell>
+                <div className="flex items-center gap-2">
+                  <Badge tone={STATUS_TONE[u.status as keyof typeof STATUS_TONE] ?? 'neutral'}>
+                    {t(`team:status.${u.status}`)}
+                  </Badge>
+                  {u.status !== 'INVITED' ? (
+                    <select
+                      value={u.status}
+                      onChange={e => update.mutate({ id: u.id, status: e.target.value as 'ACTIVE' | 'DISABLED' })}
+                      className="border rounded px-2 py-1 bg-background text-sm"
+                    >
+                      <option value="ACTIVE">{t('team:status.ACTIVE')}</option>
+                      <option value="DISABLED">{t('team:status.DISABLED')}</option>
+                    </select>
+                  ) : null}
+                </div>
+              </TableCell>
+            </TableRow>
           ))}
-        </tbody>
-      </table>
+        </TableBody>
+      </Table>
 
       <div>
         <h3 className="font-semibold mb-2">{t('team:pending')}</h3>
         <ul className="space-y-1">
           {(invs.data ?? []).map(i => (
             <li key={i.id} className="border rounded p-2 flex justify-between items-center">
-              <span>{i.email} - {t(`team:roles.${i.role}`)}</span>
-              <Button variant="ghost" size="sm" onClick={() => teamApi.deleteInvitation(i.id).then(() => qc.invalidateQueries({ queryKey: ['invitations'] }))}>
+              <span className="flex items-center gap-2">
+                {i.email}
+                <Badge tone="info">{t(`team:roles.${i.role}`)}</Badge>
+              </span>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => teamApi.deleteInvitation(i.id).then(() => {
+                  qc.invalidateQueries({ queryKey: ['invitations'] });
+                  qc.invalidateQueries({ queryKey: ['team-users'] });
+                })}
+              >
                 {t('common:actions.delete')}
               </Button>
             </li>

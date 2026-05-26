@@ -3,6 +3,8 @@
  */
 import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useQueryClient } from '@tanstack/react-query';
+import { useTranslation } from 'react-i18next';
 import { Scale, Calendar } from 'lucide-react';
 import { WizardStep } from '@/components/ui/wizard-step';
 import { HelpfulField } from '@/components/ui/helpful-field';
@@ -15,7 +17,9 @@ const COMMON_WEIGHTS = [200, 300, 400, 500, 600];
 
 /** Wizard "Pese" con selector jerárquico + presets de peso. */
 export function PesarFlow() {
+  const { t } = useTranslation('wizard');
   const nav = useNavigate();
+  const qc = useQueryClient();
   const [params] = useSearchParams();
   const prefAnimalId = params.get('animalId') ? Number(params.get('animalId')) : null;
 
@@ -52,16 +56,20 @@ export function PesarFlow() {
         weightKg: Number(weightKg),
         weighedAt
       });
+      qc.invalidateQueries({ queryKey: ['animal', ctx.animal.id] });
+      qc.invalidateQueries({ queryKey: ['production', 'weighings'] });
+      qc.invalidateQueries({ queryKey: ['dashboard', 'production'] });
+      qc.invalidateQueries({ queryKey: ['production', 'growth-curve'] });
       nav(`/animales/${ctx.animal.id}`);
     } catch (e) {
       setError((e as { response?: { data?: { error?: { message?: string } } } })
-        ?.response?.data?.error?.message ?? 'No pudimos guardar el pesaje.');
+        ?.response?.data?.error?.message ?? t('pesar.saveFailed'));
     }
   }
 
   if (step === 1) {
     return (
-      <WizardStep current={1} total={3} title="¿A cuál vaca pesaste?" canAdvance={!!ctx.animal} onNext={() => setStep(2)}>
+      <WizardStep current={1} total={3} title={t('pesar.step1Title')} canAdvance={!!ctx.animal} onNext={() => setStep(2)}>
         <WizardLocationSelector value={ctx} onChange={setCtx} />
       </WizardStep>
     );
@@ -69,10 +77,10 @@ export function PesarFlow() {
 
   if (step === 2) {
     return (
-      <WizardStep current={2} total={3} title="¿Cuánto peso?" subtitle="Toca un valor común o escribe el exacto."
+      <WizardStep current={2} total={3} title={t('pesar.step2Title')} subtitle={t('pesar.step2Subtitle')}
         canAdvance={!!weightKg && Number(weightKg) > 0}
         onNext={() => setStep(3)} onBack={() => setStep(1)}>
-        <HelpfulField id="w-weight" label="Peso en kilogramos" icon={Scale} required example="420">
+        <HelpfulField id="w-weight" label={t('pesar.weightLabel')} icon={Scale} required example={t('pesar.weightExample')}>
           <div className="space-y-2">
             <input id="w-weight" type="number" inputMode="decimal" min={0} step={0.1}
               value={weightKg} onChange={e => setWeightKg(e.target.value)}
@@ -87,7 +95,7 @@ export function PesarFlow() {
             </div>
           </div>
         </HelpfulField>
-        <HelpfulField id="w-date" label="Fecha del pesaje" icon={Calendar} required>
+        <HelpfulField id="w-date" label={t('pesar.dateLabel')} icon={Calendar} required>
           <input id="w-date" type="date" value={weighedAt} onChange={e => setWeighedAt(e.target.value)}
             className="w-full border rounded-md px-3 py-2 text-base bg-background" />
         </HelpfulField>
@@ -96,7 +104,7 @@ export function PesarFlow() {
   }
 
   return (
-    <WizardStep current={3} total={3} title="Listo? Así se guardará"
+    <WizardStep current={3} total={3} title={t('pesar.step3Title')}
       canAdvance={!create.isPending} onNext={save} onBack={() => setStep(2)} isLast>
       <div className="rounded-xl border p-4 space-y-3">
         <div className="flex items-center gap-3">
@@ -108,7 +116,7 @@ export function PesarFlow() {
           </div>
         </div>
         <p className="flex items-center gap-2 text-2xl font-bold">
-          <Scale className="h-5 w-5 text-primary" aria-hidden /> {weightKg} kilogramos
+          <Scale className="h-5 w-5 text-primary" aria-hidden /> {weightKg} {t('pesar.kgUnit')}
         </p>
         <p className="text-sm text-muted-foreground flex items-center gap-2">
           <Calendar className="h-4 w-4" aria-hidden /> {weighedAt}

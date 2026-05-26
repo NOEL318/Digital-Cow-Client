@@ -4,6 +4,7 @@
  */
 import { useEffect, useState } from 'react';
 import { CloudOff, CloudUpload, RefreshCcw } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { subscribePending, flushQueue } from '@/lib/offline-queue';
 
 /**
@@ -12,6 +13,7 @@ import { subscribePending, flushQueue } from '@/lib/offline-queue';
  * forzar el envio manualmente. Se oculta si todo esta al dia.
  */
 export function OfflineIndicator() {
+  const { t } = useTranslation('common');
   const [online, setOnline] = useState<boolean>(() => typeof navigator === 'undefined' ? true : navigator.onLine);
   const [pending, setPending] = useState(0);
   const [busy, setBusy] = useState(false);
@@ -36,18 +38,18 @@ export function OfflineIndicator() {
       {!online ? (
         <>
           <CloudOff className="h-4 w-4 text-amber-700" aria-hidden />
-          <span>Sin conexión</span>
+          <span>{t('offline.noConnection')}</span>
         </>
       ) : (
         <>
           <CloudUpload className="h-4 w-4 text-sky-700" aria-hidden />
-          <span>{pending} por sincronizar</span>
+          <span>{t('offline.pendingSync', { count: pending })}</span>
           <button
             type="button"
             onClick={async () => { setBusy(true); await flushQueue(); setBusy(false); }}
             disabled={busy}
             className="ml-1 inline-flex items-center gap-1 rounded-full px-2 py-1 hover:bg-accent"
-            aria-label="Reintentar sincronización"
+            aria-label={t('offline.retrySync')}
           >
             <RefreshCcw className={`h-4 w-4 ${busy ? 'animate-spin' : ''}`} aria-hidden />
           </button>

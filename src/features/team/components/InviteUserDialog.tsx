@@ -22,7 +22,11 @@ export function InviteUserDialog({ open, onClose }: { open: boolean; onClose: ()
   });
   const m = useMutation({
     mutationFn: teamApi.invite,
-    onSuccess: () => { qc.invalidateQueries({ queryKey: ['invitations'] }); onClose(); }
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['invitations'] });
+      qc.invalidateQueries({ queryKey: ['team-users'] });
+      onClose();
+    }
   });
 
   return (

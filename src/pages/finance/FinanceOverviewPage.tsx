@@ -9,6 +9,10 @@ import {
   PieChart, Pie, Cell, ResponsiveContainer
 } from 'recharts';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Table, TableHeader, TableBody, TableRow, TableHead, TableCell
+} from '@/components/ui/table';
+import { Badge } from '@/components/ui/badge';
 import { toArray } from '@/lib/page';
 import { useCashFlow } from '@/features/finance/cashFlow/api';
 import { usePnl } from '@/features/finance/pnl/api';
@@ -84,23 +88,49 @@ export default function FinanceOverviewPage() {
   }, [lastIncomes.data, lastExpenses.data, locale]);
 
   const totals = pnlByCategory.data;
+  const margin = totals ? Number(totals.margin) : null;
 
   return (
     <div className="p-6 space-y-6">
       <h1 className="text-2xl font-bold">{t('finance:overview.title')}</h1>
 
+      {/* KPI cards with semantic colors */}
       <div className="grid gap-3 grid-cols-1 md:grid-cols-3">
-        <Card>
-          <CardHeader><CardTitle className="text-sm text-muted-foreground">{t('finance:overview.ytdIncome')}</CardTitle></CardHeader>
-          <CardContent className="text-2xl font-bold">{totals ? Number(totals.totalIncome).toFixed(2) : '-'}</CardContent>
+        <Card className="border-green-200 dark:border-green-800">
+          <CardHeader>
+            <CardTitle className="text-sm font-medium text-green-700 dark:text-green-400">
+              {t('finance:overview.ytdIncome')}
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="text-2xl font-bold text-green-700 dark:text-green-400">
+            {totals ? Number(totals.totalIncome).toFixed(2) : '-'}
+          </CardContent>
         </Card>
-        <Card>
-          <CardHeader><CardTitle className="text-sm text-muted-foreground">{t('finance:overview.ytdExpense')}</CardTitle></CardHeader>
-          <CardContent className="text-2xl font-bold">{totals ? Number(totals.totalExpense).toFixed(2) : '-'}</CardContent>
+        <Card className="border-red-200 dark:border-red-800">
+          <CardHeader>
+            <CardTitle className="text-sm font-medium text-red-700 dark:text-red-400">
+              {t('finance:overview.ytdExpense')}
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="text-2xl font-bold text-red-700 dark:text-red-400">
+            {totals ? Number(totals.totalExpense).toFixed(2) : '-'}
+          </CardContent>
         </Card>
-        <Card>
-          <CardHeader><CardTitle className="text-sm text-muted-foreground">{t('finance:overview.ytdMargin')}</CardTitle></CardHeader>
-          <CardContent className="text-2xl font-bold">{totals ? Number(totals.margin).toFixed(2) : '-'}</CardContent>
+        <Card className={margin !== null && margin >= 0
+          ? 'border-blue-200 dark:border-blue-800'
+          : 'border-amber-200 dark:border-amber-800'}>
+          <CardHeader>
+            <CardTitle className={`text-sm font-medium ${margin !== null && margin >= 0
+              ? 'text-blue-700 dark:text-blue-400'
+              : 'text-amber-700 dark:text-amber-400'}`}>
+              {t('finance:overview.ytdMargin')}
+            </CardTitle>
+          </CardHeader>
+          <CardContent className={`text-2xl font-bold ${margin !== null && margin >= 0
+            ? 'text-blue-700 dark:text-blue-400'
+            : 'text-amber-700 dark:text-amber-400'}`}>
+            {totals ? Number(totals.margin).toFixed(2) : '-'}
+          </CardContent>
         </Card>
       </div>
 
@@ -144,30 +174,34 @@ export default function FinanceOverviewPage() {
           {recentTransactions.length === 0 ? (
             <p className="text-sm text-muted-foreground">{t('finance:overview.noTransactions')}</p>
           ) : (
-            <table className="w-full border rounded">
-              <thead>
-                <tr className="bg-muted">
-                  <th className="p-2 text-left">{t('finance:overview.type')}</th>
-                  <th className="p-2 text-left">{t('finance:overview.date')}</th>
-                  <th className="p-2 text-left">{t('finance:overview.category')}</th>
-                  <th className="p-2 text-left">{t('finance:overview.description')}</th>
-                  <th className="p-2 text-right">{t('finance:overview.amount')}</th>
-                </tr>
-              </thead>
-              <tbody>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>{t('finance:overview.type')}</TableHead>
+                  <TableHead>{t('finance:overview.date')}</TableHead>
+                  <TableHead>{t('finance:overview.category')}</TableHead>
+                  <TableHead>{t('finance:overview.description')}</TableHead>
+                  <TableHead className="text-right">{t('finance:overview.amount')}</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
                 {recentTransactions.map(r => (
-                  <tr key={r.id} className="border-t">
-                    <td className="p-2">{r.kind === 'income' ? t('finance:overview.income') : t('finance:overview.expense')}</td>
-                    <td className="p-2">{r.date}</td>
-                    <td className="p-2">{r.category}</td>
-                    <td className="p-2">{r.description}</td>
-                    <td className={`p-2 text-right ${r.kind === 'income' ? 'text-green-700' : 'text-red-700'}`}>
+                  <TableRow key={r.id}>
+                    <TableCell>
+                      <Badge tone={r.kind === 'income' ? 'success' : 'danger'}>
+                        {r.kind === 'income' ? t('finance:overview.income') : t('finance:overview.expense')}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>{r.date}</TableCell>
+                    <TableCell>{r.category}</TableCell>
+                    <TableCell>{r.description}</TableCell>
+                    <TableCell className={`text-right font-semibold ${r.kind === 'income' ? 'text-green-700 dark:text-green-400' : 'text-red-700 dark:text-red-400'}`}>
                       {r.kind === 'income' ? '+' : '-'}{r.amount.toFixed(2)}
-                    </td>
-                  </tr>
+                    </TableCell>
+                  </TableRow>
                 ))}
-              </tbody>
-            </table>
+              </TableBody>
+            </Table>
           )}
         </CardContent>
       </Card>
