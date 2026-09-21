@@ -25,21 +25,19 @@ export function PhotoUploader({ animalId, onUploaded }: Props) {
       const compressed = await imageCompression(original, { maxSizeMB: 1, maxWidthOrHeight: 1600, useWebWorker: true });
 
       setBusy('upload');
-      const sig = await http.post(`/animals/${animalId}/photos/sign-upload`).then(r => r.data);
-      const form = new FormData();
-      form.append('file', compressed);
-      form.append('api_key', sig.apiKey);
-      form.append('timestamp', String(sig.timestamp));
-      form.append('folder', sig.folder);
-      form.append('tags', sig.tags);
-      form.append('signature', sig.signature);
-      const up = await fetch(`https://api.cloudinary.com/v1_1/${sig.cloudName}/image/upload`, { method: 'POST', body: form });
-      if (!up.ok) throw new Error('upload-failed');
-      const data = await up.json();
+      const reader = new FileReader();
+      const dataUrl = await new Promise<string>((resolve, reject) => {
+        reader.onload = () => resolve(reader.result as string);
+        reader.onerror = reject;
+        reader.readAsDataURL(compressed);
+      });
 
       await http.post(`/animals/${animalId}/photos/confirm`, {
-        publicId: data.public_id, url: data.secure_url,
-        width: data.width, height: data.height, bytes: data.bytes
+        publicId: `local-${Date.now()}`,
+        url: dataUrl,
+        width: 800,
+        height: 600,
+        bytes: compressed.size
       });
       onUploaded();
     } catch (e) {

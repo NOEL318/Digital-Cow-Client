@@ -12,7 +12,7 @@ describe('AnimalForm', () => {
     const onSubmit = vi.fn();
     const qc = new QueryClient();
     render(<QueryClientProvider client={qc}><AnimalForm onSubmit={onSubmit} /></QueryClientProvider>);
-    await userEvent.type(screen.getByLabelText(/internal/i), 'TAG-1');
+    await userEvent.type(screen.getByLabelText(/internal|arete interno/i), 'TAG-1');
     expect(true).toBe(true);
   });
 });

@@ -5,12 +5,17 @@
 import axios, { type AxiosError, type AxiosRequestConfig } from 'axios';
 import { AuthStorage } from './auth-storage';
 import { enqueue } from './offline-queue';
+import { serverlessAdapter } from '@/serverless/adapter';
 
-/** Cliente axios compartido. */
+/** Cliente axios compartido configurado para ejecucion serverless 100% en front-end. */
 export const http = axios.create({
   baseURL: import.meta.env.VITE_API_URL ?? '/api/v1',
-  timeout: 15000
+  timeout: 15000,
+  adapter: serverlessAdapter
 });
+
+// Configura tambien el adaptador global de axios para cualquier llamada directa (como share publico)
+axios.defaults.adapter = serverlessAdapter;
 
 // Request: anexa Authorization si hay token.
 // El header ngrok-skip-browser-warning evita la pagina HTML interstitial que

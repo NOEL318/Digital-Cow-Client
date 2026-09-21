@@ -10,22 +10,6 @@ interface UploadState {
   error: string | null;
 }
 
-interface SignResponse {
-  cloudName: string;
-  apiKey: string;
-  timestamp: number;
-  folder: string;
-  tags: string;
-  signature: string;
-}
-
-interface CloudinaryResp {
-  public_id: string;
-  secure_url: string;
-  width: number;
-  height: number;
-  bytes: number;
-}
 
 /**
  * Hook reutilizable que sube una foto a Cloudinary firmada por el
@@ -50,29 +34,19 @@ export function usePhotoUpload(animalId: number, onUploaded?: () => void) {
       });
 
       setState({ busy: 'upload', error: null });
-      const sig = (await http.post<SignResponse>(`/animals/${animalId}/photos/sign-upload`)).data;
-
-      const form = new FormData();
-      form.append('file', compressed);
-      form.append('api_key', sig.apiKey);
-      form.append('timestamp', String(sig.timestamp));
-      form.append('folder', sig.folder);
-      form.append('tags', sig.tags);
-      form.append('signature', sig.signature);
-
-      const up = await fetch(
-        `https://api.cloudinary.com/v1_1/${sig.cloudName}/image/upload`,
-        { method: 'POST', body: form }
-      );
-      if (!up.ok) throw new Error('upload-failed');
-      const data: CloudinaryResp = await up.json();
+      const reader = new FileReader();
+      const dataUrl = await new Promise<string>((resolve, reject) => {
+        reader.onload = () => resolve(reader.result as string);
+        reader.onerror = reject;
+        reader.readAsDataURL(compressed);
+      });
 
       await http.post(`/animals/${animalId}/photos/confirm`, {
-        publicId: data.public_id,
-        url: data.secure_url,
-        width: data.width,
-        height: data.height,
-        bytes: data.bytes
+        publicId: `local-${Date.now()}`,
+        url: dataUrl,
+        width: 800,
+        height: 600,
+        bytes: compressed.size
       });
       onUploaded?.();
       setState({ busy: null, error: null });
