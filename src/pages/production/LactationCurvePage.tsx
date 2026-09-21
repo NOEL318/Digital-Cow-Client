@@ -21,7 +21,7 @@ export default function LactationCurvePage() {
   const [startDate, setStartDate] = useState<string>('');
   const curve = useLactationCurve(animalId, startDate || undefined);
 
-  const data = curve.data?.points.map(p => ({
+  const data = curve.data?.points?.map(p => ({
     dayOfLactation: p.dayOfLactation,
     totalLiters: Number(p.totalLiters)
   })) ?? [];

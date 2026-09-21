@@ -19,21 +19,30 @@ export function AnimalFinanceTab() {
   if (!roi.data) return <div>{t('common:loading')}</div>;
   const r = roi.data;
 
+  const costs = r.costs ?? {
+    treatments: 0,
+    vaccinationsIndividual: 0,
+    vaccinationsProportionalLot: 0,
+    services: 0,
+    manualExpenses: 0,
+    feedingProportional: 0
+  };
+
   return (
     <div className="space-y-4">
       <div className="grid gap-3 grid-cols-1 md:grid-cols-3">
         <Card>
           <CardHeader><CardTitle className="text-sm text-muted-foreground">{t('finance:roi.totalIncome')}</CardTitle></CardHeader>
-          <CardContent className="text-2xl font-bold">{Number(r.totalIncome).toFixed(2)}</CardContent>
+          <CardContent className="text-2xl font-bold">{Number(r.totalIncome ?? 0).toFixed(2)}</CardContent>
         </Card>
         <Card>
           <CardHeader><CardTitle className="text-sm text-muted-foreground">{t('finance:roi.totalCost')}</CardTitle></CardHeader>
-          <CardContent className="text-2xl font-bold">{Number(r.totalCost).toFixed(2)}</CardContent>
+          <CardContent className="text-2xl font-bold">{Number(r.totalCost ?? 0).toFixed(2)}</CardContent>
         </Card>
         <Card>
           <CardHeader><CardTitle className="text-sm text-muted-foreground">{t('finance:roi.roi')}</CardTitle></CardHeader>
-          <CardContent className={`text-2xl font-bold ${Number(r.roi) >= 0 ? 'text-green-700' : 'text-red-700'}`}>
-            {Number(r.roi).toFixed(2)}
+          <CardContent className={`text-2xl font-bold ${Number(r.roi ?? 0) >= 0 ? 'text-green-700' : 'text-red-700'}`}>
+            {Number(r.roi ?? 0).toFixed(2)}
           </CardContent>
         </Card>
       </div>
@@ -50,27 +59,27 @@ export function AnimalFinanceTab() {
           <TableBody>
             <TableRow>
               <TableCell>{t('finance:roi.treatments')}</TableCell>
-              <TableCell className="text-right">{Number(r.costs.treatments).toFixed(2)}</TableCell>
+              <TableCell className="text-right">{Number(costs.treatments).toFixed(2)}</TableCell>
             </TableRow>
             <TableRow>
               <TableCell>{t('finance:roi.vaccinationsIndividual')}</TableCell>
-              <TableCell className="text-right">{Number(r.costs.vaccinationsIndividual).toFixed(2)}</TableCell>
+              <TableCell className="text-right">{Number(costs.vaccinationsIndividual).toFixed(2)}</TableCell>
             </TableRow>
             <TableRow>
               <TableCell>{t('finance:roi.vaccinationsProportionalLot')}</TableCell>
-              <TableCell className="text-right">{Number(r.costs.vaccinationsProportionalLot).toFixed(2)}</TableCell>
+              <TableCell className="text-right">{Number(costs.vaccinationsProportionalLot).toFixed(2)}</TableCell>
             </TableRow>
             <TableRow>
               <TableCell>{t('finance:roi.services')}</TableCell>
-              <TableCell className="text-right">{Number(r.costs.services).toFixed(2)}</TableCell>
+              <TableCell className="text-right">{Number(costs.services).toFixed(2)}</TableCell>
             </TableRow>
             <TableRow>
               <TableCell>{t('finance:roi.manualExpenses')}</TableCell>
-              <TableCell className="text-right">{Number(r.costs.manualExpenses).toFixed(2)}</TableCell>
+              <TableCell className="text-right">{Number(costs.manualExpenses).toFixed(2)}</TableCell>
             </TableRow>
             <TableRow>
               <TableCell>{t('finance:roi.feedingProportional')}</TableCell>
-              <TableCell className="text-right">{Number(r.costs.feedingProportional).toFixed(2)}</TableCell>
+              <TableCell className="text-right">{Number(costs.feedingProportional).toFixed(2)}</TableCell>
             </TableRow>
           </TableBody>
         </Table>

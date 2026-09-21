@@ -78,7 +78,7 @@ export default function ProductionKpisPage() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {kpis.data.topProducers.map(p => (
+                  {(kpis.data.topProducers ?? []).map(p => (
                     <TableRow key={p.animalId}>
                       <TableCell>{p.internalTag}</TableCell>
                       <TableCell className="font-semibold text-green-700 dark:text-green-400">

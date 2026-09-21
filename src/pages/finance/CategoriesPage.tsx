@@ -12,10 +12,12 @@ import {
   Table, TableHeader, TableBody, TableRow, TableHead, TableCell
 } from '@/components/ui/table';
 import { localizedName } from '@/lib/catalog';
+import { toArray } from '@/lib/page';
 import {
   useExpenseCategories, useCreateExpenseCategory,
   useIncomeCategories, useCreateIncomeCategory
 } from '@/features/finance/categories/api';
+import type { ExpenseCategory, IncomeCategory } from '@/features/finance/categories/types';
 import { ExpenseCategoryForm } from '@/features/finance/categories/components/ExpenseCategoryForm';
 import { IncomeCategoryForm } from '@/features/finance/categories/components/IncomeCategoryForm';
 
@@ -68,7 +70,7 @@ export default function CategoriesPage() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {expCats.data?.map(c => (
+              {toArray<ExpenseCategory>(expCats.data).map(c => (
                 <TableRow key={c.id}>
                   <TableCell className="flex items-center gap-1">
                     {c.code}
@@ -106,7 +108,7 @@ export default function CategoriesPage() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {incCats.data?.map(c => (
+              {toArray<IncomeCategory>(incCats.data).map(c => (
                 <TableRow key={c.id}>
                   <TableCell className="flex items-center gap-1">
                     {c.code}

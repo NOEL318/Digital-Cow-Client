@@ -21,6 +21,7 @@ import { BigButton } from '@/components/ui/big-button';
 import { EmptyState } from '@/components/ui/empty-state';
 import { HelpfulField } from '@/components/ui/helpful-field';
 import { Badge } from '@/components/ui/badge';
+import { toArray } from '@/lib/page';
 
 const EMPTY: MedicationUpsertRequest = {
   nameEs: '',
@@ -77,6 +78,7 @@ function expiryStatus(expiresAt: string | null | undefined): 'expired' | 'warnin
 export default function AjustesMedicamentosPage() {
   const { t } = useTranslation(['catalog', 'common']);
   const { data, isLoading } = useMedications();
+  const list = toArray<Medication>(data);
   const create = useCreateMedication();
   const update = useUpdateMedication();
   const del = useDeleteMedication();
@@ -156,7 +158,7 @@ export default function AjustesMedicamentosPage() {
 
       {isLoading ? (
         <p>{t('common:loading')}</p>
-      ) : !data || data.length === 0 ? (
+      ) : list.length === 0 ? (
         <EmptyState
           icon={Pill}
           title={t('catalog:med.emptyTitle')}
@@ -166,7 +168,7 @@ export default function AjustesMedicamentosPage() {
         />
       ) : (
         <ul className="space-y-2">
-          {data.map(m => {
+          {list.map(m => {
             const status = expiryStatus(m.expiresAt);
             return (
               <li

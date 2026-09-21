@@ -9,12 +9,15 @@ import { ranchApi } from '@/features/ranches/api';
 import { RanchFormDialog } from '@/features/ranches/components/RanchFormDialog';
 import { Button } from '@/components/ui/button';
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/ui/table';
+import { toArray } from '@/lib/page';
+import type { Ranch } from '@/features/ranches/types';
 
 /** Listado de ranchos de la cuenta. */
 export default function RanchesPage() {
   const { t } = useTranslation('ranches');
-  const { data = [] } = useQuery({ queryKey: ['ranches'], queryFn: ranchApi.list });
+  const { data } = useQuery({ queryKey: ['ranches'], queryFn: ranchApi.list });
   const [open, setOpen] = useState(false);
+  const ranches = toArray<Ranch>(data);
 
   return (
     <div className="space-y-4">
@@ -31,7 +34,7 @@ export default function RanchesPage() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {data.map(r => (
+          {ranches.map(r => (
             <TableRow key={r.id}>
               <TableCell>
                 <Link to={`/ranches/${r.id}`} className="underline font-medium">
