@@ -22,8 +22,8 @@ export function LanguageSwitcher() {
 
   return (
     <div className="flex gap-1">
-      <Button variant={i18n.language.startsWith('es') ? 'default' : 'ghost'} size="sm" onClick={() => change('es')}>ES</Button>
-      <Button variant={i18n.language.startsWith('en') ? 'default' : 'ghost'} size="sm" onClick={() => change('en')}>EN</Button>
+      <Button variant={(i18n.language ?? 'es').startsWith('es') ? 'default' : 'ghost'} size="sm" onClick={() => change('es')}>ES</Button>
+      <Button variant={(i18n.language ?? 'es').startsWith('en') ? 'default' : 'ghost'} size="sm" onClick={() => change('en')}>EN</Button>
     </div>
   );
 }

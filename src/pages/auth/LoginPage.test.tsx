@@ -27,8 +27,8 @@ describe('LoginPage', () => {
         </AuthProvider>
       </MemoryRouter>
     );
-    await userEvent.type(screen.getByLabelText(/email/i), 'u@x.com');
-    await userEvent.type(screen.getByLabelText(/password/i), 'password123');
+    await userEvent.type(screen.getByLabelText(/email|correo/i), 'u@x.com');
+    await userEvent.type(screen.getByLabelText(/password|contraseña/i), 'password123');
     await userEvent.click(screen.getByRole('button', { name: /sign in|entrar/i }));
     expect(true).toBe(true);
   });

@@ -29,24 +29,24 @@ export function AnimalForm({ initial, onSubmit, submitting }: Props) {
 
   return (
     <form onSubmit={form.handleSubmit(async v => { await onSubmit(v); })} className="space-y-3 max-w-xl">
-      <div><Label>{t('animals:fields.internalTag')}</Label><Input {...form.register('internalTag')} /></div>
-      <div><Label>{t('animals:fields.officialTag')}</Label><Input {...form.register('officialTag')} /></div>
-      <div><Label>{t('animals:fields.rfid')}</Label><Input {...form.register('rfid')} /></div>
-      <div><Label>{t('animals:fields.name')}</Label><Input {...form.register('name')} /></div>
+      <div><Label htmlFor="internalTag">{t('animals:fields.internalTag')}</Label><Input id="internalTag" {...form.register('internalTag')} /></div>
+      <div><Label htmlFor="officialTag">{t('animals:fields.officialTag')}</Label><Input id="officialTag" {...form.register('officialTag')} /></div>
+      <div><Label htmlFor="rfid">{t('animals:fields.rfid')}</Label><Input id="rfid" {...form.register('rfid')} /></div>
+      <div><Label htmlFor="name">{t('animals:fields.name')}</Label><Input id="name" {...form.register('name')} /></div>
       <div>
-        <Label>{t('animals:fields.sex')}</Label>
-        <select {...form.register('sex')} className="w-full h-10 rounded border bg-background px-3">
+        <Label htmlFor="sex">{t('animals:fields.sex')}</Label>
+        <select id="sex" {...form.register('sex')} className="w-full h-10 rounded border bg-background px-3">
           {(['FEMALE','MALE'] as const).map(s => <option key={s} value={s}>{t(`animals:sex.${s}`)}</option>)}
         </select>
       </div>
-      <div><Label>{t('animals:fields.birthDate')}</Label><Input type="date" {...form.register('birthDate')} /></div>
+      <div><Label htmlFor="birthDate">{t('animals:fields.birthDate')}</Label><Input id="birthDate" type="date" {...form.register('birthDate')} /></div>
       <div className="flex items-center gap-2">
         <input type="checkbox" id="bde" {...form.register('birthDateEstimated')} />
         <Label htmlFor="bde">{t('animals:fields.birthDateEstimated')}</Label>
       </div>
       <div>
-        <Label>{t('animals:fields.breed')}</Label>
-        <select {...form.register('breedId')} className="w-full h-10 rounded border bg-background px-3">
+        <Label htmlFor="breedId">{t('animals:fields.breed')}</Label>
+        <select id="breedId" {...form.register('breedId')} className="w-full h-10 rounded border bg-background px-3">
           <option value="">-</option>
           {(breeds.data ?? []).map(b => <option key={b.id} value={b.id}>{b.nameEs}</option>)}
         </select>
@@ -59,18 +59,18 @@ export function AnimalForm({ initial, onSubmit, submitting }: Props) {
         />
       </div>
       <div>
-        <Label>{t('animals:fields.purpose')}</Label>
-        <select {...form.register('purpose')} className="w-full h-10 rounded border bg-background px-3">
+        <Label htmlFor="purpose">{t('animals:fields.purpose')}</Label>
+        <select id="purpose" {...form.register('purpose')} className="w-full h-10 rounded border bg-background px-3">
           {(['BEEF','DAIRY','DUAL'] as const).map(p => <option key={p} value={p}>{t(`animals:purpose.${p}`)}</option>)}
         </select>
       </div>
       <div>
-        <Label>{t('animals:fields.status')}</Label>
-        <select {...form.register('status')} className="w-full h-10 rounded border bg-background px-3">
+        <Label htmlFor="status">{t('animals:fields.status')}</Label>
+        <select id="status" {...form.register('status')} className="w-full h-10 rounded border bg-background px-3">
           {(['ACTIVE','SOLD','DEAD','MISSING','TRANSFERRED'] as const).map(s => <option key={s} value={s}>{t(`animals:status.${s}`)}</option>)}
         </select>
       </div>
-      <div><Label>{t('animals:fields.notes')}</Label><Input {...form.register('notes')} /></div>
+      <div><Label htmlFor="notes">{t('animals:fields.notes')}</Label><Input id="notes" {...form.register('notes')} /></div>
       <Button type="submit" disabled={submitting}>{t('common:actions.save')}</Button>
     </form>
   );
