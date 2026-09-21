@@ -81,8 +81,8 @@ export default function AgriculturePage() {
 
       {/* KPI Stats Rápidos con Datos 100% Reales */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-        <div className="glass-card p-4 border-l-4 border-l-emerald-600 flex items-center gap-3">
-          <div className="p-2.5 bg-emerald-500/10 text-emerald-600 rounded-xl">
+        <div className="glass-gradient-emerald p-4 border-l-4 border-l-emerald-600 flex items-center gap-3">
+          <div className="p-2.5 bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 rounded-xl">
             <Layers className="h-6 w-6" />
           </div>
           <div>
@@ -91,8 +91,8 @@ export default function AgriculturePage() {
           </div>
         </div>
 
-        <div className="glass-card p-4 border-l-4 border-l-emerald-600 flex items-center gap-3">
-          <div className="p-2.5 bg-emerald-500/10 text-emerald-600 rounded-xl">
+        <div className="glass-gradient-lime p-4 border-l-4 border-l-lime-600 flex items-center gap-3">
+          <div className="p-2.5 bg-lime-500/15 text-lime-700 dark:text-lime-300 rounded-xl">
             <Scale className="h-6 w-6" />
           </div>
           <div>
@@ -101,8 +101,8 @@ export default function AgriculturePage() {
           </div>
         </div>
 
-        <div className="glass-card p-4 border-l-4 border-l-emerald-600 flex items-center gap-3">
-          <div className="p-2.5 bg-emerald-500/10 text-emerald-600 rounded-xl">
+        <div className="glass-gradient-teal p-4 border-l-4 border-l-teal-600 flex items-center gap-3">
+          <div className="p-2.5 bg-teal-500/15 text-teal-700 dark:text-teal-300 rounded-xl">
             <DollarSign className="h-6 w-6" />
           </div>
           <div>
@@ -111,8 +111,8 @@ export default function AgriculturePage() {
           </div>
         </div>
 
-        <div className="glass-card p-4 border-l-4 border-l-emerald-600 flex items-center gap-3">
-          <div className="p-2.5 bg-emerald-500/10 text-emerald-600 rounded-xl">
+        <div className="glass-gradient-amber p-4 border-l-4 border-l-amber-600 flex items-center gap-3">
+          <div className="p-2.5 bg-amber-500/15 text-amber-700 dark:text-amber-300 rounded-xl">
             <TrendingUp className="h-6 w-6" />
           </div>
           <div>

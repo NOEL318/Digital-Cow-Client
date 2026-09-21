@@ -52,9 +52,9 @@ export const IconCard = forwardRef<HTMLDivElement | HTMLButtonElement, IconCardP
     );
 
     const baseClasses = cn(
-      'flex flex-col items-center justify-center rounded-xl border bg-background text-center transition-colors',
+      'flex flex-col items-center justify-center rounded-2xl glass-card text-center transition-shadow duration-150 border-white/60 dark:border-white/10 hover:shadow-md',
       sizes[size],
-      onClick ? 'hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring' : '',
+      onClick ? 'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring cursor-pointer' : '',
       className
     );
 

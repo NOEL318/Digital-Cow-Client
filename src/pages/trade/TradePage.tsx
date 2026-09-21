@@ -90,8 +90,8 @@ export default function TradePage() {
 
       {/* KPI Stats Rápidos */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-        <div className="glass-card p-4 border-l-4 border-l-emerald-600 flex items-center gap-3">
-          <div className="p-2.5 bg-emerald-500/10 text-emerald-600 rounded-xl">
+        <div className="glass-gradient-emerald p-4 border-l-4 border-l-emerald-600 flex items-center gap-3">
+          <div className="p-2.5 bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 rounded-xl">
             <ArrowUpRight className="h-6 w-6" />
           </div>
           <div>
@@ -100,8 +100,8 @@ export default function TradePage() {
           </div>
         </div>
 
-        <div className="glass-card p-4 border-l-4 border-l-amber-600 flex items-center gap-3">
-          <div className="p-2.5 bg-amber-500/10 text-amber-600 rounded-xl">
+        <div className="glass-gradient-amber p-4 border-l-4 border-l-amber-600 flex items-center gap-3">
+          <div className="p-2.5 bg-amber-500/15 text-amber-700 dark:text-amber-300 rounded-xl">
             <ArrowDownRight className="h-6 w-6" />
           </div>
           <div>
@@ -110,8 +110,8 @@ export default function TradePage() {
           </div>
         </div>
 
-        <div className="glass-card p-4 border-l-4 border-l-teal-600 flex items-center gap-3">
-          <div className="p-2.5 bg-teal-500/10 text-teal-600 rounded-xl">
+        <div className="glass-gradient-teal p-4 border-l-4 border-l-teal-600 flex items-center gap-3">
+          <div className="p-2.5 bg-teal-500/15 text-teal-700 dark:text-teal-300 rounded-xl">
             <TrendingUp className="h-6 w-6" />
           </div>
           <div>
@@ -120,8 +120,8 @@ export default function TradePage() {
           </div>
         </div>
 
-        <div className="glass-card p-4 border-l-4 border-l-sky-600 flex items-center gap-3">
-          <div className="p-2.5 bg-sky-500/10 text-sky-600 rounded-xl">
+        <div className="glass-gradient-blue p-4 border-l-4 border-l-sky-600 flex items-center gap-3">
+          <div className="p-2.5 bg-sky-500/15 text-sky-700 dark:text-sky-300 rounded-xl">
             <Package className="h-6 w-6" />
           </div>
           <div>

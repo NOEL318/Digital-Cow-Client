@@ -10,11 +10,11 @@ import {
 } from 'lucide-react';
 
 export function DesktopSidebar() {
-  const linkClass = (activeColor: string) => ({ isActive }: { isActive: boolean }) =>
+  const linkClass = (activeGradient: string) => ({ isActive }: { isActive: boolean }) =>
     `flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-semibold transition-all group ${
       isActive
-        ? `${activeColor} shadow-sm backdrop-blur-sm`
-        : 'text-muted-foreground hover:bg-slate-100 dark:hover:bg-slate-800/60 hover:text-foreground'
+        ? `${activeGradient} text-white shadow-sm backdrop-blur-md border border-white/25`
+        : 'text-muted-foreground hover:bg-white/40 dark:hover:bg-slate-800/40 hover:text-foreground'
     }`;
 
   return (
@@ -41,7 +41,7 @@ export function DesktopSidebar() {
         <div className="space-y-1">
           <NavLink
             to="/inicio"
-            className={linkClass('bg-slate-900 text-white dark:bg-white dark:text-slate-900')}
+            className={linkClass('bg-gradient-to-r from-slate-900/90 to-slate-800/80 dark:from-white/90 dark:to-white/80 dark:!text-slate-900')}
             end
           >
             <Home className="h-4 w-4" />
@@ -57,37 +57,37 @@ export function DesktopSidebar() {
           </div>
           <NavLink
             to="/animales"
-            className={linkClass('bg-blue-600 text-white shadow-blue-500/20')}
+            className={linkClass('bg-gradient-to-r from-blue-600/90 to-blue-500/80 shadow-blue-500/15')}
           >
-            <Beef className="h-4 w-4 text-blue-500 group-[.bg-blue-600]:text-white" />
+            <Beef className="h-4 w-4 text-blue-500 group-[.border-white\/25]:text-white" />
             <span>Hato & Animales</span>
           </NavLink>
           <NavLink
             to="/panel/produccion"
-            className={linkClass('bg-blue-600 text-white shadow-blue-500/20')}
+            className={linkClass('bg-gradient-to-r from-blue-600/90 to-blue-500/80 shadow-blue-500/15')}
           >
-            <Scale className="h-4 w-4 text-blue-500 group-[.bg-blue-600]:text-white" />
+            <Scale className="h-4 w-4 text-blue-500 group-[.border-white\/25]:text-white" />
             <span>Producción & Pesaje</span>
           </NavLink>
           <NavLink
             to="/panel/salud"
-            className={linkClass('bg-purple-600 text-white shadow-purple-500/20')}
+            className={linkClass('bg-gradient-to-r from-purple-600/90 to-purple-500/80 shadow-purple-500/15')}
           >
-            <HeartPulse className="h-4 w-4 text-purple-500 group-[.bg-purple-600]:text-white" />
+            <HeartPulse className="h-4 w-4 text-purple-500 group-[.border-white\/25]:text-white" />
             <span>Salud & Vacunas</span>
           </NavLink>
           <NavLink
             to="/panel/reproduccion"
-            className={linkClass('bg-pink-600 text-white shadow-pink-500/20')}
+            className={linkClass('bg-gradient-to-r from-pink-600/90 to-pink-500/80 shadow-pink-500/15')}
           >
-            <Baby className="h-4 w-4 text-pink-500 group-[.bg-pink-600]:text-white" />
+            <Baby className="h-4 w-4 text-pink-500 group-[.border-white\/25]:text-white" />
             <span>Reproducción</span>
           </NavLink>
           <NavLink
             to="/panel/alimentacion"
-            className={linkClass('bg-amber-600 text-white shadow-amber-500/20')}
+            className={linkClass('bg-gradient-to-r from-amber-600/90 to-amber-500/80 shadow-amber-500/15')}
           >
-            <Wheat className="h-4 w-4 text-amber-500 group-[.bg-amber-600]:text-white" />
+            <Wheat className="h-4 w-4 text-amber-500 group-[.border-white\/25]:text-white" />
             <span>Alimentación</span>
           </NavLink>
         </div>
@@ -100,23 +100,23 @@ export function DesktopSidebar() {
           </div>
           <NavLink
             to="/agricultura"
-            className={linkClass('bg-emerald-600 text-white shadow-emerald-500/20')}
+            className={linkClass('bg-gradient-to-r from-emerald-600/90 to-emerald-500/80 shadow-emerald-500/15')}
           >
-            <Sprout className="h-4 w-4 text-emerald-500 group-[.bg-emerald-600]:text-white" />
+            <Sprout className="h-4 w-4 text-emerald-500 group-[.border-white\/25]:text-white" />
             <span>Siembras & Cosechas</span>
           </NavLink>
           <NavLink
             to="/terrenos"
-            className={linkClass('bg-lime-600 text-white shadow-lime-500/20')}
+            className={linkClass('bg-gradient-to-r from-lime-600/90 to-lime-500/80 shadow-lime-500/15')}
           >
-            <Fence className="h-4 w-4 text-lime-500 group-[.bg-lime-600]:text-white" />
+            <Fence className="h-4 w-4 text-lime-500 group-[.border-white\/25]:text-white" />
             <span>Potreros & Corrales</span>
           </NavLink>
           <NavLink
             to="/ajustes/ranchos"
-            className={linkClass('bg-emerald-700 text-white shadow-emerald-600/20')}
+            className={linkClass('bg-gradient-to-r from-emerald-700/90 to-emerald-600/80 shadow-emerald-600/15')}
           >
-            <MapPin className="h-4 w-4 text-emerald-600 group-[.bg-emerald-700]:text-white" />
+            <MapPin className="h-4 w-4 text-emerald-600 group-[.border-white\/25]:text-white" />
             <span>Ranchos & Divisiones</span>
           </NavLink>
         </div>
@@ -129,23 +129,23 @@ export function DesktopSidebar() {
           </div>
           <NavLink
             to="/maquinaria"
-            className={linkClass('bg-amber-600 text-white shadow-amber-500/20')}
+            className={linkClass('bg-gradient-to-r from-amber-600/90 to-amber-500/80 shadow-amber-500/15')}
           >
-            <Truck className="h-4 w-4 text-amber-500 group-[.bg-amber-600]:text-white" />
+            <Truck className="h-4 w-4 text-amber-500 group-[.border-white\/25]:text-white" />
             <span>Maquinaria & Taller</span>
           </NavLink>
           <NavLink
             to="/comercio"
-            className={linkClass('bg-emerald-700 text-white shadow-emerald-600/20')}
+            className={linkClass('bg-gradient-to-r from-emerald-700/90 to-teal-600/80 shadow-emerald-600/15')}
           >
-            <Handshake className="h-4 w-4 text-emerald-600 group-[.bg-emerald-700]:text-white" />
+            <Handshake className="h-4 w-4 text-emerald-600 group-[.border-white\/25]:text-white" />
             <span>Ventas, Compras & Insumos</span>
           </NavLink>
           <NavLink
             to="/calculadoras"
-            className={linkClass('bg-teal-600 text-white shadow-teal-500/20')}
+            className={linkClass('bg-gradient-to-r from-teal-600/90 to-emerald-600/80 shadow-teal-500/15')}
           >
-            <Calculator className="h-4 w-4 text-teal-500 group-[.bg-teal-600]:text-white" />
+            <Calculator className="h-4 w-4 text-teal-500 group-[.border-white\/25]:text-white" />
             <span>Calculadoras de Campo</span>
           </NavLink>
         </div>
@@ -158,16 +158,16 @@ export function DesktopSidebar() {
           </div>
           <NavLink
             to="/panel/dinero"
-            className={linkClass('bg-teal-600 text-white shadow-teal-500/20')}
+            className={linkClass('bg-gradient-to-r from-teal-600/90 to-blue-600/80 shadow-teal-500/15')}
           >
-            <DollarSign className="h-4 w-4 text-teal-500 group-[.bg-teal-600]:text-white" />
+            <DollarSign className="h-4 w-4 text-teal-500 group-[.border-white\/25]:text-white" />
             <span>Finanzas & Caja</span>
           </NavLink>
           <NavLink
             to="/panel/reportes"
-            className={linkClass('bg-slate-800 text-white dark:bg-slate-700')}
+            className={linkClass('bg-gradient-to-r from-indigo-700/90 to-indigo-600/80 shadow-indigo-600/15')}
           >
-            <BarChart3 className="h-4 w-4 text-slate-400 group-[.bg-slate-800]:text-white dark:group-[.bg-slate-700]:text-white" />
+            <BarChart3 className="h-4 w-4 text-slate-400 group-[.border-white\/25]:text-white" />
             <span>Reportes & PnL</span>
           </NavLink>
         </div>
@@ -176,9 +176,9 @@ export function DesktopSidebar() {
         <div className="space-y-1 pt-2 border-t border-border/50">
           <NavLink
             to="/ajustes"
-            className={linkClass('bg-slate-700 text-white dark:bg-slate-800')}
+            className={linkClass('bg-gradient-to-r from-slate-700/90 to-slate-600/80 shadow-slate-600/15')}
           >
-            <Settings className="h-4 w-4 text-slate-500 group-[.bg-slate-700]:text-white" />
+            <Settings className="h-4 w-4 text-slate-500 group-[.border-white\/25]:text-white" />
             <span>Ajustes & Configuración</span>
           </NavLink>
         </div>

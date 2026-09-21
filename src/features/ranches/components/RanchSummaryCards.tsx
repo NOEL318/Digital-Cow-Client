@@ -61,33 +61,33 @@ export function RanchSummaryCards({ ranchId }: Props) {
 
   return (
     <div className="grid gap-3 grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
-      <Card>
-        <CardHeader><CardTitle className="text-sm text-muted-foreground">{t('ranches:detail.activeAnimals')}</CardTitle></CardHeader>
-        <CardContent className="text-2xl font-bold">{totalActive}</CardContent>
+      <Card className="glass-gradient-emerald border-l-4 border-l-emerald-600">
+        <CardHeader><CardTitle className="text-sm font-medium text-emerald-800 dark:text-emerald-300">{t('ranches:detail.activeAnimals')}</CardTitle></CardHeader>
+        <CardContent className="text-2xl font-black text-emerald-700 dark:text-emerald-400">{totalActive}</CardContent>
       </Card>
-      <Card>
-        <CardHeader><CardTitle className="text-sm text-muted-foreground">{t('ranches:detail.totalLots')}</CardTitle></CardHeader>
-        <CardContent className="text-2xl font-bold">{totalLots}</CardContent>
+      <Card className="glass-gradient-blue border-l-4 border-l-blue-600">
+        <CardHeader><CardTitle className="text-sm font-medium text-blue-800 dark:text-blue-300">{t('ranches:detail.totalLots')}</CardTitle></CardHeader>
+        <CardContent className="text-2xl font-black text-blue-700 dark:text-blue-400">{totalLots}</CardContent>
       </Card>
-      <Card>
-        <CardHeader><CardTitle className="text-sm text-muted-foreground">{t('ranches:detail.byPurpose')}</CardTitle></CardHeader>
-        <CardContent className="text-sm space-y-1">
+      <Card className="glass-gradient-amber border-l-4 border-l-amber-600">
+        <CardHeader><CardTitle className="text-sm font-medium text-amber-800 dark:text-amber-300">{t('ranches:detail.byPurpose')}</CardTitle></CardHeader>
+        <CardContent className="text-sm space-y-1 text-card-foreground">
           <div className="flex justify-between"><span>{t('animals:purpose.DAIRY')}</span><span className="font-semibold">{dairyCount}</span></div>
           <div className="flex justify-between"><span>{t('animals:purpose.BEEF')}</span><span className="font-semibold">{beefCount}</span></div>
           <div className="flex justify-between"><span>{t('animals:purpose.DUAL')}</span><span className="font-semibold">{dualCount}</span></div>
         </CardContent>
       </Card>
-      <Card>
-        <CardHeader><CardTitle className="text-sm text-muted-foreground">{t('ranches:detail.bySex')}</CardTitle></CardHeader>
-        <CardContent className="text-sm space-y-1">
+      <Card className="glass-gradient-purple border-l-4 border-l-purple-600">
+        <CardHeader><CardTitle className="text-sm font-medium text-purple-800 dark:text-purple-300">{t('ranches:detail.bySex')}</CardTitle></CardHeader>
+        <CardContent className="text-sm space-y-1 text-card-foreground">
           <div className="flex justify-between"><span>{t('animals:sex.FEMALE')}</span><span className="font-semibold">{sexCounts.FEMALE}</span></div>
           <div className="flex justify-between"><span>{t('animals:sex.MALE')}</span><span className="font-semibold">{sexCounts.MALE}</span></div>
         </CardContent>
       </Card>
       {vetSpend !== undefined && (
-        <Card className="md:col-span-2 lg:col-span-4">
-          <CardHeader><CardTitle className="text-sm text-muted-foreground">{t('ranches:detail.monthVetSpend')}</CardTitle></CardHeader>
-          <CardContent className="text-2xl font-bold">{Number(vetSpend).toFixed(2)}</CardContent>
+        <Card className="md:col-span-2 lg:col-span-4 glass-card border-l-4 border-l-teal-600">
+          <CardHeader><CardTitle className="text-sm font-medium text-muted-foreground">{t('ranches:detail.monthVetSpend')}</CardTitle></CardHeader>
+          <CardContent className="text-2xl font-black text-foreground">${Number(vetSpend).toFixed(2)}</CardContent>
         </Card>
       )}
     </div>

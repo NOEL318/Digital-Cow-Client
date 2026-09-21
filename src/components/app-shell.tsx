@@ -168,7 +168,7 @@ export function AppShell() {
 
           {/* Identificador de Sección Activa (Escritorio) */}
           <div className="hidden md:flex items-center gap-2">
-            <div className="p-1.5 rounded-lg bg-background/60 shadow-xs text-foreground">
+            <div className="p-1.5 rounded-lg bg-background/60 shadow-sm text-foreground">
               <SectionIcon className="h-4 w-4" />
             </div>
             <span className="font-bold text-sm tracking-tight text-foreground">{section.name}</span>

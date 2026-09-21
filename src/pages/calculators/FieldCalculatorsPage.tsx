@@ -187,10 +187,10 @@ export default function FieldCalculatorsPage() {
             <button
               key={item.id}
               onClick={() => setCalculator(item.id)}
-              className={`p-3 rounded-2xl text-left transition-all border flex items-start gap-3 ${
+              className={`p-3 rounded-2xl text-left transition-all duration-150 border flex items-start gap-3 backdrop-blur-md ${
                 active
-                  ? 'bg-teal-600 text-white shadow-md shadow-teal-600/20 border-teal-600'
-                  : 'bg-card/70 hover:bg-accent border-border text-card-foreground'
+                  ? 'bg-gradient-to-r from-teal-600/90 to-emerald-600/90 text-white shadow-sm border-teal-500/50'
+                  : 'glass-card border-white/60 dark:border-white/10 hover:border-teal-500/40 text-card-foreground hover:shadow-sm'
               }`}
             >
               <div className={`p-2 rounded-xl shrink-0 ${active ? 'bg-white/20 text-white' : 'bg-teal-500/10 text-teal-600 dark:text-teal-400'}`}>

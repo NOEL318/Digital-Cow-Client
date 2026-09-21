@@ -152,13 +152,15 @@ export default function InicioPage() {
         </div>
       </div>
 
-      {/* KPI Cards Consolidados (Multidominio Agropecuario con datos reales) */}
+      {/* KPI Cards Consolidados (Multidominio Agropecuario con datos reales y Glassmorphism) */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
         {/* Ganadería */}
-        <Link to="/animales" className="glass-card p-4 border-l-4 border-l-blue-600 hover:scale-[1.01] transition-transform">
+        <Link to="/animales" className="glass-card glass-gradient-blue p-4 border-l-4 border-l-blue-600 transition-shadow">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400">Ganadería</span>
-            <Beef className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+            <span className="text-xs font-bold uppercase tracking-wider text-blue-700 dark:text-blue-300">Ganadería</span>
+            <div className="p-1.5 rounded-lg bg-blue-500/10 text-blue-600 dark:text-blue-400">
+              <Beef className="h-4 w-4" />
+            </div>
           </div>
           <div className="mt-2">
             <div className="text-2xl font-black text-foreground">{totalAnimals} <span className="text-xs font-normal text-muted-foreground">cabezas</span></div>
@@ -167,10 +169,12 @@ export default function InicioPage() {
         </Link>
 
         {/* Agricultura */}
-        <Link to="/agricultura" className="glass-card p-4 border-l-4 border-l-emerald-600 hover:scale-[1.01] transition-transform">
+        <Link to="/agricultura" className="glass-card glass-gradient-emerald p-4 border-l-4 border-l-emerald-600 transition-shadow">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">Agricultura</span>
-            <Sprout className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
+            <span className="text-xs font-bold uppercase tracking-wider text-emerald-700 dark:text-emerald-300">Agricultura</span>
+            <div className="p-1.5 rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
+              <Sprout className="h-4 w-4" />
+            </div>
           </div>
           <div className="mt-2">
             <div className="text-2xl font-black text-foreground">{agroKpis?.activeCropsHectares ?? 0} <span className="text-xs font-normal text-muted-foreground">ha en cultivo</span></div>
@@ -179,10 +183,12 @@ export default function InicioPage() {
         </Link>
 
         {/* Terrenos / Potreros */}
-        <Link to="/terrenos" className="glass-card p-4 border-l-4 border-l-lime-600 hover:scale-[1.01] transition-transform">
+        <Link to="/terrenos" className="glass-card glass-gradient-lime p-4 border-l-4 border-l-lime-600 transition-shadow">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-bold uppercase tracking-wider text-lime-700 dark:text-lime-400">Pastoreo Voisin</span>
-            <RotateCw className="h-5 w-5 text-lime-600 dark:text-lime-400" />
+            <span className="text-xs font-bold uppercase tracking-wider text-lime-800 dark:text-lime-300">Pastoreo Voisin</span>
+            <div className="p-1.5 rounded-lg bg-lime-500/10 text-lime-700 dark:text-lime-400">
+              <RotateCw className="h-4 w-4" />
+            </div>
           </div>
           <div className="mt-2">
             <div className="text-2xl font-black text-foreground">{pasturesActive} <span className="text-xs font-normal text-muted-foreground">pastoreo</span> / {pasturesResting} <span className="text-xs font-normal text-muted-foreground">descanso</span></div>
@@ -191,10 +197,12 @@ export default function InicioPage() {
         </Link>
 
         {/* Maquinaria */}
-        <Link to="/maquinaria" className="glass-card p-4 border-l-4 border-l-amber-600 hover:scale-[1.01] transition-transform">
+        <Link to="/maquinaria" className="glass-card glass-gradient-amber p-4 border-l-4 border-l-amber-600 transition-shadow">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-bold uppercase tracking-wider text-amber-600 dark:text-amber-400">Maquinaria</span>
-            <Truck className="h-5 w-5 text-amber-600 dark:text-amber-400" />
+            <span className="text-xs font-bold uppercase tracking-wider text-amber-700 dark:text-amber-300">Maquinaria</span>
+            <div className="p-1.5 rounded-lg bg-amber-500/10 text-amber-600 dark:text-amber-400">
+              <Truck className="h-4 w-4" />
+            </div>
           </div>
           <div className="mt-2">
             <div className="text-2xl font-black text-foreground">{machinery.filter(m => m.status === 'OPERATIONAL').length} / {machinery.length} <span className="text-xs font-normal text-muted-foreground">operativos</span></div>
@@ -288,7 +296,7 @@ export default function InicioPage() {
                 <Link
                   key={task.key}
                   to={task.to}
-                  className={`glass-card p-4 border flex items-start gap-3 transition-all hover:scale-[1.01] ${SEVERITY_BG[task.severity] ?? 'border-border'}`}
+                  className={`glass-card p-4 border flex items-start gap-3 transition-shadow duration-150 ${SEVERITY_BG[task.severity] ?? 'border-border'}`}
                 >
                   <div className="p-2 rounded-xl bg-background/80 shrink-0 shadow-sm">
                     <Icon className={`h-5 w-5 ${task.color}`} />
@@ -383,11 +391,11 @@ function QuickTile({ to, icon: Icon, label, tag, color }: { to: string; icon: Lu
   return (
     <Link
       to={to}
-      className={`glass-card p-3.5 flex flex-col justify-between border hover:scale-[1.02] transition-all min-h-[90px] ${color}`}
+      className={`glass-card p-3.5 flex flex-col justify-between border hover:shadow-md transition-shadow duration-150 min-h-[90px] ${color}`}
     >
       <div className="flex items-center justify-between">
         <Icon className="h-5 w-5" />
-        <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-background/80 shadow-xs">{tag}</span>
+        <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-background/80 shadow-sm">{tag}</span>
       </div>
       <span className="text-xs font-bold text-foreground leading-tight mt-2">{label}</span>
     </Link>
@@ -398,7 +406,7 @@ function ModuleCard({ to, icon: Icon, title, subtitle, color }: { to: string; ic
   return (
     <Link
       to={to}
-      className="glass-card p-4 flex items-start gap-3 hover:border-primary/40 hover:scale-[1.01] transition-all"
+      className="glass-card p-4 flex items-start gap-3 hover:border-primary/40 hover:shadow-md transition-all duration-150"
     >
       <div className={`p-2.5 rounded-xl shrink-0 ${color}`}>
         <Icon className="h-6 w-6" />
