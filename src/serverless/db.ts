@@ -5,7 +5,7 @@
 import type { ServerlessDatabase } from './types';
 import { INITIAL_SEED_DATA } from './seedData';
 
-const STORAGE_KEY = 'digitalcow_db_v1';
+const STORAGE_KEY = 'digitalcow_db_v2';
 
 class LocalDatabase {
   private data: ServerlessDatabase;
