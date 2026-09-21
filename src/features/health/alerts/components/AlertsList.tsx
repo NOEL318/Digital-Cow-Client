@@ -16,7 +16,7 @@ export function AlertsList({ title, items, emptyKey }: Props) {
   const safeItems = Array.isArray(items) ? items : [];
 
   return (
-    <section className="border rounded p-4">
+    <section className="glass-card rounded-2xl p-5 border border-white/60 dark:border-white/10">
       <h3 className="font-semibold mb-2">{title}</h3>
       {safeItems.length === 0 ? (
         <p className="text-sm text-muted-foreground">{t(emptyKey)}</p>

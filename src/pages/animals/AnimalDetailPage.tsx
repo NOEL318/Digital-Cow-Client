@@ -151,7 +151,7 @@ export default function AnimalDetailPage() {
       <AnimalActions animal={a} />
 
       <Tabs.Root defaultValue="datos" className="space-y-4">
-        <Tabs.List className="grid grid-cols-3 border rounded-xl overflow-hidden">
+        <Tabs.List className="grid grid-cols-3 border border-white/60 dark:border-white/10 rounded-2xl overflow-hidden glass-panel">
           <TabHead value="datos" icon={Camera} label={t('animals:tabs.dataAndPhotos')} />
           <TabHead value="historia" icon={Activity} label={t('animals:tabs.history')} />
           <TabHead value="dinero" icon={BarChart3} label={t('animals:tabs.moneyAndCompare')} />
@@ -160,7 +160,7 @@ export default function AnimalDetailPage() {
         <Tabs.Content value="datos" className="space-y-6">
           <section className="space-y-3">
             <h2 className="text-lg font-semibold">{t('animals:detail.identification')}</h2>
-            <div className="rounded-xl border divide-y">
+            <div className="rounded-2xl border border-white/60 dark:border-white/10 divide-y glass-card">
               <Field label={t('animals:fields.officialTag')} value={a.officialTag ?? '-'} />
               <Field label={t('animals:fields.rfid')} value={a.rfid ?? '-'} />
               <Field label={t('animals:fields.birthDate')} value={a.birthDate ?? '-'} />
@@ -207,7 +207,7 @@ function TabHead({ value, icon: Icon, label }: { value: string; icon: LucideIcon
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <section className="rounded-xl border p-4 space-y-3">
+    <section className="rounded-2xl border border-white/60 dark:border-white/10 glass-card p-5 space-y-3">
       <h2 className="text-lg font-semibold">{title}</h2>
       {children}
     </section>

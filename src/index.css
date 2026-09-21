@@ -64,27 +64,70 @@
 
 @layer base {
   * { @apply border-border; }
-  body { @apply bg-background text-foreground antialiased selection:bg-emerald-500/20 selection:text-emerald-700 dark:selection:text-emerald-300; }
+  body {
+    @apply bg-slate-50/60 dark:bg-slate-950 text-foreground antialiased selection:bg-emerald-500/20 selection:text-emerald-700 dark:selection:text-emerald-300;
+    background-image:
+      radial-gradient(at 0% 0%, rgba(16, 185, 129, 0.05) 0px, transparent 45%),
+      radial-gradient(at 100% 0%, rgba(14, 165, 233, 0.05) 0px, transparent 45%),
+      radial-gradient(at 50% 100%, rgba(168, 85, 247, 0.04) 0px, transparent 45%);
+    background-attachment: fixed;
+  }
+  .dark body {
+    background-image:
+      radial-gradient(at 0% 0%, rgba(16, 185, 129, 0.08) 0px, transparent 45%),
+      radial-gradient(at 100% 0%, rgba(14, 165, 233, 0.08) 0px, transparent 45%),
+      radial-gradient(at 50% 100%, rgba(168, 85, 247, 0.06) 0px, transparent 45%);
+    background-attachment: fixed;
+  }
 }
 
 @layer utilities {
   .glass {
-    @apply backdrop-blur-md bg-white/80 dark:bg-slate-900/80 border border-slate-200/60 dark:border-slate-800/60 shadow-sm;
+    @apply backdrop-blur-xl bg-white/70 dark:bg-slate-900/60 border border-white/50 dark:border-white/10 shadow-sm;
   }
   .glass-card {
-    @apply backdrop-blur-md bg-white/85 dark:bg-slate-900/85 border border-slate-200/70 dark:border-slate-800/70 shadow-sm hover:shadow-md hover:border-slate-300 dark:hover:border-slate-700 transition-all rounded-2xl;
+    @apply backdrop-blur-xl bg-gradient-to-br from-white/80 via-white/60 to-white/40 dark:from-slate-900/80 dark:via-slate-900/60 dark:to-slate-900/40 border border-white/60 dark:border-white/10 shadow-sm hover:shadow-md transition-shadow duration-150 rounded-2xl;
   }
   .glass-panel {
-    @apply backdrop-blur-lg bg-white/70 dark:bg-slate-900/70 border border-white/40 dark:border-slate-800/40 shadow-sm rounded-2xl;
+    @apply backdrop-blur-2xl bg-gradient-to-br from-white/70 via-white/50 to-white/30 dark:from-slate-900/70 dark:via-slate-900/50 dark:to-slate-900/30 border border-white/50 dark:border-white/10 shadow-sm rounded-3xl;
   }
   .glass-header {
-    @apply backdrop-blur-xl bg-white/80 dark:bg-slate-950/80 border-b border-slate-200/60 dark:border-slate-800/60;
+    @apply backdrop-blur-2xl bg-white/75 dark:bg-slate-950/75 border-b border-white/30 dark:border-white/10 shadow-sm;
   }
   .glass-nav {
-    @apply backdrop-blur-xl bg-white/85 dark:bg-slate-950/85 border-t border-slate-200/60 dark:border-slate-800/60;
+    @apply backdrop-blur-2xl bg-white/80 dark:bg-slate-950/80 border-t border-white/30 dark:border-white/10;
   }
   .glass-sidebar {
-    @apply backdrop-blur-xl bg-slate-50/80 dark:bg-slate-950/80 border-r border-slate-200/60 dark:border-slate-800/60;
+    @apply backdrop-blur-2xl bg-white/75 dark:bg-slate-950/75 border-r border-white/30 dark:border-white/10;
+  }
+
+  /* Gradientes transparentes semánticos para Cards con Glassmorphism */
+  .glass-gradient-emerald {
+    @apply bg-gradient-to-br from-emerald-500/15 via-emerald-500/5 to-transparent border-emerald-500/30 dark:border-emerald-500/25;
+  }
+  .glass-gradient-blue {
+    @apply bg-gradient-to-br from-blue-500/15 via-blue-500/5 to-transparent border-blue-500/30 dark:border-blue-500/25;
+  }
+  .glass-gradient-purple {
+    @apply bg-gradient-to-br from-purple-500/15 via-purple-500/5 to-transparent border-purple-500/30 dark:border-purple-500/25;
+  }
+  .glass-gradient-pink {
+    @apply bg-gradient-to-br from-pink-500/15 via-pink-500/5 to-transparent border-pink-500/30 dark:border-pink-500/25;
+  }
+  .glass-gradient-amber {
+    @apply bg-gradient-to-br from-amber-500/15 via-amber-500/5 to-transparent border-amber-500/30 dark:border-amber-500/25;
+  }
+  .glass-gradient-lime {
+    @apply bg-gradient-to-br from-lime-500/15 via-lime-500/5 to-transparent border-lime-500/30 dark:border-lime-500/25;
+  }
+  .glass-gradient-teal {
+    @apply bg-gradient-to-br from-teal-500/15 via-teal-500/5 to-transparent border-teal-500/30 dark:border-teal-500/25;
+  }
+  .glass-gradient-rose {
+    @apply bg-gradient-to-br from-rose-500/15 via-rose-500/5 to-transparent border-rose-500/30 dark:border-rose-500/25;
+  }
+  .glass-gradient-indigo {
+    @apply bg-gradient-to-br from-indigo-500/15 via-indigo-500/5 to-transparent border-indigo-500/30 dark:border-indigo-500/25;
   }
 }
 

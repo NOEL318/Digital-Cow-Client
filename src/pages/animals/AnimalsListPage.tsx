@@ -174,7 +174,7 @@ export default function AnimalsListPage() {
           ))}
         </ul>
       ) : (
-        <ul className="divide-y border rounded-xl overflow-hidden">
+        <ul className="divide-y border border-white/60 dark:border-white/10 rounded-2xl overflow-hidden glass-card">
           {list.data.content.map(a => {
             const aBadges = badgesByAnimal.get(a.id) ?? [];
             const sx = sexStyle(a.sex);
@@ -283,7 +283,7 @@ function AnimalCard({ animal, statusLabel, sexLabel, badges }: AnimalCardProps) 
     <li>
       <Link
         to={`/animales/${animal.id}`}
-        className="block rounded-xl border overflow-hidden hover:shadow-md transition-shadow bg-background"
+        className="block rounded-2xl glass-card overflow-hidden hover:shadow-md transition-shadow border-white/60 dark:border-white/10"
       >
         <div className={`aspect-square bg-muted relative ring-2 ring-inset ${sx.ring}`}>
           {animal.coverPhotoUrl ? (

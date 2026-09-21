@@ -53,17 +53,17 @@ export default function ProductionKpisPage() {
       ) : kpis.data ? (
         <>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-            <Card>
-              <CardHeader><CardTitle className="text-sm text-muted-foreground">{t('production:kpis.totalMilkLiters')}</CardTitle></CardHeader>
-              <CardContent className="text-2xl font-bold">{fmt(kpis.data.totalMilkLiters)}</CardContent>
+            <Card className="glass-gradient-blue border-l-4 border-l-blue-600">
+              <CardHeader><CardTitle className="text-sm font-medium text-blue-800 dark:text-blue-300">{t('production:kpis.totalMilkLiters')}</CardTitle></CardHeader>
+              <CardContent className="text-2xl font-black text-blue-700 dark:text-blue-400">{fmt(kpis.data.totalMilkLiters)}</CardContent>
             </Card>
-            <Card>
-              <CardHeader><CardTitle className="text-sm text-muted-foreground">{t('production:kpis.avgDailyMilkLiters')}</CardTitle></CardHeader>
-              <CardContent className="text-2xl font-bold">{fmt(kpis.data.avgDailyMilkLiters)}</CardContent>
+            <Card className="glass-gradient-teal border-l-4 border-l-teal-600">
+              <CardHeader><CardTitle className="text-sm font-medium text-teal-800 dark:text-teal-300">{t('production:kpis.avgDailyMilkLiters')}</CardTitle></CardHeader>
+              <CardContent className="text-2xl font-black text-teal-700 dark:text-teal-400">{fmt(kpis.data.avgDailyMilkLiters)}</CardContent>
             </Card>
-            <Card>
-              <CardHeader><CardTitle className="text-sm text-muted-foreground">{t('production:kpis.avgAdgKgDay')}</CardTitle></CardHeader>
-              <CardContent className="text-2xl font-bold">{fmt(kpis.data.avgAdgKgDay)}</CardContent>
+            <Card className="glass-gradient-emerald border-l-4 border-l-emerald-600">
+              <CardHeader><CardTitle className="text-sm font-medium text-emerald-800 dark:text-emerald-300">{t('production:kpis.avgAdgKgDay')}</CardTitle></CardHeader>
+              <CardContent className="text-2xl font-black text-emerald-700 dark:text-emerald-400">{fmt(kpis.data.avgAdgKgDay)}</CardContent>
             </Card>
           </div>
 

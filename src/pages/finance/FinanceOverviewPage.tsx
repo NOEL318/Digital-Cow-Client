@@ -94,42 +94,42 @@ export default function FinanceOverviewPage() {
     <div className="p-6 space-y-6">
       <h1 className="text-2xl font-bold">{t('finance:overview.title')}</h1>
 
-      {/* KPI cards with semantic colors */}
+      {/* KPI cards with semantic colors and glassmorphic gradients */}
       <div className="grid gap-3 grid-cols-1 md:grid-cols-3">
-        <Card className="border-green-200 dark:border-green-800">
+        <Card className="glass-gradient-emerald border-l-4 border-l-emerald-600">
           <CardHeader>
-            <CardTitle className="text-sm font-medium text-green-700 dark:text-green-400">
+            <CardTitle className="text-xs font-bold uppercase tracking-wider text-emerald-700 dark:text-emerald-400">
               {t('finance:overview.ytdIncome')}
             </CardTitle>
           </CardHeader>
-          <CardContent className="text-2xl font-bold text-green-700 dark:text-green-400">
-            {totals ? Number(totals.totalIncome).toFixed(2) : '-'}
+          <CardContent className="text-3xl font-black text-emerald-700 dark:text-emerald-400">
+            ${totals ? Number(totals.totalIncome).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '-'}
           </CardContent>
         </Card>
-        <Card className="border-red-200 dark:border-red-800">
+        <Card className="glass-gradient-rose border-l-4 border-l-rose-600">
           <CardHeader>
-            <CardTitle className="text-sm font-medium text-red-700 dark:text-red-400">
+            <CardTitle className="text-xs font-bold uppercase tracking-wider text-rose-700 dark:text-rose-400">
               {t('finance:overview.ytdExpense')}
             </CardTitle>
           </CardHeader>
-          <CardContent className="text-2xl font-bold text-red-700 dark:text-red-400">
-            {totals ? Number(totals.totalExpense).toFixed(2) : '-'}
+          <CardContent className="text-3xl font-black text-rose-700 dark:text-rose-400">
+            ${totals ? Number(totals.totalExpense).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '-'}
           </CardContent>
         </Card>
-        <Card className={margin !== null && margin >= 0
-          ? 'border-blue-200 dark:border-blue-800'
-          : 'border-amber-200 dark:border-amber-800'}>
+        <Card className={`border-l-4 ${margin !== null && margin >= 0
+          ? 'glass-gradient-blue border-l-blue-600'
+          : 'glass-gradient-amber border-l-amber-600'}`}>
           <CardHeader>
-            <CardTitle className={`text-sm font-medium ${margin !== null && margin >= 0
+            <CardTitle className={`text-xs font-bold uppercase tracking-wider ${margin !== null && margin >= 0
               ? 'text-blue-700 dark:text-blue-400'
               : 'text-amber-700 dark:text-amber-400'}`}>
               {t('finance:overview.ytdMargin')}
             </CardTitle>
           </CardHeader>
-          <CardContent className={`text-2xl font-bold ${margin !== null && margin >= 0
+          <CardContent className={`text-3xl font-black ${margin !== null && margin >= 0
             ? 'text-blue-700 dark:text-blue-400'
             : 'text-amber-700 dark:text-amber-400'}`}>
-            {totals ? Number(totals.margin).toFixed(2) : '-'}
+            ${totals ? Number(totals.margin).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '-'}
           </CardContent>
         </Card>
       </div>

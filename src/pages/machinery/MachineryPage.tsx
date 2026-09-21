@@ -92,8 +92,8 @@ export default function MachineryPage() {
 
       {/* KPI Stats Rápidos */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-        <div className="glass-card p-4 border-l-4 border-l-amber-600 flex items-center gap-3">
-          <div className="p-2.5 bg-amber-500/10 text-amber-600 rounded-xl">
+        <div className="glass-gradient-amber p-4 border-l-4 border-l-amber-600 flex items-center gap-3">
+          <div className="p-2.5 bg-amber-500/15 text-amber-700 dark:text-amber-300 rounded-xl">
             <Truck className="h-6 w-6" />
           </div>
           <div>
@@ -102,8 +102,8 @@ export default function MachineryPage() {
           </div>
         </div>
 
-        <div className="glass-card p-4 border-l-4 border-l-emerald-600 flex items-center gap-3">
-          <div className="p-2.5 bg-emerald-500/10 text-emerald-600 rounded-xl">
+        <div className="glass-gradient-emerald p-4 border-l-4 border-l-emerald-600 flex items-center gap-3">
+          <div className="p-2.5 bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 rounded-xl">
             <CheckCircle2 className="h-6 w-6" />
           </div>
           <div>
@@ -112,18 +112,18 @@ export default function MachineryPage() {
           </div>
         </div>
 
-        <div className="glass-card p-4 border-l-4 border-l-red-600 flex items-center gap-3">
-          <div className="p-2.5 bg-red-500/10 text-red-600 rounded-xl">
+        <div className="glass-gradient-rose p-4 border-l-4 border-l-rose-600 flex items-center gap-3">
+          <div className="p-2.5 bg-rose-500/15 text-rose-700 dark:text-rose-300 rounded-xl">
             <ShieldAlert className="h-6 w-6" />
           </div>
           <div>
-            <div className="text-2xl font-black text-red-600">{maintenancePendingCount}</div>
+            <div className="text-2xl font-black text-rose-600 dark:text-rose-400">{maintenancePendingCount}</div>
             <div className="text-xs text-muted-foreground font-medium uppercase tracking-wider">Servicio Próximo (&lt;50h)</div>
           </div>
         </div>
 
-        <div className="glass-card p-4 border-l-4 border-l-amber-600 flex items-center gap-3">
-          <div className="p-2.5 bg-amber-500/10 text-amber-600 rounded-xl">
+        <div className="glass-gradient-blue p-4 border-l-4 border-l-blue-600 flex items-center gap-3">
+          <div className="p-2.5 bg-blue-500/15 text-blue-700 dark:text-blue-300 rounded-xl">
             <Fuel className="h-6 w-6" />
           </div>
           <div>

@@ -25,28 +25,30 @@ export default function RanchesPage() {
         <h2 className="text-xl font-bold">{t('title')}</h2>
         <Button onClick={() => setOpen(true)}>{t('new')}</Button>
       </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>{t('fields.name')}</TableHead>
-            <TableHead>{t('fields.location')}</TableHead>
-            <TableHead>{t('fields.area')}</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {ranches.map(r => (
-            <TableRow key={r.id}>
-              <TableCell>
-                <Link to={`/ranches/${r.id}`} className="underline font-medium">
-                  {r.name}
-                </Link>
-              </TableCell>
-              <TableCell>{r.location}</TableCell>
-              <TableCell>{r.areaHectares ?? '-'}</TableCell>
+      <div className="glass-card overflow-hidden rounded-2xl border border-white/60 dark:border-white/10">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>{t('fields.name')}</TableHead>
+              <TableHead>{t('fields.location')}</TableHead>
+              <TableHead>{t('fields.area')}</TableHead>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+          </TableHeader>
+          <TableBody>
+            {ranches.map(r => (
+              <TableRow key={r.id}>
+                <TableCell>
+                  <Link to={`/ranches/${r.id}`} className="underline font-medium">
+                    {r.name}
+                  </Link>
+                </TableCell>
+                <TableCell>{r.location}</TableCell>
+                <TableCell>{r.areaHectares ?? '-'}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
       <RanchFormDialog open={open} onClose={() => setOpen(false)} />
     </div>
   );
