@@ -172,39 +172,48 @@ export default function AgriculturePage() {
       </div>
 
       {/* Selector de Pestañas Rápidas */}
-      <div className="flex items-center gap-2 border-b border-border/60 pb-2">
+      <div className="inline-flex flex-wrap items-center gap-1.5 p-1.5 rounded-2xl glass-card border border-white/60 dark:border-white/10 backdrop-blur-xl shadow-sm">
         <button
           onClick={() => setActiveTab('plantings')}
-          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all ${
+          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs md:text-sm font-semibold transition-all duration-150 ${
             activeTab === 'plantings'
-              ? 'bg-emerald-600 text-white shadow-sm'
-              : 'text-muted-foreground hover:bg-accent'
+              ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-md shadow-emerald-600/25 border border-white/20 font-bold'
+              : 'text-muted-foreground hover:text-foreground hover:bg-white/40 dark:hover:bg-slate-800/40'
           }`}
         >
           <Sprout className="h-4 w-4" />
-          Siembras en Curso ({plantings.filter(p => p.status !== 'HARVESTED').length})
+          <span>Siembras en Curso</span>
+          <span className={`text-[11px] px-1.5 py-0.5 rounded-full font-bold ${activeTab === 'plantings' ? 'bg-white/25 text-white' : 'bg-muted text-muted-foreground'}`}>
+            {plantings.filter(p => p.status !== 'HARVESTED').length}
+          </span>
         </button>
         <button
           onClick={() => setActiveTab('harvests')}
-          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all ${
+          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs md:text-sm font-semibold transition-all duration-150 ${
             activeTab === 'harvests'
-              ? 'bg-emerald-600 text-white shadow-sm'
-              : 'text-muted-foreground hover:bg-accent'
+              ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-md shadow-emerald-600/25 border border-white/20 font-bold'
+              : 'text-muted-foreground hover:text-foreground hover:bg-white/40 dark:hover:bg-slate-800/40'
           }`}
         >
           <Wheat className="h-4 w-4" />
-          Historial de Cosechas ({harvests.length})
+          <span>Historial de Cosechas</span>
+          <span className={`text-[11px] px-1.5 py-0.5 rounded-full font-bold ${activeTab === 'harvests' ? 'bg-white/25 text-white' : 'bg-muted text-muted-foreground'}`}>
+            {harvests.length}
+          </span>
         </button>
         <button
           onClick={() => setActiveTab('crops')}
-          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all ${
+          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs md:text-sm font-semibold transition-all duration-150 ${
             activeTab === 'crops'
-              ? 'bg-emerald-600 text-white shadow-sm'
-              : 'text-muted-foreground hover:bg-accent'
+              ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-md shadow-emerald-600/25 border border-white/20 font-bold'
+              : 'text-muted-foreground hover:text-foreground hover:bg-white/40 dark:hover:bg-slate-800/40'
           }`}
         >
           <Sparkles className="h-4 w-4" />
-          Catálogo de Cultivos ({crops.length})
+          <span>Catálogo de Cultivos</span>
+          <span className={`text-[11px] px-1.5 py-0.5 rounded-full font-bold ${activeTab === 'crops' ? 'bg-white/25 text-white' : 'bg-muted text-muted-foreground'}`}>
+            {crops.length}
+          </span>
         </button>
       </div>
 
