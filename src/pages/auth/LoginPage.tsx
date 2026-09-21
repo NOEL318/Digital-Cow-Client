@@ -61,25 +61,6 @@ export default function LoginPage() {
         <Button type="submit" className="w-full" disabled={form.formState.isSubmitting}>
           {t('auth:login.submit')}
         </Button>
-        <Button
-          type="button"
-          variant="outline"
-          className="w-full border-dashed border-primary/50 text-primary hover:bg-primary/10"
-          onClick={async () => {
-            form.setValue('email', 'admin@digitalcow.local');
-            form.setValue('password', 'password123');
-            try {
-              await login('admin@digitalcow.local', 'password123');
-              nav('/inicio');
-            } catch {}
-          }}
-        >
-          🚀 Acceso Rápido Demo (1 Clic)
-        </Button>
-        <div className="rounded-md bg-muted/50 p-2.5 text-xs text-muted-foreground text-center border">
-          <p className="font-semibold text-foreground">Modo Serverless / Front-End</p>
-          <p className="mt-0.5">Ejecuta 100% en tu navegador sin backend. Usa <span className="font-mono text-primary font-medium">admin@digitalcow.local</span> o tu propio correo.</p>
-        </div>
         <div className="text-sm text-center space-y-1">
           <div><Link to="/forgot-password" className="underline">{t('auth:login.forgot')}</Link></div>
           <div>{t('auth:login.noAccount')} <Link to="/register" className="underline">{t('auth:login.register')}</Link></div>

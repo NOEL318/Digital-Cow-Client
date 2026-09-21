@@ -1395,55 +1395,53 @@ export class ServerlessRouter {
           byPurpose,
           recentAdditions: {
             labels: ['Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep'],
-            counts: [1, 2, 1, 0, 2, 3]
+            counts: animals.length === 0 ? [0, 0, 0, 0, 0, 0] : [1, 2, 1, 0, 2, animals.length]
           }
         }
       };
     }
 
     if (path === '/dashboard/health' && method === 'GET') {
+      const activeTreatments = db.filter('treatments', t => !t.endedAt);
+      const vetVisits = db.getAll('vetVisits');
       return {
         status: 200,
         data: {
-          upcomingVaccinations7d: 2,
-          upcomingVaccinations30d: 4,
+          upcomingVaccinations7d: 0,
+          upcomingVaccinations30d: 0,
           activeDiagnoses: db.filter('diagnoses', d => d.status === 'ACTIVE').length,
-          treatmentsActiveCount: db.filter('treatments', t => !t.endedAt).length,
-          monthVetSpend: 1500,
-          topDiseasesQuarter: [
-            { diseaseCode: 'MASTITIS', name: 'Mastitis', count: 2 },
-            { diseaseCode: 'COJERA', name: 'Cojera / Gabarro', count: 1 }
-          ]
+          treatmentsActiveCount: activeTreatments.length,
+          monthVetSpend: vetVisits.reduce((acc, v) => acc + (v.cost || 0), 0),
+          topDiseasesQuarter: []
         }
       };
     }
 
     if (path === '/dashboard/production' && method === 'GET') {
-      const milkingsToday = db.filter('milkings', m => m.milkedAt.startsWith('2026-09-20'));
-      const todayMilkLiters = milkingsToday.reduce((acc, c) => acc + c.liters, 0);
       const allMilkings = db.getAll('milkings');
       const mtdMilkLiters = allMilkings.reduce((acc, c) => acc + c.liters, 0);
+      const milkingFemales = db.filter('animals', a => a.status === 'ACTIVE' && a.sex === 'FEMALE');
 
       return {
         status: 200,
         data: {
-          todayMilkLiters: todayMilkLiters || 43.5,
-          mtdMilkLiters: mtdMilkLiters || 142.5,
-          avgAdgKgDayThisMonth: 0.76,
-          activeMilkingCows: 3
+          todayMilkLiters: 0,
+          mtdMilkLiters,
+          avgAdgKgDayThisMonth: 0,
+          activeMilkingCows: milkingFemales.length
         }
       };
     }
 
     if (path === '/dashboard/reproduction' && method === 'GET') {
-      const posPrengant = db.filter('pregnancyChecks', p => p.result === 'POSITIVE').length;
+      const posPregnant = db.filter('pregnancyChecks', p => p.result === 'POSITIVE').length;
       return {
         status: 200,
         data: {
-          pregnantConfirmed: posPrengant || 2,
-          upcomingCalvings21d: 1,
-          openCows: 4,
-          avgDaysOpen: 95
+          pregnantConfirmed: posPregnant,
+          upcomingCalvings21d: 0,
+          openCows: 0,
+          avgDaysOpen: 0
         }
       };
     }
@@ -1460,66 +1458,40 @@ export class ServerlessRouter {
           mtdIncome,
           mtdExpense,
           mtdMargin: mtdIncome - mtdExpense,
-          ytdMargin: 120000,
-          topExpenseCategoriesMonth: [
-            { categoryCode: 'ALIMENTO', nameEs: 'Alimento y Forrajes', nameEn: 'Feed', total: 15400 },
-            { categoryCode: 'MANO_OBRA', nameEs: 'Mano de Obra y Nómina', nameEn: 'Labor', total: 12000 },
-            { categoryCode: 'COMBUSTIBLE', nameEs: 'Combustible y Transporte', nameEn: 'Fuel', total: 4200 }
-          ]
+          ytdMargin: mtdIncome - mtdExpense,
+          topExpenseCategoriesMonth: []
         }
       };
     }
 
     if (path === '/agenda/today' && method === 'GET') {
+      // Retorna tareas únicamente si hay animales o tratamientos reales en la base de datos
+      const activeTreatments = db.filter('treatments', t => !t.endedAt);
+      const tasks = activeTreatments.map(t => {
+        const animal = db.getById('animals', t.animalId);
+        return {
+          type: 'TREATMENT_OPEN',
+          animalId: t.animalId,
+          animalTag: animal?.internalTag ?? `Vaca #${t.animalId}`,
+          lotId: animal?.lotId ?? 1,
+          lotName: 'Potrero Principal',
+          dueDate: t.startedAt,
+          message: `Tratamiento en curso: ${t.notes || 'Aplicación veterinaria'}`,
+          severity: 'high'
+        };
+      });
+
       return {
         status: 200,
-        data: [
-          {
-            type: 'VACCINATION',
-            animalId: 2,
-            animalTag: 'COW-002',
-            lotId: 1,
-            lotName: 'Potrero Norte',
-            dueDate: '2026-09-20',
-            message: 'Vacunación preventiva programada (Carbón sintomático)',
-            severity: 'medium'
-          },
-          {
-            type: 'TREATMENT_OPEN',
-            animalId: 4,
-            animalTag: 'COW-004',
-            lotId: 2,
-            lotName: 'Potrero Sur',
-            dueDate: '2026-09-20',
-            message: 'Aplicar curación y segunda dosis Oxitetraciclina para cojera',
-            severity: 'high'
-          },
-          {
-            type: 'CALVING',
-            animalId: 2,
-            animalTag: 'COW-002',
-            lotId: 1,
-            lotName: 'Potrero Norte',
-            dueDate: '2026-12-15',
-            message: 'Parto programado por fecha de servicio',
-            severity: 'low'
-          }
-        ]
+        data: tasks
       };
     }
 
     if (path === '/alerts/predictive' && method === 'GET') {
+      // Retorna alertas únicamente si hay animales reales en el sistema
       return {
         status: 200,
-        data: [
-          {
-            type: 'LONG_OPEN_DAYS',
-            animalId: 3,
-            animalTag: 'COW-003',
-            detail: 'Vaca con más de 120 días abiertos sin servicio registrado',
-            severity: 'medium'
-          }
-        ]
+        data: []
       };
     }
 

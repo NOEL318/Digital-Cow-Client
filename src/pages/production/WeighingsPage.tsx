@@ -3,9 +3,10 @@
  */
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Plus, Upload } from 'lucide-react';
+import { Plus, Upload, Scale } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { EmptyState } from '@/components/ui/empty-state';
 import {
   Table, TableHeader, TableBody, TableRow, TableHead, TableCell
 } from '@/components/ui/table';
@@ -49,28 +50,38 @@ export default function WeighingsPage() {
         </div>
       </div>
 
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>{t('production:weighing.weighedAt')}</TableHead>
-            <TableHead>{t('production:weighing.animal')}</TableHead>
-            <TableHead>{t('production:weighing.weightKg')}</TableHead>
-            <TableHead>{t('production:weighing.method')}</TableHead>
-            <TableHead>{t('production:weighing.bodyConditionScore')}</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {weighings.data?.map(w => (
-            <TableRow key={w.id}>
-              <TableCell>{w.weighedAt}</TableCell>
-              <TableCell>{w.animalId}</TableCell>
-              <TableCell>{w.weightKg}</TableCell>
-              <TableCell>{w.method ? t(`production:weighing.methodValue.${w.method}`) : '-'}</TableCell>
-              <TableCell>{w.bodyConditionScore ?? '-'}</TableCell>
+      {!weighings.data || weighings.data.length === 0 ? (
+        <EmptyState
+          icon={Scale}
+          title={t('production:weighing.title')}
+          description="Aún no hay pesajes registrados en la báscula para este hato."
+          ctaLabel={t('production:weighing.new')}
+          onCta={() => setOpen(true)}
+        />
+      ) : (
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>{t('production:weighing.weighedAt')}</TableHead>
+              <TableHead>{t('production:weighing.animal')}</TableHead>
+              <TableHead>{t('production:weighing.weightKg')}</TableHead>
+              <TableHead>{t('production:weighing.method')}</TableHead>
+              <TableHead>{t('production:weighing.bodyConditionScore')}</TableHead>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+          </TableHeader>
+          <TableBody>
+            {weighings.data.map(w => (
+              <TableRow key={w.id}>
+                <TableCell>{w.weighedAt}</TableCell>
+                <TableCell>{w.animalId}</TableCell>
+                <TableCell>{w.weightKg}</TableCell>
+                <TableCell>{w.method ? t(`production:weighing.methodValue.${w.method}`) : '-'}</TableCell>
+                <TableCell>{w.bodyConditionScore ?? '-'}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      )}
 
       <CsvImportDialog<WeighingCreate>
         open={importOpen}

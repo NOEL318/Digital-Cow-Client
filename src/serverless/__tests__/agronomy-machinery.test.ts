@@ -44,13 +44,31 @@ describe('Módulos de Agricultura, Maquinaria, Terrenos y Comercio', () => {
   });
 
   it('registra una cosecha con cálculo automático de rendimiento t/ha e ingreso', async () => {
+    const planting = db.insert('plantings', {
+      accountId: 1,
+      ranchId: 1,
+      landId: 3,
+      cropId: 1,
+      cropName: 'Maíz Blanco',
+      variety: 'Híbrido Dekalb',
+      plantingDate: '2026-06-01',
+      expectedHarvestDate: '2026-09-25',
+      actualHarvestDate: null,
+      areaHectares: 10.0,
+      seedingRateKgHa: 22.0,
+      status: 'FLOWERING',
+      progressPercentage: 80,
+      totalInvestment: 80000,
+      notes: ''
+    });
+
     const harvestRes = await serverlessRouter.handle(
       'POST',
       '/harvests',
       {},
       {
         ranchId: 1,
-        plantingId: 1,
+        plantingId: planting.id,
         landId: 3,
         cropName: 'Maíz Blanco',
         harvestDate: '2026-09-20',
@@ -68,17 +86,35 @@ describe('Módulos de Agricultura, Maquinaria, Terrenos y Comercio', () => {
     expect(harvestRes.data.totalRevenue).toBe(92.5 * 5300);
 
     // Verificar que la siembra se marcó como cosechada
-    const planting = db.getById('plantings', 1);
-    expect(planting?.status).toBe('HARVESTED');
-    expect(planting?.progressPercentage).toBe(100);
+    const updatedPlanting = db.getById('plantings', planting.id);
+    expect(updatedPlanting?.status).toBe('HARVESTED');
+    expect(updatedPlanting?.progressPercentage).toBe(100);
   });
 
   it('gestiona maquinaria, registra mantenimiento preventivo y actualiza horómetro', async () => {
+    const tractor = db.insert('machinery', {
+      accountId: 1,
+      ranchId: 1,
+      name: 'Tractor John Deere 6110M',
+      type: 'TRACTOR',
+      brand: 'John Deere',
+      model: '6110M',
+      year: 2021,
+      serialNumber: '1L06110MJ0982',
+      purchaseDate: '2021-03-15',
+      purchasePrice: 1150000,
+      currentHoursMeter: 2450,
+      lastServiceHours: 2250,
+      nextServiceHours: 2500,
+      serviceIntervalHours: 250,
+      status: 'OPERATIONAL',
+      fuelType: 'DIESEL',
+      notes: 'Tractor principal'
+    });
+
     const listRes = await serverlessRouter.handle('GET', '/machinery');
     expect(listRes.status).toBe(200);
-    expect(listRes.data.length).toBeGreaterThanOrEqual(4);
-
-    const tractor = listRes.data[0];
+    expect(listRes.data.length).toBeGreaterThanOrEqual(1);
 
     // Registrar servicio preventivo
     const maintRes = await serverlessRouter.handle(
@@ -103,9 +139,29 @@ describe('Módulos de Agricultura, Maquinaria, Terrenos y Comercio', () => {
   });
 
   it('registra carga de combustible diesel y actualiza horómetro de equipo', async () => {
+    const tractor = db.insert('machinery', {
+      accountId: 1,
+      ranchId: 1,
+      name: 'Tractor New Holland TT4.75',
+      type: 'TRACTOR',
+      brand: 'New Holland',
+      model: 'TT4.75',
+      year: 2020,
+      serialNumber: 'NH-99120',
+      purchaseDate: '2020-05-10',
+      purchasePrice: 850000,
+      currentHoursMeter: 2400,
+      lastServiceHours: 2250,
+      nextServiceHours: 2500,
+      serviceIntervalHours: 250,
+      status: 'OPERATIONAL',
+      fuelType: 'DIESEL',
+      notes: ''
+    });
+
     const fuelRes = await serverlessRouter.handle(
       'POST',
-      '/machinery/1/fuel',
+      `/machinery/${tractor.id}/fuel`,
       {},
       {
         loggedAt: '2026-09-20',
@@ -119,18 +175,32 @@ describe('Módulos de Agricultura, Maquinaria, Terrenos y Comercio', () => {
     expect(fuelRes.status).toBe(201);
     expect(fuelRes.data.totalCost).toBe(150 * 24.50);
 
-    const tractor = db.getById('machinery', 1);
-    expect(tractor?.currentHoursMeter).toBe(2460);
+    const updated = db.getById('machinery', tractor.id);
+    expect(updated?.currentHoursMeter).toBe(2460);
   });
 
   it('permite rotar potreros de pastoreo Voisin con un solo clic', async () => {
-    const potrero = db.getById('lands', 1);
-    expect(potrero).toBeDefined();
-    const initialStatus = potrero?.status;
+    const potrero = db.insert('lands', {
+      accountId: 1,
+      ranchId: 1,
+      name: 'Potrero El Mirador',
+      type: 'PASTURE',
+      areaHectares: 18.5,
+      soilType: 'LOAM',
+      irrigationType: 'RAIN_FED',
+      status: 'ACTIVE',
+      carryingCapacityUGM: 25,
+      currentAnimalCount: 14,
+      daysInUse: 4,
+      daysInRest: 28,
+      notes: ''
+    });
+
+    const initialStatus = potrero.status;
 
     const rotateRes = await serverlessRouter.handle(
       'POST',
-      '/lands/1/rotate',
+      `/lands/${potrero.id}/rotate`,
       {},
       { animalCount: 20 }
     );
@@ -140,13 +210,24 @@ describe('Módulos de Agricultura, Maquinaria, Terrenos y Comercio', () => {
   });
 
   it('administra inventario de bodega y registra salidas de insumos', async () => {
-    const supply = db.getById('supplies', 2); // Urea
-    expect(supply).toBeDefined();
-    const initialStock = supply!.currentStock;
+    const supply = db.insert('supplies', {
+      accountId: 1,
+      ranchId: 1,
+      name: 'Fertilizante Urea Granulada 46-00-00',
+      category: 'FERTILIZER',
+      brand: 'YaraVera',
+      unit: 'BAG_50KG',
+      currentStock: 80,
+      minimumStockAlert: 20,
+      unitCost: 820,
+      location: 'Bodega Principal Estante A'
+    });
+
+    const initialStock = supply.currentStock;
 
     const moveRes = await serverlessRouter.handle(
       'POST',
-      `/supplies/${supply!.id}/movements`,
+      `/supplies/${supply.id}/movements`,
       {},
       {
         movementDate: '2026-09-20',
@@ -158,11 +239,42 @@ describe('Módulos de Agricultura, Maquinaria, Terrenos y Comercio', () => {
     );
 
     expect(moveRes.status).toBe(201);
-    const updatedSupply = db.getById('supplies', supply!.id);
+    const updatedSupply = db.getById('supplies', supply.id);
     expect(updatedSupply?.currentStock).toBe(initialStock - 5);
   });
 
   it('registra transacciones de comercio agropecuario y calcula KPIs consolidados', async () => {
+    db.insert('plantings', {
+      accountId: 1,
+      ranchId: 1,
+      landId: 1,
+      cropId: 1,
+      cropName: 'Maíz',
+      variety: 'Pioneer',
+      plantingDate: '2026-09-01',
+      expectedHarvestDate: '2027-01-01',
+      actualHarvestDate: null,
+      areaHectares: 12.0,
+      seedingRateKgHa: 22.0,
+      status: 'VEGETATIVE',
+      progressPercentage: 40,
+      totalInvestment: 50000,
+      notes: ''
+    });
+
+    db.insert('machinery', {
+      accountId: 1,
+      ranchId: 1,
+      name: 'Tractor Test',
+      type: 'TRACTOR',
+      currentHoursMeter: 100,
+      lastServiceHours: 0,
+      nextServiceHours: 250,
+      serviceIntervalHours: 250,
+      status: 'OPERATIONAL',
+      fuelType: 'DIESEL'
+    });
+
     const tradeRes = await serverlessRouter.handle(
       'POST',
       '/trades',

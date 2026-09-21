@@ -6,7 +6,7 @@ import { NavLink } from 'react-router-dom';
 import {
   Home, Beef, Scale, HeartPulse, Baby, Wheat,
   Sprout, Fence, Truck, Handshake, Calculator, Settings,
-  Sparkles
+  Sparkles, DollarSign, BarChart3, MapPin
 } from 'lucide-react';
 
 export function DesktopSidebar() {
@@ -112,9 +112,16 @@ export function DesktopSidebar() {
             <Fence className="h-4 w-4 text-lime-500 group-[.bg-lime-600]:text-white" />
             <span>Potreros & Corrales</span>
           </NavLink>
+          <NavLink
+            to="/ajustes/ranchos"
+            className={linkClass('bg-emerald-700 text-white shadow-emerald-600/20')}
+          >
+            <MapPin className="h-4 w-4 text-emerald-600 group-[.bg-emerald-700]:text-white" />
+            <span>Ranchos & Divisiones</span>
+          </NavLink>
         </div>
 
-        {/* Maquinaria & Comercio (Naranja / Dólar) */}
+        {/* Maquinaria & Operaciones (Ámbar / Naranja) */}
         <div className="space-y-1">
           <div className="px-3 text-[10px] font-bold uppercase tracking-wider text-amber-600 dark:text-amber-400 flex items-center gap-1.5">
             <Truck className="h-3 w-3" />
@@ -140,6 +147,28 @@ export function DesktopSidebar() {
           >
             <Calculator className="h-4 w-4 text-teal-500 group-[.bg-teal-600]:text-white" />
             <span>Calculadoras de Campo</span>
+          </NavLink>
+        </div>
+
+        {/* Finanzas & Control (Esmeralda / Pizarra) */}
+        <div className="space-y-1">
+          <div className="px-3 text-[10px] font-bold uppercase tracking-wider text-teal-600 dark:text-teal-400 flex items-center gap-1.5">
+            <DollarSign className="h-3 w-3" />
+            <span>Finanzas & Métricas</span>
+          </div>
+          <NavLink
+            to="/panel/dinero"
+            className={linkClass('bg-teal-600 text-white shadow-teal-500/20')}
+          >
+            <DollarSign className="h-4 w-4 text-teal-500 group-[.bg-teal-600]:text-white" />
+            <span>Finanzas & Caja</span>
+          </NavLink>
+          <NavLink
+            to="/panel/reportes"
+            className={linkClass('bg-slate-800 text-white dark:bg-slate-700')}
+          >
+            <BarChart3 className="h-4 w-4 text-slate-400 group-[.bg-slate-800]:text-white dark:group-[.bg-slate-700]:text-white" />
+            <span>Reportes & PnL</span>
           </NavLink>
         </div>
 

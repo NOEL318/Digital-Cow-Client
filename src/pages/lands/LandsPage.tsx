@@ -6,13 +6,15 @@
 import { useState } from 'react';
 import {
   Layers, Fence, RotateCw, Plus,
-  Sprout, Beef, Droplets, Sun
+  Sprout, Beef, Droplets, Sun, BarChart3
 } from 'lucide-react';
+import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid } from 'recharts';
 import { useLands, landsApi, type CreateLandPayload } from '@/features/lands/api';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { EmptyState } from '@/components/ui/empty-state';
 import { useQueryClient } from '@tanstack/react-query';
 import type { ServerlessLand } from '@/serverless/types';
 
@@ -122,8 +124,42 @@ export default function LandsPage() {
         </div>
       </div>
 
+      {/* Gráfica de Capacidad Territorial & Aforo UGM */}
+      {lands.length > 0 && (
+        <div className="glass-card p-5 space-y-3">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <BarChart3 className="h-5 w-5 text-lime-600" />
+              <h3 className="font-bold text-base text-foreground">Distribución Territorial y Capacidad de Carga (UGM)</h3>
+            </div>
+            <span className="text-xs text-muted-foreground font-medium">{lands.length} terrenos registrados</span>
+          </div>
+
+          <div className="h-56 w-full pt-2">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={lands.map(l => ({ name: l.name, ha: l.areaHectares || 0, ugm: l.carryingCapacityUGM || 0 }))} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                <CartesianGrid strokeDasharray="3 3" opacity={0.15} />
+                <XAxis dataKey="name" tick={{ fontSize: 11 }} />
+                <YAxis tick={{ fontSize: 11 }} />
+                <Tooltip
+                  contentStyle={{
+                    backgroundColor: 'rgba(15, 23, 42, 0.9)',
+                    borderColor: 'rgba(255, 255, 255, 0.1)',
+                    borderRadius: '0.75rem',
+                    color: '#fff',
+                    fontSize: '12px'
+                  }}
+                />
+                <Bar dataKey="ha" name="Superficie (ha)" fill="#65a30d" radius={[6, 6, 0, 0]} />
+                <Bar dataKey="ugm" name="Capacidad (UGM)" fill="#059669" radius={[6, 6, 0, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+      )}
+
       {/* Selector de Filtro de Terrenos */}
-      <div className="flex items-center gap-2 border-b border-border/60 pb-2 overflow-x-auto">
+      <div className="flex flex-wrap items-center gap-2 border-b border-border/60 pb-2">
         <button
           onClick={() => setSelectedType('ALL')}
           className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all shrink-0 ${
@@ -170,173 +206,183 @@ export default function LandsPage() {
         </button>
       </div>
 
-      {/* Grid de Terrenos */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {filteredLands.map(l => {
-          const isPasture = l.type === 'PASTURE';
-          const isAgri = l.type === 'AGRICULTURAL';
-          const isFeedlot = l.type === 'FEEDLOT';
+      {/* Grid de Terrenos o Estado Vacío */}
+      {filteredLands.length === 0 ? (
+        <EmptyState
+          icon={Fence}
+          title="No hay terrenos registrados en esta categoría"
+          description="Registra potreros para pastoreo Voisin, parcelas agrícolas para siembra o corrales de engorda para comenzar la gestión de tus tierras."
+          ctaLabel="Registrar Primer Terreno"
+          onCta={() => setNewLandOpen(true)}
+        />
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {filteredLands.map(l => {
+            const isPasture = l.type === 'PASTURE';
+            const isAgri = l.type === 'AGRICULTURAL';
+            const isFeedlot = l.type === 'FEEDLOT';
 
-          const isActivePasture = isPasture && l.status === 'ACTIVE';
-          const isRestingPasture = isPasture && l.status === 'RESTING';
+            const isActivePasture = isPasture && l.status === 'ACTIVE';
+            const isRestingPasture = isPasture && l.status === 'RESTING';
 
-          return (
-            <div
-              key={l.id}
-              className={`glass-card p-5 relative overflow-hidden flex flex-col justify-between border-t-4 ${
-                isActivePasture ? 'border-t-emerald-600' :
-                isRestingPasture ? 'border-t-lime-500' :
-                isAgri ? 'border-t-sky-500' : 'border-t-amber-500'
-              }`}
-            >
-              <div className="space-y-3">
-                <div className="flex items-start justify-between gap-2">
-                  <div>
-                    <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-foreground border border-border">
-                      {isPasture ? 'Potrero' : isAgri ? 'Parcela Agrícola' : 'Corral'}
-                    </span>
-                    <h3 className="font-bold text-lg mt-1 text-foreground leading-snug">{l.name}</h3>
-                  </div>
-
-                  <span className={`text-xs px-2.5 py-1 rounded-full font-bold ${
-                    l.status === 'ACTIVE' ? 'bg-emerald-100 text-emerald-800 border border-emerald-300' :
-                    l.status === 'RESTING' ? 'bg-lime-100 text-lime-800 border border-lime-300' :
-                    l.status === 'OCCUPIED' ? 'bg-amber-100 text-amber-800 border border-amber-300' :
-                    'bg-slate-100 text-slate-800 border border-slate-300'
-                  }`}>
-                    {l.status === 'ACTIVE' ? (isPasture ? 'En Pastoreo' : 'Activo') :
-                     l.status === 'RESTING' ? 'En Descanso' :
-                     l.status === 'OCCUPIED' ? 'Ocupado' : l.status}
-                  </span>
-                </div>
-
-                <div className="grid grid-cols-2 gap-2 text-xs text-muted-foreground">
-                  <div className="flex items-center gap-1.5">
-                    <Layers className="h-3.5 w-3.5 text-lime-600" />
-                    <span><strong>{l.areaHectares} ha</strong></span>
-                  </div>
-                  {l.soilType && (
-                    <div className="flex items-center gap-1.5">
-                      <Sun className="h-3.5 w-3.5 text-lime-600" />
-                      <span>Suelo: {l.soilType}</span>
-                    </div>
-                  )}
-                  {l.irrigationType && (
-                    <div className="flex items-center gap-1.5">
-                      <Droplets className="h-3.5 w-3.5 text-sky-600" />
-                      <span>Riego: {l.irrigationType}</span>
-                    </div>
-                  )}
-                </div>
-
-                {/* Info específica de Potrero: Pasto, Días y Capacidad */}
-                {isPasture && (
-                  <div className="p-3 bg-slate-50 dark:bg-slate-900/60 rounded-xl border border-border/50 space-y-2">
-                    <div className="text-xs font-semibold text-foreground flex items-center justify-between">
-                      <span>Pasto: {l.pastureGrassType || 'Brachiaria / Estrella'}</span>
-                      <span className="font-mono text-emerald-700 dark:text-emerald-400 font-bold">
-                        {l.currentAnimalCount ?? 0} cabezas
+            return (
+              <div
+                key={l.id}
+                className={`glass-card p-5 relative overflow-hidden flex flex-col justify-between border-t-4 ${
+                  isActivePasture ? 'border-t-emerald-600' :
+                  isRestingPasture ? 'border-t-lime-500' :
+                  isAgri ? 'border-t-sky-500' : 'border-t-amber-500'
+                }`}
+              >
+                <div className="space-y-3">
+                  <div className="flex items-start justify-between gap-2">
+                    <div>
+                      <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-foreground border border-border">
+                        {isPasture ? 'Potrero' : isAgri ? 'Parcela Agrícola' : 'Corral'}
                       </span>
+                      <h3 className="font-bold text-lg mt-1 text-foreground leading-snug">{l.name}</h3>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-2 text-[11px] pt-1 border-t border-border/40">
-                      <div>
-                        <span className="text-muted-foreground block">Días en uso:</span>
-                        <strong className="text-foreground">{l.daysInUse ?? 0} días</strong>
-                      </div>
-                      <div>
-                        <span className="text-muted-foreground block">Días descanso:</span>
-                        <strong className="text-lime-700 dark:text-lime-400">{l.daysInRest ?? 0} días</strong>
-                      </div>
-                    </div>
+                    <span className={`text-xs px-2.5 py-1 rounded-full font-bold ${
+                      l.status === 'ACTIVE' ? 'bg-emerald-100 text-emerald-800 border border-emerald-300' :
+                      l.status === 'RESTING' ? 'bg-lime-100 text-lime-800 border border-lime-300' :
+                      l.status === 'OCCUPIED' ? 'bg-amber-100 text-amber-800 border border-amber-300' :
+                      'bg-slate-100 text-slate-800 border border-slate-300'
+                    }`}>
+                      {l.status === 'ACTIVE' ? (isPasture ? 'En Pastoreo' : 'Activo') :
+                       l.status === 'RESTING' ? 'En Descanso' :
+                       l.status === 'OCCUPIED' ? 'Ocupado' : l.status}
+                    </span>
+                  </div>
 
-                    {l.carryingCapacityUGM && (
-                      <div className="text-[11px] text-muted-foreground">
-                        Capacidad sustentable: <strong>{l.carryingCapacityUGM} UGM</strong>
+                  <div className="grid grid-cols-2 gap-2 text-xs text-muted-foreground">
+                    <div className="flex items-center gap-1.5">
+                      <Layers className="h-3.5 w-3.5 text-lime-600" />
+                      <span><strong>{l.areaHectares} ha</strong></span>
+                    </div>
+                    {l.soilType && (
+                      <div className="flex items-center gap-1.5">
+                        <Sun className="h-3.5 w-3.5 text-lime-600" />
+                        <span>Suelo: {l.soilType}</span>
+                      </div>
+                    )}
+                    {l.irrigationType && (
+                      <div className="flex items-center gap-1.5">
+                        <Droplets className="h-3.5 w-3.5 text-sky-600" />
+                        <span>Riego: {l.irrigationType}</span>
                       </div>
                     )}
                   </div>
-                )}
 
-                {/* Info específica de Parcela Agrícola */}
-                {isAgri && (
-                  <div className="p-3 bg-sky-50/50 dark:bg-sky-950/20 rounded-xl border border-sky-200/50 dark:border-sky-800/40 space-y-1">
-                    <span className="text-xs text-sky-800 dark:text-sky-300 font-semibold block">Cultivo en Terreno:</span>
-                    <p className="text-sm font-bold text-foreground">{l.currentCrop || 'Sin siembra activa (Descanso)'}</p>
-                  </div>
-                )}
+                  {/* Info específica de Potrero: Pasto, Días y Capacidad */}
+                  {isPasture && (
+                    <div className="p-3 bg-slate-50 dark:bg-slate-900/60 rounded-xl border border-border/50 space-y-2">
+                      <div className="text-xs font-semibold text-foreground flex items-center justify-between">
+                        <span>Pasto: {l.pastureGrassType || 'Brachiaria / Estrella'}</span>
+                        <span className="font-mono text-emerald-700 dark:text-emerald-400 font-bold">
+                          {l.currentAnimalCount ?? 0} cabezas
+                        </span>
+                      </div>
 
-                {/* Info específica de Corral de Engorda */}
-                {isFeedlot && (
-                  <div className="p-3 bg-amber-50/50 dark:bg-amber-950/20 rounded-xl border border-amber-200/50 dark:border-amber-800/40 space-y-2">
-                    <div className="flex justify-between text-xs font-bold">
-                      <span className="text-foreground">Ocupación Corral:</span>
-                      <span className="text-amber-800 dark:text-amber-300">
-                        {l.currentAnimalCount ?? 0} / {l.carryingCapacityUGM ?? 30} cabezas
-                      </span>
+                      <div className="grid grid-cols-2 gap-2 text-[11px] pt-1 border-t border-border/40">
+                        <div>
+                          <span className="text-muted-foreground block">Días en uso:</span>
+                          <strong className="text-foreground">{l.daysInUse ?? 0} días</strong>
+                        </div>
+                        <div>
+                          <span className="text-muted-foreground block">Días descanso:</span>
+                          <strong className="text-lime-700 dark:text-lime-400">{l.daysInRest ?? 0} días</strong>
+                        </div>
+                      </div>
+
+                      {l.carryingCapacityUGM && (
+                        <div className="text-[11px] text-muted-foreground">
+                          Capacidad sustentable: <strong>{l.carryingCapacityUGM} UGM</strong>
+                        </div>
+                      )}
                     </div>
-                    <div className="h-2 w-full bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden">
-                      <div
-                        className="h-full bg-amber-500 rounded-full transition-all"
-                        style={{ width: `${Math.min(100, (((l.currentAnimalCount ?? 0) / (l.carryingCapacityUGM || 30)) * 100))}%` }}
-                      />
+                  )}
+
+                  {/* Info específica de Parcela Agrícola */}
+                  {isAgri && (
+                    <div className="p-3 bg-sky-50/50 dark:bg-sky-950/20 rounded-xl border border-sky-200/50 dark:border-sky-800/40 space-y-1">
+                      <span className="text-xs text-sky-800 dark:text-sky-300 font-semibold block">Cultivo en Terreno:</span>
+                      <p className="text-sm font-bold text-foreground">{l.currentCrop || 'Sin siembra activa (Descanso)'}</p>
                     </div>
-                  </div>
-                )}
+                  )}
 
-                {l.notes && (
-                  <p className="text-xs text-muted-foreground italic bg-slate-50 dark:bg-slate-900/50 p-2 rounded-lg border border-border/50">
-                    {l.notes}
-                  </p>
-                )}
-              </div>
+                  {/* Info específica de Corral de Engorda */}
+                  {isFeedlot && (
+                    <div className="p-3 bg-amber-50/50 dark:bg-amber-950/20 rounded-xl border border-amber-200/50 dark:border-amber-800/40 space-y-2">
+                      <div className="flex justify-between text-xs font-bold">
+                        <span className="text-foreground">Ocupación Corral:</span>
+                        <span className="text-amber-800 dark:text-amber-300">
+                          {l.currentAnimalCount ?? 0} / {l.carryingCapacityUGM ?? 30} cabezas
+                        </span>
+                      </div>
+                      <div className="h-2 w-full bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden">
+                        <div
+                          className="h-full bg-amber-500 rounded-full transition-all"
+                          style={{ width: `${Math.min(100, (((l.currentAnimalCount ?? 0) / (l.carryingCapacityUGM || 30)) * 100))}%` }}
+                        />
+                      </div>
+                    </div>
+                  )}
 
-              {/* Botón de Acción Rápida: Rotación en 1 clic */}
-              <div className="pt-4 mt-3 border-t border-border/60">
-                {isPasture ? (
-                  <Button
-                    size="sm"
-                    onClick={() => handleRotate(l)}
-                    disabled={rotatingId === l.id}
-                    className={`w-full text-xs font-semibold gap-1.5 ${
-                      l.status === 'ACTIVE'
-                        ? 'bg-lime-600 hover:bg-lime-700 text-white'
-                        : 'bg-emerald-600 hover:bg-emerald-700 text-white'
-                    }`}
-                  >
-                    <RotateCw className={`h-3.5 w-3.5 ${rotatingId === l.id ? 'animate-spin' : ''}`} />
-                    {l.status === 'ACTIVE' ? 'Pasar a Descanso Foliar' : 'Mover Ganado Aquí (Activar)'}
-                  </Button>
-                ) : isAgri ? (
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    className="w-full text-xs gap-1 border-sky-400/50 text-sky-700 dark:text-sky-300 hover:bg-sky-50 dark:hover:bg-sky-950/40"
-                    asChild
-                  >
-                    <a href="/agricultura">
-                      <Sprout className="h-3.5 w-3.5" />
-                      Ver Siembras
-                    </a>
-                  </Button>
-                ) : (
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    className="w-full text-xs gap-1 border-amber-400/50 text-amber-700 dark:text-amber-300 hover:bg-amber-50 dark:hover:bg-amber-950/40"
-                    asChild
-                  >
-                    <a href="/animales">
-                      <Beef className="h-3.5 w-3.5" />
-                      Ver Animales
-                    </a>
-                  </Button>
-                )}
+                  {l.notes && (
+                    <p className="text-xs text-muted-foreground italic bg-slate-50 dark:bg-slate-900/50 p-2 rounded-lg border border-border/50">
+                      {l.notes}
+                    </p>
+                  )}
+                </div>
+
+                {/* Botón de Acción Rápida: Rotación en 1 clic */}
+                <div className="pt-4 mt-3 border-t border-border/60">
+                  {isPasture ? (
+                    <Button
+                      size="sm"
+                      onClick={() => handleRotate(l)}
+                      disabled={rotatingId === l.id}
+                      className={`w-full text-xs font-semibold gap-1.5 ${
+                        l.status === 'ACTIVE'
+                          ? 'bg-lime-600 hover:bg-lime-700 text-white'
+                          : 'bg-emerald-600 hover:bg-emerald-700 text-white'
+                      }`}
+                    >
+                      <RotateCw className={`h-3.5 w-3.5 ${rotatingId === l.id ? 'animate-spin' : ''}`} />
+                      {l.status === 'ACTIVE' ? 'Pasar a Descanso Foliar' : 'Mover Ganado Aquí (Activar)'}
+                    </Button>
+                  ) : isAgri ? (
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="w-full text-xs gap-1 border-sky-400/50 text-sky-700 dark:text-sky-300 hover:bg-sky-50 dark:hover:bg-sky-950/40"
+                      asChild
+                    >
+                      <a href="/agricultura">
+                        <Sprout className="h-3.5 w-3.5" />
+                        Ver Siembras
+                      </a>
+                    </Button>
+                  ) : (
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="w-full text-xs gap-1 border-amber-400/50 text-amber-700 dark:text-amber-300 hover:bg-amber-50 dark:hover:bg-amber-950/40"
+                      asChild
+                    >
+                      <a href="/animales">
+                        <Beef className="h-3.5 w-3.5" />
+                        Ver Animales
+                      </a>
+                    </Button>
+                  )}
+                </div>
               </div>
-            </div>
-          );
-        })}
-      </div>
+            );
+          })}
+        </div>
+      )}
 
       {/* MODAL: Nuevo Terreno */}
       <NewLandModal

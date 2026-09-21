@@ -48,16 +48,24 @@ export default function BulkTankPage() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {deliveries.data?.map(d => (
-            <TableRow key={d.id}>
-              <TableCell>{d.deliveryDate}</TableCell>
-              <TableCell>{d.ranchId}</TableCell>
-              <TableCell>
-                <Badge tone="success">{d.totalLiters}</Badge>
+          {!deliveries.data || deliveries.data.length === 0 ? (
+            <TableRow>
+              <TableCell colSpan={4} className="text-center py-6 text-muted-foreground">
+                No hay entregas a tanque registradas aún
               </TableCell>
-              <TableCell>{d.buyer ?? '-'}</TableCell>
             </TableRow>
-          ))}
+          ) : (
+            deliveries.data.map(d => (
+              <TableRow key={d.id}>
+                <TableCell>{d.deliveryDate}</TableCell>
+                <TableCell>{d.ranchId}</TableCell>
+                <TableCell>
+                  <Badge tone="success">{d.totalLiters}</Badge>
+                </TableCell>
+                <TableCell>{d.buyer ?? '-'}</TableCell>
+              </TableRow>
+            ))
+          )}
         </TableBody>
       </Table>
     </div>

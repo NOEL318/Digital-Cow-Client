@@ -91,15 +91,23 @@ export default function VaccinationsPage() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {list.data?.map(v => (
-            <TableRow key={v.id}>
-              <TableCell>{v.appliedAt}</TableCell>
-              <TableCell>{vaccineName(v.vaccineId)}</TableCell>
-              <TableCell>{v.batchNumber ?? '-'}</TableCell>
-              <TableCell>{v.nextDoseDue ?? '-'}</TableCell>
-              <TableCell className="text-right">{v.cost ?? '-'}</TableCell>
+          {!list.data || list.data.length === 0 ? (
+            <TableRow>
+              <TableCell colSpan={5} className="text-center py-6 text-muted-foreground">
+                No hay vacunaciones registradas aún
+              </TableCell>
             </TableRow>
-          ))}
+          ) : (
+            list.data.map(v => (
+              <TableRow key={v.id}>
+                <TableCell>{v.appliedAt}</TableCell>
+                <TableCell>{vaccineName(v.vaccineId)}</TableCell>
+                <TableCell>{v.batchNumber ?? '-'}</TableCell>
+                <TableCell>{v.nextDoseDue ?? '-'}</TableCell>
+                <TableCell className="text-right">{v.cost ?? '-'}</TableCell>
+              </TableRow>
+            ))
+          )}
         </TableBody>
       </Table>
 
