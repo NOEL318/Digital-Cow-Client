@@ -65,25 +65,25 @@ export default defineConfig({
             urlPattern: /\/api\/v1\//,
             method: 'POST',
             handler: 'NetworkOnly',
-            options: { backgroundSync: { name: 'mutations-queue', options: { maxRetentionTime: 60 * 24 } } }
+            options: { backgroundSync: { name: 'mutations-post-queue', options: { maxRetentionTime: 60 * 24 } } }
           },
           {
             urlPattern: /\/api\/v1\//,
             method: 'PATCH',
             handler: 'NetworkOnly',
-            options: { backgroundSync: { name: 'mutations-queue', options: { maxRetentionTime: 60 * 24 } } }
+            options: { backgroundSync: { name: 'mutations-patch-queue', options: { maxRetentionTime: 60 * 24 } } }
           },
           {
             urlPattern: /\/api\/v1\//,
             method: 'PUT',
             handler: 'NetworkOnly',
-            options: { backgroundSync: { name: 'mutations-queue', options: { maxRetentionTime: 60 * 24 } } }
+            options: { backgroundSync: { name: 'mutations-put-queue', options: { maxRetentionTime: 60 * 24 } } }
           },
           {
             urlPattern: /\/api\/v1\//,
             method: 'DELETE',
             handler: 'NetworkOnly',
-            options: { backgroundSync: { name: 'mutations-queue', options: { maxRetentionTime: 60 * 24 } } }
+            options: { backgroundSync: { name: 'mutations-delete-queue', options: { maxRetentionTime: 60 * 24 } } }
           }
         ]
       }

@@ -131,7 +131,7 @@ export class ServerlessRouter {
       };
     }
 
-    if (path === '/auth/me' && method === 'GET') {
+    if ((path === '/auth/me' || path === '/me') && method === 'GET') {
       const user = db.getAll('users')[0] || {
         id: 1,
         accountId: 1,
@@ -798,7 +798,16 @@ export class ServerlessRouter {
     }
 
     if (path === '/health/alerts' && method === 'GET') {
-      return { status: 200, data: [] };
+      return {
+        status: 200,
+        data: {
+          upcomingVaccinations7d: [],
+          upcomingVaccinations30d: [],
+          withdrawalActiveMilk: [],
+          withdrawalActiveMeat: [],
+          activeDiagnosesWithoutTreatment: []
+        }
+      };
     }
 
     // -------------------------------------------------------------
@@ -946,16 +955,30 @@ export class ServerlessRouter {
       return {
         status: 200,
         data: {
-          conceptionRate: 65.5,
-          pregnancyRate: 72.0,
-          calvingIntervalDays: 395,
-          avgDaysOpen: 110
+          from: query.from || '2026-01-01',
+          to: query.to || '2026-12-31',
+          daysOpenMedian: null,
+          daysOpenP75: null,
+          daysOpenMax: null,
+          iepDays: null,
+          firstCalvingAgeDays: null,
+          firstServiceConceptionRate: null,
+          servicesPerConception: null,
+          pregnancyRate: null
         }
       };
     }
 
     if (path === '/reproduction/alerts' && method === 'GET') {
-      return { status: 200, data: [] };
+      return {
+        status: 200,
+        data: {
+          upcomingCalvings21d: [],
+          dryOffDue: [],
+          servedWithoutCheck: [],
+          openTooLong: []
+        }
+      };
     }
 
     // -------------------------------------------------------------
@@ -1030,42 +1053,76 @@ export class ServerlessRouter {
       }
     }
 
-    if (path === '/production/growth-curve' && method === 'GET') {
+    const growthMatch = path.match(/^\/production\/growth-curve(?:\/(\d+))?$/);
+    if ((path === '/production/growth-curve' || growthMatch) && method === 'GET') {
+      const animalId = growthMatch?.[1] ? Number(growthMatch[1]) : (query.animalId ? Number(query.animalId) : null);
+      const weights = animalId
+        ? db.filter('weighings', w => w.animalId === animalId).sort((a, b) => (a.weighedAt < b.weighedAt ? -1 : 1))
+        : [];
+      let prevWeight: number | null = null;
+      let prevDate: Date | null = null;
+      const points = weights.map(w => {
+        const currentDate = new Date(w.weighedAt);
+        let adg: number | null = null;
+        if (prevWeight != null && prevDate != null) {
+          const days = Math.max(1, Math.round((currentDate.getTime() - prevDate.getTime()) / (1000 * 60 * 60 * 24)));
+          adg = Number(((w.weightKg - prevWeight) / days).toFixed(3));
+        }
+        prevWeight = w.weightKg;
+        prevDate = currentDate;
+        return {
+          date: w.weighedAt,
+          weightKg: w.weightKg,
+          adgSincePrevious: adg
+        };
+      });
       return {
         status: 200,
-        data: [
-          { ageMonths: 0, weightKg: 38 },
-          { ageMonths: 4, weightKg: 135 },
-          { ageMonths: 8, weightKg: 215 },
-          { ageMonths: 12, weightKg: 320 },
-          { ageMonths: 18, weightKg: 450 },
-          { ageMonths: 24, weightKg: 580 }
-        ]
+        data: {
+          animalId: animalId || 0,
+          points
+        }
       };
     }
 
-    if (path === '/production/lactation-curve' && method === 'GET') {
+    const lactMatch = path.match(/^\/production\/lactation-curve(?:\/(\d+))?$/);
+    if ((path === '/production/lactation-curve' || lactMatch) && method === 'GET') {
+      const animalId = lactMatch?.[1] ? Number(lactMatch[1]) : (query.animalId ? Number(query.animalId) : null);
+      const milkings = animalId
+        ? db.filter('milkings', m => m.animalId === animalId).sort((a, b) => (a.milkedAt < b.milkedAt ? -1 : 1))
+        : [];
+      const startDate = query.lactationStartDate || (milkings[0]?.milkedAt ? milkings[0].milkedAt.slice(0, 10) : '2026-01-01');
+      const startMs = new Date(startDate).getTime();
+      const points = milkings.map(m => {
+        const dayOfLactation = Math.max(1, Math.round((new Date(m.milkedAt).getTime() - startMs) / (1000 * 60 * 60 * 24)));
+        return {
+          dayOfLactation,
+          date: m.milkedAt,
+          totalLiters: m.liters || 0
+        };
+      });
       return {
         status: 200,
-        data: [
-          { daysInMilk: 30, avgLiters: 28 },
-          { daysInMilk: 60, avgLiters: 34 },
-          { daysInMilk: 90, avgLiters: 32 },
-          { daysInMilk: 120, avgLiters: 29 },
-          { daysInMilk: 180, avgLiters: 24 },
-          { daysInMilk: 240, avgLiters: 19 },
-          { daysInMilk: 305, avgLiters: 14 }
-        ]
+        data: {
+          animalId: animalId || 0,
+          lactationStart: startDate,
+          points
+        }
       };
     }
 
     if (path === '/production/kpis' && method === 'GET') {
+      const milkings = db.getAll('milkings');
+      const totalMilkLiters = milkings.reduce((sum, m) => sum + (m.liters || 0), 0);
       return {
         status: 200,
         data: {
-          avgLitersPerCowDay: 24.5,
-          totalMilkMonth: 8900,
-          avgAdgKgDay: 0.78
+          from: query.from || '2026-01-01',
+          to: query.to || '2026-12-31',
+          totalMilkLiters,
+          avgDailyMilkLiters: 0,
+          avgAdgKgDay: null,
+          topProducers: []
         }
       };
     }
@@ -1150,13 +1207,10 @@ export class ServerlessRouter {
       return {
         status: 200,
         data: {
-          from: query.from || '2026-09-01',
-          to: query.to || '2026-09-30',
+          from: query.from || '2026-01-01',
+          to: query.to || '2026-12-31',
           groupBy: query.groupBy || 'lot',
-          buckets: [
-            { key: '1', label: 'Potrero Norte - Lecheras Altas', totalCost: 3555.0, totalKg: 1310 },
-            { key: '2', label: 'Potrero Sur - Bajas y Secas', totalCost: 1240.0, totalKg: 620 }
-          ]
+          buckets: []
         }
       };
     }
@@ -1164,30 +1218,30 @@ export class ServerlessRouter {
     // -------------------------------------------------------------
     // FINANCE
     // -------------------------------------------------------------
-    if (path === '/finance/categories/expenses') {
+    if (path === '/finance/categories/expenses' || path === '/finance/expense-categories') {
       if (method === 'GET') return { status: 200, data: db.getAll('expenseCategories') };
       if (method === 'POST') return { status: 201, data: db.insert('expenseCategories', { accountId: 1, ...body }) };
     }
 
-    const expCatMatch = path.match(/^\/finance\/categories\/expenses\/(\d+)$/);
+    const expCatMatch = path.match(/^\/finance\/(?:categories\/expenses|expense-categories)\/(\d+)$/);
     if (expCatMatch) {
       const cid = Number(expCatMatch[1]);
-      if (method === 'PATCH') return { status: 200, data: db.update('expenseCategories', cid, body) };
+      if (method === 'PATCH' || method === 'PUT') return { status: 200, data: db.update('expenseCategories', cid, body) };
       if (method === 'DELETE') {
         db.delete('expenseCategories', cid);
         return { status: 204, data: null };
       }
     }
 
-    if (path === '/finance/categories/incomes') {
+    if (path === '/finance/categories/incomes' || path === '/finance/income-categories') {
       if (method === 'GET') return { status: 200, data: db.getAll('incomeCategories') };
       if (method === 'POST') return { status: 201, data: db.insert('incomeCategories', { accountId: 1, ...body }) };
     }
 
-    const incCatMatch = path.match(/^\/finance\/categories\/incomes\/(\d+)$/);
+    const incCatMatch = path.match(/^\/finance\/(?:categories\/incomes|income-categories)\/(\d+)$/);
     if (incCatMatch) {
       const cid = Number(incCatMatch[1]);
-      if (method === 'PATCH') return { status: 200, data: db.update('incomeCategories', cid, body) };
+      if (method === 'PATCH' || method === 'PUT') return { status: 200, data: db.update('incomeCategories', cid, body) };
       if (method === 'DELETE') {
         db.delete('incomeCategories', cid);
         return { status: 204, data: null };
@@ -1288,61 +1342,163 @@ export class ServerlessRouter {
     }
 
     if (path === '/finance/cash-flow' && method === 'GET') {
+      const year = Number(query.year) || new Date().getFullYear();
+      const expenses = db.getAll('expenses');
+      const incomes = db.getAll('incomes');
+
+      const months = Array.from({ length: 12 }, (_, i) => {
+        const monthNum = i + 1;
+        const prefix = `${year}-${String(monthNum).padStart(2, '0')}`;
+        const monthInc = incomes
+          .filter(inc => (inc.receivedAt || '').startsWith(prefix))
+          .reduce((sum, inc) => sum + (Number(inc.amount) || 0), 0);
+        const monthExp = expenses
+          .filter(exp => (exp.incurredAt || '').startsWith(prefix))
+          .reduce((sum, exp) => sum + (Number(exp.amount) || 0), 0);
+        return {
+          month: monthNum,
+          income: monthInc,
+          expense: monthExp,
+          net: monthInc - monthExp
+        };
+      });
+
       return {
         status: 200,
-        data: [
-          { month: '2026-06', income: 24000, expense: 18000, balance: 6000 },
-          { month: '2026-07', income: 52000, expense: 31000, balance: 21000 },
-          { month: '2026-08', income: 56000, expense: 33000, balance: 23000 },
-          { month: '2026-09', income: 58300, expense: 34950, balance: 23350 }
-        ]
+        data: {
+          year,
+          months
+        }
       };
     }
 
     if (['/finance/pnl', '/reports/pnl'].includes(path) && method === 'GET') {
       const expenses = db.getAll('expenses');
       const incomes = db.getAll('incomes');
-      const totalExpense = expenses.reduce((acc, c) => acc + c.amount, 0);
-      const totalIncome = incomes.reduce((acc, c) => acc + c.amount, 0);
+      const totalExpense = expenses.reduce((acc, c) => acc + (Number(c.amount) || 0), 0);
+      const totalIncome = incomes.reduce((acc, c) => acc + (Number(c.amount) || 0), 0);
+
+      const groupBy = (query.groupBy as 'month' | 'category') || 'month';
+      let buckets: Array<{ key: string; label: string; income: number; expense: number; margin: number }> = [];
+
+      if (groupBy === 'category') {
+        const categories = db.getAll('expenseCategories');
+        buckets = categories.map(cat => {
+          const catExpenses = expenses.filter(e => e.expenseCategoryId === cat.id);
+          const exp = catExpenses.reduce((sum, e) => sum + (Number(e.amount) || 0), 0);
+          return {
+            key: String(cat.id),
+            label: cat.nameEs || cat.code,
+            income: 0,
+            expense: exp,
+            margin: -exp
+          };
+        }).filter(b => b.expense > 0);
+      } else {
+        const monthMap = new Map<string, { income: number; expense: number }>();
+        for (const inc of incomes) {
+          const m = (inc.receivedAt || '').slice(0, 7);
+          if (m) {
+            const cur = monthMap.get(m) || { income: 0, expense: 0 };
+            cur.income += Number(inc.amount) || 0;
+            monthMap.set(m, cur);
+          }
+        }
+        for (const exp of expenses) {
+          const m = (exp.incurredAt || '').slice(0, 7);
+          if (m) {
+            const cur = monthMap.get(m) || { income: 0, expense: 0 };
+            cur.expense += Number(exp.amount) || 0;
+            monthMap.set(m, cur);
+          }
+        }
+        buckets = Array.from(monthMap.entries()).sort((a, b) => a[0].localeCompare(b[0])).map(([key, val]) => ({
+          key,
+          label: key,
+          income: val.income,
+          expense: val.expense,
+          margin: val.income - val.expense
+        }));
+      }
+
+      const vetVisits = db.getAll('vetVisits');
+      const treatments = db.getAll('treatments');
+      const vaccinations = db.getAll('vaccinations');
+      const pestControls = db.getAll('pestControls');
+      const feedingRecords = db.getAll('feedingRecords');
+      const reproductionServices = db.getAll('services');
 
       return {
         status: 200,
         data: {
           from: query.from || '2026-01-01',
-          to: query.to || '2026-09-30',
-          groupBy: query.groupBy || 'month',
+          to: query.to || '2026-12-31',
+          groupBy,
           totalIncome,
           totalExpense,
           margin: totalIncome - totalExpense,
-          buckets: [
-            { key: '2026-07', label: 'Julio 2026', income: 52000, expense: 31000, margin: 21000 },
-            { key: '2026-08', label: 'Agosto 2026', income: 56000, expense: 33000, margin: 23000 },
-            { key: '2026-09', label: 'Septiembre 2026', income: totalIncome, expense: totalExpense, margin: totalIncome - totalExpense }
-          ],
+          buckets,
           importedCosts: {
-            treatments: 215,
-            vaccinations: 213,
-            pestControls: 450,
-            vetVisits: 1500,
-            feedingRecords: 3555,
-            services: 1030
+            treatments: treatments.reduce((sum, t) => sum + (Number(t.cost) || 0), 0),
+            vaccinations: vaccinations.reduce((sum, v) => sum + (Number(v.cost) || 0), 0),
+            pestControls: pestControls.reduce((sum, p) => sum + (Number(p.cost) || 0), 0),
+            vetVisits: vetVisits.reduce((sum, v) => sum + (Number(v.cost) || 0), 0),
+            feedingRecords: feedingRecords.reduce((sum, f) => sum + (Number(f.totalCost) || 0), 0),
+            services: reproductionServices.reduce((sum, s) => sum + (Number(s.cost) || 0), 0)
           }
         }
       };
     }
 
     if (path === '/finance/cost-per-unit' && method === 'GET') {
+      const expenses = db.getAll('expenses');
+      const milkings = db.getAll('milkings');
+      const totalExpense = expenses.reduce((acc, c) => acc + (Number(c.amount) || 0), 0);
+      const totalLiters = milkings.reduce((acc, c) => acc + (Number(c.liters) || 0), 0);
       return {
         status: 200,
         data: {
-          costPerLiter: 5.85,
-          costPerKgBeef: 38.20
+          costPerLiter: totalLiters > 0 ? Number((totalExpense / totalLiters).toFixed(2)) : 0,
+          costPerKgBeef: 0
         }
       };
     }
 
-    if (path === '/finance/animal-roi' && method === 'GET') {
-      return { status: 200, data: [] };
+    const roiMatch = path.match(/^\/finance\/animal-roi(?:\/(\d+))?$/);
+    if ((path === '/finance/animal-roi' || roiMatch) && method === 'GET') {
+      const animalId = roiMatch?.[1] ? Number(roiMatch[1]) : (query.animalId ? Number(query.animalId) : 0);
+      const animalTreatments = db.filter('treatments', t => t.animalId === animalId);
+      const animalVaccinations = db.filter('vaccinations', v => v.animalId === animalId);
+      const animalServices = db.filter('services', s => s.cowId === animalId);
+      const animalExpenses = db.filter('expenses', e => e.animalId === animalId);
+      const animalIncomes = db.filter('incomes', i => i.animalId === animalId);
+
+      const treatmentsCost = animalTreatments.reduce((sum, t) => sum + (Number(t.cost) || 0), 0);
+      const vaccinationsCost = animalVaccinations.reduce((sum, v) => sum + (Number(v.cost) || 0), 0);
+      const servicesCost = animalServices.reduce((sum, s) => sum + (Number(s.cost) || 0), 0);
+      const manualExpensesCost = animalExpenses.reduce((sum, e) => sum + (Number(e.amount) || 0), 0);
+
+      const totalCost = treatmentsCost + vaccinationsCost + servicesCost + manualExpensesCost;
+      const totalIncome = animalIncomes.reduce((sum, i) => sum + (Number(i.amount) || 0), 0);
+      const roi = totalCost > 0 ? Number((((totalIncome - totalCost) / totalCost) * 100).toFixed(2)) : 0;
+
+      return {
+        status: 200,
+        data: {
+          animalId,
+          totalIncome,
+          totalCost,
+          roi,
+          costs: {
+            treatments: treatmentsCost,
+            vaccinationsIndividual: vaccinationsCost,
+            vaccinationsProportionalLot: 0,
+            services: servicesCost,
+            manualExpenses: manualExpensesCost,
+            feedingProportional: 0
+          }
+        }
+      };
     }
 
     // -------------------------------------------------------------
@@ -1474,7 +1630,7 @@ export class ServerlessRouter {
           animalId: t.animalId,
           animalTag: animal?.internalTag ?? `Vaca #${t.animalId}`,
           lotId: animal?.lotId ?? 1,
-          lotName: 'Potrero Principal',
+          lotName: animal?.lotId ? (db.getById('lots', animal.lotId)?.name ?? 'Sin lote') : 'Sin lote',
           dueDate: t.startedAt,
           message: `Tratamiento en curso: ${t.notes || 'Aplicación veterinaria'}`,
           severity: 'high'
@@ -1511,18 +1667,22 @@ export class ServerlessRouter {
 
         let ageDays = null;
         if (a.birthDate) {
-          ageDays = Math.floor((Date.now() - new Date(a.birthDate).getTime()) / (1000 * 60 * 60 * 24));
+          ageDays = Math.floor((new Date().getTime() - new Date(a.birthDate).getTime()) / (1000 * 60 * 60 * 24));
         }
 
         return {
           id: a.id,
           internalTag: a.internalTag,
-          breed: breed?.nameEs || 'Bovino',
+          rfid: a.rfid,
+          name: a.name,
           sex: a.sex,
+          status: a.status,
           purpose: a.purpose,
+          ranchName: ranch?.name ?? null,
+          lotName: lot?.name ?? null,
+          breedName: breed?.nameEs ?? null,
+          birthDate: a.birthDate,
           ageDays,
-          currentLot: lot?.name || null,
-          currentRanch: ranch?.name || null,
           lastWeightKg: lastWeight
         };
       });
@@ -1530,7 +1690,6 @@ export class ServerlessRouter {
       return {
         status: 200,
         data: {
-          generatedAt: new Date().toISOString(),
           totalAnimals: animals.length,
           rows
         }
@@ -1659,31 +1818,58 @@ export class ServerlessRouter {
     }
 
     if (path === '/reports/health-summary' && method === 'GET') {
+      const vaccinations = db.getAll('vaccinations');
+      const diagnoses = db.getAll('diagnoses');
+      const treatments = db.getAll('treatments');
+
+      const monthMap = new Map<string, {
+        month: string;
+        vaccinations: number;
+        diagnosesMild: number;
+        diagnosesModerate: number;
+        diagnosesSevere: number;
+        treatments: number;
+        totalCost: number;
+      }>();
+
+      for (const v of vaccinations) {
+        const m = (v.appliedAt || '').slice(0, 7);
+        if (m) {
+          const cur = monthMap.get(m) || { month: m, vaccinations: 0, diagnosesMild: 0, diagnosesModerate: 0, diagnosesSevere: 0, treatments: 0, totalCost: 0 };
+          cur.vaccinations += 1;
+          cur.totalCost += Number(v.cost) || 0;
+          monthMap.set(m, cur);
+        }
+      }
+      for (const d of diagnoses) {
+        const m = (d.diagnosedAt || '').slice(0, 7);
+        if (m) {
+          const cur = monthMap.get(m) || { month: m, vaccinations: 0, diagnosesMild: 0, diagnosesModerate: 0, diagnosesSevere: 0, treatments: 0, totalCost: 0 };
+          const sev = (d.severity || '').toUpperCase();
+          if (sev === 'LOW' || sev === 'MILD') cur.diagnosesMild += 1;
+          else if (sev === 'MEDIUM' || sev === 'MODERATE') cur.diagnosesModerate += 1;
+          else if (sev === 'HIGH' || sev === 'SEVERE') cur.diagnosesSevere += 1;
+          monthMap.set(m, cur);
+        }
+      }
+      for (const t of treatments) {
+        const m = (t.startedAt || '').slice(0, 7);
+        if (m) {
+          const cur = monthMap.get(m) || { month: m, vaccinations: 0, diagnosesMild: 0, diagnosesModerate: 0, diagnosesSevere: 0, treatments: 0, totalCost: 0 };
+          cur.treatments += 1;
+          cur.totalCost += Number(t.cost) || 0;
+          monthMap.set(m, cur);
+        }
+      }
+
+      const months = Array.from(monthMap.values()).sort((a, b) => a.month.localeCompare(b.month));
+
       return {
         status: 200,
         data: {
           from: query.from || '2026-01-01',
-          to: query.to || '2026-09-30',
-          months: [
-            {
-              month: '2026-08',
-              vaccinations: 1,
-              diagnosesMild: 1,
-              diagnosesModerate: 0,
-              diagnosesSevere: 0,
-              treatments: 1,
-              totalCost: 570
-            },
-            {
-              month: '2026-09',
-              vaccinations: 0,
-              diagnosesMild: 0,
-              diagnosesModerate: 1,
-              diagnosesSevere: 0,
-              treatments: 1,
-              totalCost: 1595
-            }
-          ]
+          to: query.to || '2026-12-31',
+          months
         }
       };
     }
@@ -2043,9 +2229,10 @@ export class ServerlessRouter {
 
     // Si ningun handler coincide, devuelve 200 vacio o 404 informativo
     console.warn('[ServerlessRouter unhandled route]', method, path);
+    const isCollection = method === 'GET' && !path.match(/\/\d+$/);
     return {
       status: 200,
-      data: Array.isArray(body) ? [] : {}
+      data: isCollection || Array.isArray(body) ? [] : {}
     };
   }
 }

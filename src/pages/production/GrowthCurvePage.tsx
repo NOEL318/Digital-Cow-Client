@@ -18,7 +18,7 @@ export default function GrowthCurvePage() {
   const [animalId, setAnimalId] = useState<number | undefined>(undefined);
   const curve = useGrowthCurve(animalId);
 
-  const data = curve.data?.points.map(p => ({
+  const data = curve.data?.points?.map(p => ({
     date: p.date,
     weightKg: Number(p.weightKg),
     adg: p.adgSincePrevious != null ? Number(p.adgSincePrevious) : null

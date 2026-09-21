@@ -44,7 +44,7 @@ export default function FinanceOverviewPage() {
   const lastExpenses = useExpenses({ size: 20, sort: 'incurredAt,desc' });
 
   const cashChart = useMemo(() => {
-    if (!cashFlow.data) return [];
+    if (!cashFlow.data || !Array.isArray(cashFlow.data.months)) return [];
     return cashFlow.data.months.map(m => ({
       month: monthLabels[m.month - 1] ?? String(m.month),
       income: Number(m.income),
@@ -53,7 +53,7 @@ export default function FinanceOverviewPage() {
   }, [cashFlow.data, monthLabels]);
 
   const pieData = useMemo(() => {
-    if (!pnlByCategory.data) return [];
+    if (!pnlByCategory.data || !Array.isArray(pnlByCategory.data.buckets)) return [];
     return pnlByCategory.data.buckets
       .filter(b => Number(b.expense) > 0)
       .map(b => ({ name: b.label, value: Number(b.expense) }));
