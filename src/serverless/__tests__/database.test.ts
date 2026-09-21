@@ -6,16 +6,18 @@ describe('Serverless LocalDatabase', () => {
     db.resetToSeed();
   });
 
-  it('initializes with seed data', () => {
+  it('initializes with clean user state and full catalogs', () => {
     const animals = db.getAll('animals');
-    expect(animals.length).toBeGreaterThanOrEqual(8);
-    expect(animals[0].internalTag).toBe('COW-001');
+    expect(animals.length).toBe(0); // Clean initial user state
 
     const ranches = db.getAll('ranches');
-    expect(ranches.length).toBeGreaterThanOrEqual(2);
+    expect(ranches.length).toBeGreaterThanOrEqual(1);
 
     const breeds = db.getAll('breeds');
     expect(breeds.length).toBe(17);
+
+    const vaccines = db.getAll('vaccines');
+    expect(vaccines.length).toBe(9);
   });
 
   it('inserts and retrieves an animal', () => {
@@ -40,22 +42,46 @@ describe('Serverless LocalDatabase', () => {
   });
 
   it('updates an animal', () => {
-    const updated = db.update('animals', 1, { name: 'Mariposa Modificada' });
+    const created = db.insert('animals', {
+      accountId: 1,
+      ranchId: 1,
+      internalTag: 'TEST-UPD',
+      name: 'Mariposa Original',
+      sex: 'FEMALE',
+      breedId: 1,
+      purpose: 'DAIRY',
+      status: 'ACTIVE',
+      createdByUserId: 1
+    });
+
+    const updated = db.update('animals', created.id, { name: 'Mariposa Modificada' });
     expect(updated).not.toBeNull();
     expect(updated.name).toBe('Mariposa Modificada');
 
-    const fetched = db.getById('animals', 1);
+    const fetched = db.getById('animals', created.id);
     expect(fetched.name).toBe('Mariposa Modificada');
   });
 
   it('deletes an animal', () => {
+    const created = db.insert('animals', {
+      accountId: 1,
+      ranchId: 1,
+      internalTag: 'TEST-DEL',
+      name: 'Para Eliminar',
+      sex: 'FEMALE',
+      breedId: 1,
+      purpose: 'DAIRY',
+      status: 'ACTIVE',
+      createdByUserId: 1
+    });
+
     const initialCount = db.getAll('animals').length;
-    const ok = db.delete('animals', 1);
+    const ok = db.delete('animals', created.id);
     expect(ok).toBe(true);
 
     const afterCount = db.getAll('animals').length;
     expect(afterCount).toBe(initialCount - 1);
-    expect(db.getById('animals', 1)).toBeNull();
+    expect(db.getById('animals', created.id)).toBeNull();
   });
 
   it('resets to seed data properly', () => {

@@ -4,9 +4,10 @@
  */
 import { useState } from 'react';
 import {
-  Wrench, Truck, Fuel, Gauge, Plus, AlertTriangle,
-  CheckCircle2, User, ShieldAlert
+  Wrench, Truck, Fuel, Gauge, Plus,
+  CheckCircle2, User, ShieldAlert, BarChart3
 } from 'lucide-react';
+import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid } from 'recharts';
 import {
   useMachineryList, useMachineryMaintenances, useFuelLogs,
   machineryApi, type CreateMachineryPayload, type CreateMaintenancePayload, type CreateFuelLogPayload
@@ -15,6 +16,7 @@ import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { EmptyState } from '@/components/ui/empty-state';
 import { useQueryClient } from '@tanstack/react-query';
 
 export default function MachineryPage() {
@@ -133,6 +135,58 @@ export default function MachineryPage() {
         </div>
       </div>
 
+      {/* Gráfica Estadística de Horómetros y Diésel */}
+      <div className="glass-panel p-6 border-border/60">
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <h2 className="text-base font-bold flex items-center gap-2 text-foreground">
+              <BarChart3 className="h-5 w-5 text-amber-600" />
+              Horómetros y Consumo Operativo de la Flota
+            </h2>
+            <p className="text-xs text-muted-foreground">Horas acumuladas y litros de combustible consumidos por equipo.</p>
+          </div>
+        </div>
+
+        {machinery.length > 0 ? (
+          <div className="h-60 w-full">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart
+                data={machinery.map(m => {
+                  const mFuel = fuelLogs.filter(f => f.machineryId === m.id).reduce((s, f) => s + (f.liters || 0), 0);
+                  return {
+                    name: m.name.split(' ')[0] + ' ' + (m.name.split(' ')[1] || ''),
+                    horometro: m.currentHoursMeter,
+                    dieselLitros: mFuel
+                  };
+                })}
+                margin={{ top: 10, right: 10, left: -10, bottom: 20 }}
+              >
+                <CartesianGrid strokeDasharray="3 3" opacity={0.2} />
+                <XAxis dataKey="name" stroke="#888888" fontSize={12} tickLine={false} />
+                <YAxis stroke="#888888" fontSize={12} tickLine={false} />
+                <Tooltip
+                  contentStyle={{
+                    backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                    borderRadius: '0.75rem',
+                    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+                    border: '1px solid #e2e8f0',
+                    fontSize: '12px'
+                  }}
+                />
+                <Bar dataKey="horometro" name="Horas de Trabajo (Horómetro)" fill="#d97706" radius={[6, 6, 0, 0]} />
+                <Bar dataKey="dieselLitros" name="Diésel Acumulado (Litros)" fill="#059669" radius={[6, 6, 0, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        ) : (
+          <div className="py-6 text-center bg-card/40 rounded-xl border border-dashed border-border/80">
+            <Truck className="h-7 w-7 text-amber-600 mx-auto mb-1.5 opacity-50" />
+            <p className="text-xs font-semibold text-foreground">Sin maquinaria registrada</p>
+            <p className="text-[11px] text-muted-foreground mt-0.5">Registra tus tractores e implementos para llevar seguimiento del horómetro y mantenimientos.</p>
+          </div>
+        )}
+      </div>
+
       {/* Tabs */}
       <div className="flex items-center gap-2 border-b border-border/60 pb-2">
         <button
@@ -172,199 +226,248 @@ export default function MachineryPage() {
 
       {/* Tab: Equipos */}
       {activeTab === 'fleet' && (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {machinery.map(m => {
-            const isNearService = m.nextServiceHours > 0 && m.currentHoursMeter >= m.nextServiceHours - 50;
-            const hoursRemaining = Math.max(0, m.nextServiceHours - m.currentHoursMeter);
+        <div>
+          {machinery.length === 0 ? (
+            <div className="glass-card p-8 text-center">
+              <EmptyState
+                icon={Truck}
+                title="No hay maquinaria registrada"
+                description="Registra tus tractores, camiones, picadoras e implementos para llevar control de mantenimientos y horómetros."
+                ctaLabel="Nuevo Equipo"
+                onCta={() => setNewMachineryOpen(true)}
+              />
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {machinery.map(m => {
+                const isNearService = m.nextServiceHours > 0 && m.currentHoursMeter >= m.nextServiceHours - 50;
+                const hoursRemaining = Math.max(0, m.nextServiceHours - m.currentHoursMeter);
 
-            return (
-              <div
-                key={m.id}
-                className={`glass-card p-5 relative overflow-hidden flex flex-col justify-between border-t-4 ${
-                  m.status === 'IN_MAINTENANCE' ? 'border-t-red-600' :
-                  isNearService ? 'border-t-amber-500' : 'border-t-emerald-600'
-                }`}
-              >
-                <div className="space-y-3">
-                  <div className="flex items-start justify-between gap-2">
-                    <div>
-                      <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-amber-50 dark:bg-amber-950 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-800">
-                        {m.type}
-                      </span>
-                      <h3 className="font-bold text-lg mt-1 text-foreground leading-snug">{m.name}</h3>
-                      <p className="text-xs text-muted-foreground">{m.brand} • {m.model} ({m.year})</p>
-                    </div>
-                    <span className={`text-xs px-2.5 py-1 rounded-full font-bold ${
-                      m.status === 'OPERATIONAL' ? 'bg-emerald-100 text-emerald-800 border border-emerald-300' :
-                      m.status === 'IN_MAINTENANCE' ? 'bg-red-100 text-red-800 border border-red-300' :
-                      'bg-slate-100 text-slate-800 border border-slate-300'
-                    }`}>
-                      {m.status === 'OPERATIONAL' ? 'Operativo' : 'En Taller'}
-                    </span>
-                  </div>
-
-                  {/* Horómetro e indicador de servicio */}
-                  <div className="p-3 bg-slate-50 dark:bg-slate-900/60 rounded-xl border border-border/50 space-y-2">
-                    <div className="flex items-center justify-between text-xs">
-                      <div className="flex items-center gap-1.5 font-bold text-foreground">
-                        <Gauge className="h-4 w-4 text-amber-600" />
-                        <span>{m.currentHoursMeter.toLocaleString()} hrs</span>
+                return (
+                  <div
+                    key={m.id}
+                    className={`glass-card p-5 relative overflow-hidden flex flex-col justify-between border-t-4 ${
+                      m.status === 'IN_MAINTENANCE' ? 'border-t-red-600' :
+                      isNearService ? 'border-t-amber-500' : 'border-t-emerald-600'
+                    }`}
+                  >
+                    <div className="space-y-3">
+                      <div className="flex items-start justify-between gap-2">
+                        <div>
+                          <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-amber-50 dark:bg-amber-950 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-800">
+                            {m.type}
+                          </span>
+                          <h3 className="font-bold text-lg mt-1 text-foreground leading-snug">{m.name}</h3>
+                          <p className="text-xs text-muted-foreground">{m.brand} • {m.model} ({m.year})</p>
+                        </div>
+                        <span className={`text-xs px-2.5 py-1 rounded-full font-bold ${
+                          m.status === 'OPERATIONAL' ? 'bg-emerald-100 text-emerald-800 border border-emerald-300' :
+                          m.status === 'IN_MAINTENANCE' ? 'bg-red-100 text-red-800 border border-red-300' :
+                          'bg-slate-100 text-slate-800 border border-slate-300'
+                        }`}>
+                          {m.status === 'OPERATIONAL' ? 'Operativo' : 'En Taller'}
+                        </span>
                       </div>
-                      <span className="text-muted-foreground text-[11px]">
-                        Próx: {m.nextServiceHours} hrs
-                      </span>
-                    </div>
 
-                    {m.nextServiceHours > 0 && (
-                      <div className="space-y-1">
-                        <div className="flex justify-between text-[11px]">
-                          <span className={isNearService ? 'text-amber-600 font-bold flex items-center gap-1' : 'text-muted-foreground'}>
-                            {isNearService && <AlertTriangle className="h-3 w-3" />}
-                            Faltan {hoursRemaining} hrs para servicio
+                      {/* Horómetro e indicador de servicio */}
+                      <div className="p-3 bg-slate-50 dark:bg-slate-900/60 rounded-xl border border-border/50 space-y-2">
+                        <div className="flex items-center justify-between text-xs">
+                          <div className="flex items-center gap-1.5 font-bold text-foreground">
+                            <Gauge className="h-4 w-4 text-amber-600" />
+                            <span>{m.currentHoursMeter.toLocaleString()} hrs</span>
+                          </div>
+                          <span className="text-muted-foreground text-[11px]">
+                            Próx: {m.nextServiceHours} hrs
                           </span>
                         </div>
-                        <div className="h-1.5 w-full bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden">
-                          <div
-                            className={`h-full rounded-full transition-all ${isNearService ? 'bg-amber-500' : 'bg-emerald-500'}`}
-                            style={{ width: `${Math.min(100, (m.currentHoursMeter / (m.nextServiceHours || 1)) * 100)}%` }}
-                          />
+
+                        {m.nextServiceHours > 0 && (
+                          <div className="space-y-1">
+                            <div className="flex justify-between text-[11px]">
+                              <span className="text-muted-foreground">Vida útil de servicio</span>
+                              <span className={isNearService ? 'text-amber-600 font-bold' : 'text-foreground'}>
+                                {hoursRemaining} hrs restantes
+                              </span>
+                            </div>
+                            <div className="h-2 w-full bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden">
+                              <div
+                                className={`h-full rounded-full transition-all ${
+                                  isNearService ? 'bg-amber-500' : 'bg-emerald-500'
+                                }`}
+                                style={{
+                                  width: `${Math.min(
+                                    100,
+                                    (m.currentHoursMeter / (m.nextServiceHours || 1)) * 100
+                                  )}%`
+                                }}
+                              />
+                            </div>
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-2 text-xs text-muted-foreground pt-1">
+                        <div className="flex items-center gap-1.5">
+                          <Fuel className="h-3.5 w-3.5 text-amber-600" />
+                          <span>{m.fuelType}</span>
                         </div>
+                        {m.assignedOperator && (
+                          <div className="flex items-center gap-1.5">
+                            <User className="h-3.5 w-3.5 text-amber-600" />
+                            <span className="truncate">{m.assignedOperator}</span>
+                          </div>
+                        )}
                       </div>
-                    )}
-                  </div>
 
-                  <div className="grid grid-cols-2 gap-2 text-xs text-muted-foreground">
-                    <div className="flex items-center gap-1.5">
-                      <Fuel className="h-3.5 w-3.5 text-amber-600" />
-                      <span>{m.fuelType}</span>
+                      {m.notes && (
+                        <p className="text-xs text-muted-foreground italic bg-slate-50 dark:bg-slate-900/50 p-2 rounded-lg border border-border/50">
+                          {m.notes}
+                        </p>
+                      )}
                     </div>
-                    {m.assignedOperator && (
-                      <div className="flex items-center gap-1.5">
-                        <User className="h-3.5 w-3.5 text-amber-600" />
-                        <span className="truncate">{m.assignedOperator}</span>
-                      </div>
-                    )}
+
+                    <div className="pt-4 mt-3 border-t border-border/60 flex items-center gap-2">
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => handleOpenMaintenance(m.id)}
+                        className="flex-1 text-xs gap-1 hover:border-amber-500 hover:text-amber-600"
+                      >
+                        <Wrench className="h-3.5 w-3.5" />
+                        Servicio
+                      </Button>
+                      {m.fuelType === 'DIESEL' && (
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => handleOpenFuel(m.id)}
+                          className="flex-1 text-xs gap-1 hover:border-amber-500 hover:text-amber-600"
+                        >
+                          <Fuel className="h-3.5 w-3.5" />
+                          Combustible
+                        </Button>
+                      )}
+                    </div>
                   </div>
-
-                  {m.notes && (
-                    <p className="text-xs text-muted-foreground italic bg-slate-50 dark:bg-slate-900/50 p-2 rounded-lg border border-border/50">
-                      {m.notes}
-                    </p>
-                  )}
-                </div>
-
-                <div className="pt-4 mt-3 border-t border-border/60 flex items-center gap-2">
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    onClick={() => handleOpenMaintenance(m.id)}
-                    className="flex-1 text-xs gap-1 hover:border-amber-500 hover:text-amber-600"
-                  >
-                    <Wrench className="h-3.5 w-3.5" />
-                    Servicio
-                  </Button>
-                  {m.fuelType === 'DIESEL' && (
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      onClick={() => handleOpenFuel(m.id)}
-                      className="flex-1 text-xs gap-1 hover:border-amber-500 hover:text-amber-600"
-                    >
-                      <Fuel className="h-3.5 w-3.5" />
-                      Combustible
-                    </Button>
-                  )}
-                </div>
-              </div>
-            );
-          })}
+                );
+              })}
+            </div>
+          )}
         </div>
       )}
 
       {/* Tab: Mantenimientos */}
       {activeTab === 'maintenances' && (
-        <div className="glass-card overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm text-left">
-              <thead className="text-xs uppercase bg-muted/50 border-b border-border text-muted-foreground">
-                <tr>
-                  <th className="px-4 py-3">Fecha</th>
-                  <th className="px-4 py-3">Equipo</th>
-                  <th className="px-4 py-3">Tipo</th>
-                  <th className="px-4 py-3">Horómetro</th>
-                  <th className="px-4 py-3">Descripción y Piezas</th>
-                  <th className="px-4 py-3">Realizado Por</th>
-                  <th className="px-4 py-3 text-right">Costo</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-border">
-                {maintenances.map(m => {
-                  const eq = machinery.find(x => x.id === m.machineryId);
-                  return (
-                    <tr key={m.id} className="hover:bg-accent/40 transition-colors">
-                      <td className="px-4 py-3 font-medium whitespace-nowrap">{m.maintenanceDate}</td>
-                      <td className="px-4 py-3 font-semibold text-foreground">{eq?.name ?? `Equipo #${m.machineryId}`}</td>
-                      <td className="px-4 py-3">
-                        <span className={`text-xs px-2 py-0.5 rounded-full font-bold ${
-                          m.type === 'PREVENTIVE' ? 'bg-emerald-100 text-emerald-800' : 'bg-red-100 text-red-800'
-                        }`}>
-                          {m.type === 'PREVENTIVE' ? 'Preventivo' : 'Correctivo'}
-                        </span>
-                      </td>
-                      <td className="px-4 py-3 font-mono">{m.hoursMeter} hrs</td>
-                      <td className="px-4 py-3">
-                        <p className="font-medium text-foreground">{m.description}</p>
-                        {m.partsReplaced && <p className="text-xs text-muted-foreground">Repuestos: {m.partsReplaced}</p>}
-                      </td>
-                      <td className="px-4 py-3 text-muted-foreground">{m.performedBy}</td>
-                      <td className="px-4 py-3 text-right font-black text-amber-700 dark:text-amber-400">
-                        ${m.cost.toLocaleString()}
-                      </td>
+        <div>
+          {maintenances.length === 0 ? (
+            <div className="glass-card p-8 text-center">
+              <EmptyState
+                icon={Wrench}
+                title="No hay mantenimientos registrados"
+                description="Lleva registro de servicios preventivos, cambios de aceite y reparaciones de taller para extender la vida útil de tus equipos."
+                ctaLabel="Registrar Servicio"
+                onCta={() => handleOpenMaintenance()}
+              />
+            </div>
+          ) : (
+            <div className="glass-card overflow-hidden">
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm text-left">
+                  <thead className="text-xs uppercase bg-muted/50 border-b border-border text-muted-foreground">
+                    <tr>
+                      <th className="px-4 py-3">Fecha</th>
+                      <th className="px-4 py-3">Equipo</th>
+                      <th className="px-4 py-3">Tipo</th>
+                      <th className="px-4 py-3">Horómetro</th>
+                      <th className="px-4 py-3">Descripción y Piezas</th>
+                      <th className="px-4 py-3">Realizado Por</th>
+                      <th className="px-4 py-3 text-right">Costo</th>
                     </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
+                  </thead>
+                  <tbody className="divide-y divide-border">
+                    {maintenances.map(m => {
+                      const eq = machinery.find(x => x.id === m.machineryId);
+                      return (
+                        <tr key={m.id} className="hover:bg-accent/40 transition-colors">
+                          <td className="px-4 py-3 font-medium whitespace-nowrap">{m.maintenanceDate}</td>
+                          <td className="px-4 py-3 font-semibold text-foreground">{eq?.name ?? `Equipo #${m.machineryId}`}</td>
+                          <td className="px-4 py-3">
+                            <span className={`text-xs px-2 py-0.5 rounded-full font-bold ${
+                              m.type === 'PREVENTIVE' ? 'bg-emerald-100 text-emerald-800' : 'bg-red-100 text-red-800'
+                            }`}>
+                              {m.type === 'PREVENTIVE' ? 'Preventivo' : 'Correctivo'}
+                            </span>
+                          </td>
+                          <td className="px-4 py-3 font-mono">{m.hoursMeter} hrs</td>
+                          <td className="px-4 py-3">
+                            <p className="font-medium text-foreground">{m.description}</p>
+                            {m.partsReplaced && <p className="text-xs text-muted-foreground">Repuestos: {m.partsReplaced}</p>}
+                          </td>
+                          <td className="px-4 py-3 text-muted-foreground">{m.performedBy}</td>
+                          <td className="px-4 py-3 text-right font-black text-amber-700 dark:text-amber-400">
+                            ${m.cost.toLocaleString()}
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
         </div>
       )}
 
       {/* Tab: Combustible */}
       {activeTab === 'fuel' && (
-        <div className="glass-card overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm text-left">
-              <thead className="text-xs uppercase bg-muted/50 border-b border-border text-muted-foreground">
-                <tr>
-                  <th className="px-4 py-3">Fecha</th>
-                  <th className="px-4 py-3">Equipo</th>
-                  <th className="px-4 py-3">Litros</th>
-                  <th className="px-4 py-3">Precio / Litro</th>
-                  <th className="px-4 py-3">Horómetro</th>
-                  <th className="px-4 py-3">Notas</th>
-                  <th className="px-4 py-3 text-right">Total</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-border">
-                {fuelLogs.map(f => {
-                  const eq = machinery.find(x => x.id === f.machineryId);
-                  return (
-                    <tr key={f.id} className="hover:bg-accent/40 transition-colors">
-                      <td className="px-4 py-3 font-medium whitespace-nowrap">{f.loggedAt}</td>
-                      <td className="px-4 py-3 font-semibold text-foreground">{eq?.name ?? `Equipo #${f.machineryId}`}</td>
-                      <td className="px-4 py-3 font-bold text-amber-700 dark:text-amber-400">{f.liters} L</td>
-                      <td className="px-4 py-3 text-muted-foreground">${f.costPerLiter.toFixed(2)}</td>
-                      <td className="px-4 py-3 font-mono">{f.hoursMeter} hrs</td>
-                      <td className="px-4 py-3 text-xs text-muted-foreground">{f.notes ?? '-'}</td>
-                      <td className="px-4 py-3 text-right font-black text-foreground">
-                        ${f.totalCost.toLocaleString()}
-                      </td>
+        <div>
+          {fuelLogs.length === 0 ? (
+            <div className="glass-card p-8 text-center">
+              <EmptyState
+                icon={Fuel}
+                title="No hay cargas de combustible registradas"
+                description="Registra consumos de diésel o gasolina por equipo para calcular costos por hora de trabajo."
+                ctaLabel="Cargar Diésel"
+                onCta={() => handleOpenFuel()}
+              />
+            </div>
+          ) : (
+            <div className="glass-card overflow-hidden">
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm text-left">
+                  <thead className="text-xs uppercase bg-muted/50 border-b border-border text-muted-foreground">
+                    <tr>
+                      <th className="px-4 py-3">Fecha</th>
+                      <th className="px-4 py-3">Equipo</th>
+                      <th className="px-4 py-3">Litros</th>
+                      <th className="px-4 py-3">Precio / Litro</th>
+                      <th className="px-4 py-3">Horómetro</th>
+                      <th className="px-4 py-3">Notas</th>
+                      <th className="px-4 py-3 text-right">Total</th>
                     </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
+                  </thead>
+                  <tbody className="divide-y divide-border">
+                    {fuelLogs.map(f => {
+                      const eq = machinery.find(x => x.id === f.machineryId);
+                      return (
+                        <tr key={f.id} className="hover:bg-accent/40 transition-colors">
+                          <td className="px-4 py-3 font-medium whitespace-nowrap">{f.loggedAt}</td>
+                          <td className="px-4 py-3 font-semibold text-foreground">{eq?.name ?? `Equipo #${f.machineryId}`}</td>
+                          <td className="px-4 py-3 font-bold text-amber-700 dark:text-amber-400">{f.liters} L</td>
+                          <td className="px-4 py-3 text-muted-foreground">${f.costPerLiter.toFixed(2)}</td>
+                          <td className="px-4 py-3 font-mono">{f.hoursMeter} hrs</td>
+                          <td className="px-4 py-3 text-xs text-muted-foreground">{f.notes ?? '-'}</td>
+                          <td className="px-4 py-3 text-right font-black text-foreground">
+                            ${f.totalCost.toLocaleString()}
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
         </div>
       )}
 

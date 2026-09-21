@@ -4,16 +4,19 @@
  * accesos directos por colores temáticos de sección, sin texto de relleno e íconos en todas partes.
  */
 import { Link } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
 import {
   Sun, AlertTriangle, Sparkles, Sprout, Wheat, Truck, RotateCw,
   Handshake, Calculator, Scale, Beef, Milk, Syringe, Pill, Baby,
   FileBarChart, DollarSign, Layers, Plus, ArrowUpRight, ArrowDownRight,
-  ShieldAlert, CheckCircle2, type LucideIcon
+  ShieldAlert, CheckCircle2, BarChart3, type LucideIcon
 } from 'lucide-react';
+import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid, Cell } from 'recharts';
 import { useAgendaToday, usePredictiveAlerts } from '@/features/agenda/api';
 import { useAgronomyKpis } from '@/features/crops/api';
 import { useLands } from '@/features/lands/api';
 import { useMachineryList } from '@/features/machinery/api';
+import { animalsApi } from '@/features/animals/api';
 import { EmptyState } from '@/components/ui/empty-state';
 import { Button } from '@/components/ui/button';
 
@@ -38,6 +41,13 @@ export default function InicioPage() {
   const { data: agroKpis } = useAgronomyKpis();
   const { data: lands = [] } = useLands();
   const { data: machinery = [] } = useMachineryList();
+
+  const animalsQuery = useQuery({
+    queryKey: ['animals', { page: 0, size: 1 }],
+    queryFn: () => animalsApi.list({ page: 0, size: 1 })
+  });
+
+  const totalAnimals = animalsQuery.data?.totalElements ?? 0;
 
   const allTasks: Array<{
     key: string;
@@ -95,6 +105,17 @@ export default function InicioPage() {
 
   const pasturesResting = lands.filter(l => l.type === 'PASTURE' && l.status === 'RESTING').length;
   const pasturesActive = lands.filter(l => l.type === 'PASTURE' && l.status === 'ACTIVE').length;
+  const totalLandHectares = Number(lands.reduce((sum, l) => sum + (l.areaHectares || 0), 0).toFixed(1));
+
+  // Datos para la gráfica general
+  const chartData = [
+    { name: 'Ganado (cabezas)', valor: totalAnimals, color: '#2563eb' },
+    { name: 'Siembra (ha)', valor: agroKpis?.activeCropsHectares ?? 0, color: '#059669' },
+    { name: 'Terrenos (ha)', valor: totalLandHectares, color: '#65a30d' },
+    { name: 'Maquinaria', valor: machinery.length, color: '#d97706' }
+  ];
+
+  const hasAnyData = totalAnimals > 0 || (agroKpis?.activeCropsHectares ?? 0) > 0 || totalLandHectares > 0 || machinery.length > 0;
 
   return (
     <div className="space-y-8 max-w-7xl mx-auto">
@@ -103,15 +124,15 @@ export default function InicioPage() {
         <div className="space-y-1">
           <div className="flex items-center gap-2">
             <h1 className="text-2xl font-black tracking-tight text-foreground flex items-center gap-2">
-              <Sun className="h-7 w-7 text-amber-500 animate-spin-slow" />
-              Rancho El Paraíso
+              <Sun className="h-7 w-7 text-amber-500" />
+              Rancho Principal
             </h1>
             <span className="text-xs px-2.5 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 font-bold border border-emerald-300/40">
               Operación Integral
             </span>
           </div>
           <p className="text-sm text-muted-foreground">
-            Gestión completa de hato ganadero, siembras, pasturas rotacionales, maquinaria y ventas.
+            Control de hato ganadero, siembras, pasturas rotacionales, maquinaria y finanzas.
           </p>
         </div>
 
@@ -131,7 +152,7 @@ export default function InicioPage() {
         </div>
       </div>
 
-      {/* KPI Cards Consolidados (Multidominio Agropecuario) */}
+      {/* KPI Cards Consolidados (Multidominio Agropecuario con datos reales) */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
         {/* Ganadería */}
         <Link to="/animales" className="glass-card p-4 border-l-4 border-l-blue-600 hover:scale-[1.01] transition-transform">
@@ -140,8 +161,8 @@ export default function InicioPage() {
             <Beef className="h-5 w-5 text-blue-600 dark:text-blue-400" />
           </div>
           <div className="mt-2">
-            <div className="text-2xl font-black text-foreground">36 <span className="text-xs font-normal text-muted-foreground">cabezas</span></div>
-            <p className="text-xs text-muted-foreground mt-0.5">Leche, engorda y pie de cría</p>
+            <div className="text-2xl font-black text-foreground">{totalAnimals} <span className="text-xs font-normal text-muted-foreground">cabezas</span></div>
+            <p className="text-xs text-muted-foreground mt-0.5">Hato registrado en el sistema</p>
           </div>
         </Link>
 
@@ -152,8 +173,8 @@ export default function InicioPage() {
             <Sprout className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
           </div>
           <div className="mt-2">
-            <div className="text-2xl font-black text-foreground">{agroKpis?.activeCropsHectares ?? 20.5} <span className="text-xs font-normal text-muted-foreground">ha en cultivo</span></div>
-            <p className="text-xs text-muted-foreground mt-0.5">Maíz ensilaje y alfalfa de corte</p>
+            <div className="text-2xl font-black text-foreground">{agroKpis?.activeCropsHectares ?? 0} <span className="text-xs font-normal text-muted-foreground">ha en cultivo</span></div>
+            <p className="text-xs text-muted-foreground mt-0.5">Siembras activas registradas</p>
           </div>
         </Link>
 
@@ -165,7 +186,7 @@ export default function InicioPage() {
           </div>
           <div className="mt-2">
             <div className="text-2xl font-black text-foreground">{pasturesActive} <span className="text-xs font-normal text-muted-foreground">pastoreo</span> / {pasturesResting} <span className="text-xs font-normal text-muted-foreground">descanso</span></div>
-            <p className="text-xs text-muted-foreground mt-0.5">Rotación de potreros activa</p>
+            <p className="text-xs text-muted-foreground mt-0.5">{totalLandHectares} ha totales en {lands.length} potreros</p>
           </div>
         </Link>
 
@@ -182,10 +203,61 @@ export default function InicioPage() {
                 <span className="text-amber-600 font-bold flex items-center gap-1">
                   <AlertTriangle className="h-3 w-3" /> {machinesNearService.length} servicio próximo
                 </span>
-              ) : 'Flota al 100%'}
+              ) : machinery.length > 0 ? 'Flota al 100%' : 'Sin equipos registrados'}
             </p>
           </div>
         </Link>
+      </div>
+
+      {/* Gráfica Estadística de Balance Operativo del Rancho */}
+      <div className="glass-panel p-6 border-border/60">
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <h2 className="text-base font-bold flex items-center gap-2 text-foreground">
+              <BarChart3 className="h-5 w-5 text-primary" />
+              Balance Operativo de Activos del Rancho
+            </h2>
+            <p className="text-xs text-muted-foreground">Indicadores cuantitativos actuales en los diferentes sectores productivos.</p>
+          </div>
+          <span className="text-xs font-mono text-muted-foreground bg-accent px-2 py-1 rounded-md">
+            Métricas en Vivo
+          </span>
+        </div>
+
+        {hasAnyData ? (
+          <div className="h-64 w-full">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={chartData} margin={{ top: 10, right: 10, left: -10, bottom: 20 }}>
+                <CartesianGrid strokeDasharray="3 3" opacity={0.2} />
+                <XAxis dataKey="name" stroke="#888888" fontSize={12} tickLine={false} />
+                <YAxis stroke="#888888" fontSize={12} tickLine={false} allowDecimals={false} />
+                <Tooltip
+                  contentStyle={{
+                    backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                    borderRadius: '0.75rem',
+                    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+                    border: '1px solid #e2e8f0',
+                    fontSize: '12px'
+                  }}
+                  formatter={(val: number) => [val, 'Total registrado']}
+                />
+                <Bar dataKey="valor" radius={[8, 8, 0, 0]}>
+                  {chartData.map((entry, idx) => (
+                    <Cell key={`cell-${idx}`} fill={entry.color} />
+                  ))}
+                </Bar>
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        ) : (
+          <div className="py-8 text-center bg-card/40 rounded-xl border border-dashed border-border/80">
+            <Sparkles className="h-8 w-8 text-primary mx-auto mb-2 opacity-50" />
+            <h3 className="text-sm font-semibold text-foreground">Tu rancho está listo para comenzar</h3>
+            <p className="text-xs text-muted-foreground max-w-sm mx-auto mt-1">
+              No tienes registros cargados todavía. Usa las acciones rápidas de abajo para registrar tu primer animal, cultivo o maquinaria.
+            </p>
+          </div>
+        )}
       </div>
 
       {/* Alertas & Agenda del Día */}
@@ -266,7 +338,7 @@ export default function InicioPage() {
             <QuickTile to="/agricultura" icon={Wheat} label="Cosechar" tag="+ Toneladas" color="text-emerald-700 bg-emerald-500/10 border-emerald-200 dark:border-emerald-800" />
             <QuickTile to="/terrenos" icon={RotateCw} label="Rotar Potrero" tag="Voisin" color="text-lime-700 bg-lime-500/10 border-lime-200 dark:border-lime-800" />
             <QuickTile to="/terrenos" icon={Layers} label="Gestionar Terrenos" tag="Parcelas" color="text-lime-700 bg-lime-500/10 border-lime-200 dark:border-lime-800" />
-            <QuickTile to="/calculadoras" icon={Calculator} label="Calculadoras de Campo" tag="GMD / UGM" color="text-teal-700 bg-teal-500/10 border-teal-200 dark:border-teal-800" />
+            <QuickTile to="/calculadoras" icon={Calculator} label="Calculadoras de Campo" tag="9 Módulos" color="text-teal-700 bg-teal-500/10 border-teal-200 dark:border-teal-800" />
           </div>
         </div>
 
@@ -338,4 +410,3 @@ function ModuleCard({ to, icon: Icon, title, subtitle, color }: { to: string; ic
     </Link>
   );
 }
-

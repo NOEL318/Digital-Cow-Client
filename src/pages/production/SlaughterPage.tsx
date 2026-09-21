@@ -59,21 +59,29 @@ export default function SlaughterPage() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {results.data?.map(s => (
-            <TableRow key={s.id}>
-              <TableCell>{s.slaughteredAt}</TableCell>
-              <TableCell>{s.animalId}</TableCell>
-              <TableCell>{s.liveWeightKg ?? '-'}</TableCell>
-              <TableCell>{s.carcassWeightKg ?? '-'}</TableCell>
-              <TableCell>
-                {s.yieldPct != null ? (
-                  <Badge tone={yieldTone(s.yieldPct)}>{s.yieldPct}%</Badge>
-                ) : '-'}
+          {!results.data || results.data.length === 0 ? (
+            <TableRow>
+              <TableCell colSpan={7} className="text-center py-6 text-muted-foreground">
+                No hay resultados de faena registrados aún
               </TableCell>
-              <TableCell>{s.grade ?? '-'}</TableCell>
-              <TableCell>{s.buyer ?? '-'}</TableCell>
             </TableRow>
-          ))}
+          ) : (
+            results.data.map(s => (
+              <TableRow key={s.id}>
+                <TableCell>{s.slaughteredAt}</TableCell>
+                <TableCell>{s.animalId}</TableCell>
+                <TableCell>{s.liveWeightKg ?? '-'}</TableCell>
+                <TableCell>{s.carcassWeightKg ?? '-'}</TableCell>
+                <TableCell>
+                  {s.yieldPct != null ? (
+                    <Badge tone={yieldTone(s.yieldPct)}>{s.yieldPct}%</Badge>
+                  ) : '-'}
+                </TableCell>
+                <TableCell>{s.grade ?? '-'}</TableCell>
+                <TableCell>{s.buyer ?? '-'}</TableCell>
+              </TableRow>
+            ))
+          )}
         </TableBody>
       </Table>
     </div>
