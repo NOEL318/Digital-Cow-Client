@@ -121,12 +121,16 @@ export default function AnimalsListPage() {
           )}
         </select>
 
-        <div className="ml-auto inline-flex rounded-md border overflow-hidden" role="group" aria-label={t('view.label')}>
+        <div className="ml-auto inline-flex items-center gap-1.5 p-1.5 rounded-2xl glass-card border border-white/60 dark:border-white/10 backdrop-blur-xl shadow-sm" role="group" aria-label={t('view.label')}>
           <button
             type="button"
             onClick={() => setView('list')}
             aria-pressed={mode === 'list'}
-            className={`flex items-center gap-1 px-3 py-2 text-sm ${mode === 'list' ? 'bg-accent font-semibold' : 'hover:bg-accent'}`}
+            className={`flex items-center gap-1.5 px-3 py-1.5 text-xs md:text-sm rounded-xl font-semibold transition-all duration-150 ${
+              mode === 'list'
+                ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-md shadow-emerald-600/25 border border-white/20 font-bold'
+                : 'text-muted-foreground hover:text-foreground hover:bg-white/40 dark:hover:bg-slate-800/40'
+            }`}
           >
             <List className="h-4 w-4" aria-hidden /> {t('view.list')}
           </button>
@@ -134,7 +138,11 @@ export default function AnimalsListPage() {
             type="button"
             onClick={() => setView('cards')}
             aria-pressed={mode === 'cards'}
-            className={`flex items-center gap-1 px-3 py-2 text-sm border-l ${mode === 'cards' ? 'bg-accent font-semibold' : 'hover:bg-accent'}`}
+            className={`flex items-center gap-1.5 px-3 py-1.5 text-xs md:text-sm rounded-xl font-semibold transition-all duration-150 ${
+              mode === 'cards'
+                ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-md shadow-emerald-600/25 border border-white/20 font-bold'
+                : 'text-muted-foreground hover:text-foreground hover:bg-white/40 dark:hover:bg-slate-800/40'
+            }`}
           >
             <LayoutGrid className="h-4 w-4" aria-hidden /> {t('view.cards')}
           </button>
@@ -142,7 +150,11 @@ export default function AnimalsListPage() {
             type="button"
             onClick={() => setView('map')}
             aria-pressed={mode === 'map'}
-            className={`flex items-center gap-1 px-3 py-2 text-sm border-l ${mode === 'map' ? 'bg-accent font-semibold' : 'hover:bg-accent'}`}
+            className={`flex items-center gap-1.5 px-3 py-1.5 text-xs md:text-sm rounded-xl font-semibold transition-all duration-150 ${
+              mode === 'map'
+                ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-md shadow-emerald-600/25 border border-white/20 font-bold'
+                : 'text-muted-foreground hover:text-foreground hover:bg-white/40 dark:hover:bg-slate-800/40'
+            }`}
           >
             <MapIcon className="h-4 w-4" aria-hidden /> {t('view.map')}
           </button>

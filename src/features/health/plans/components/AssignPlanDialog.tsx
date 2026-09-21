@@ -46,14 +46,18 @@ export function AssignPlanDialog({ planId, trigger }: Props) {
   };
 
   const tabBtn = (k: Tab) =>
-    `px-3 py-1 rounded ${tab === k ? 'bg-accent font-medium' : 'border'}`;
+    `px-4 py-1.5 rounded-xl text-xs md:text-sm font-semibold transition-all duration-150 ${
+      tab === k
+        ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-md shadow-emerald-600/25 border border-white/20 font-bold'
+        : 'text-muted-foreground hover:text-foreground hover:bg-white/40 dark:hover:bg-slate-800/40'
+    }`;
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
       <DialogContent className="max-w-2xl">
         <DialogHeader><DialogTitle>{t('health:plan.assign')}</DialogTitle></DialogHeader>
-        <div className="flex gap-2">
+        <div className="inline-flex items-center gap-1.5 p-1.5 rounded-2xl glass-card border border-white/60 dark:border-white/10 backdrop-blur-xl shadow-sm">
           <button type="button" className={tabBtn('animals')} onClick={() => setTab('animals')}>{t('health:plan.animals')}</button>
           <button type="button" className={tabBtn('lots')} onClick={() => setTab('lots')}>{t('health:plan.lots')}</button>
         </div>

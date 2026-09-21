@@ -188,39 +188,48 @@ export default function MachineryPage() {
       </div>
 
       {/* Tabs */}
-      <div className="flex items-center gap-2 border-b border-border/60 pb-2">
+      <div className="inline-flex flex-wrap items-center gap-1.5 p-1.5 rounded-2xl glass-card border border-white/60 dark:border-white/10 backdrop-blur-xl shadow-sm">
         <button
           onClick={() => setActiveTab('fleet')}
-          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all ${
+          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs md:text-sm font-semibold transition-all duration-150 ${
             activeTab === 'fleet'
-              ? 'bg-amber-600 text-white shadow-sm'
-              : 'text-muted-foreground hover:bg-accent'
+              ? 'bg-gradient-to-r from-amber-600 to-orange-600 text-white shadow-md shadow-amber-600/25 border border-white/20 font-bold'
+              : 'text-muted-foreground hover:text-foreground hover:bg-white/40 dark:hover:bg-slate-800/40'
           }`}
         >
           <Truck className="h-4 w-4" />
-          Equipos ({machinery.length})
+          <span>Equipos</span>
+          <span className={`text-[11px] px-1.5 py-0.5 rounded-full font-bold ${activeTab === 'fleet' ? 'bg-white/25 text-white' : 'bg-muted text-muted-foreground'}`}>
+            {machinery.length}
+          </span>
         </button>
         <button
           onClick={() => setActiveTab('maintenances')}
-          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all ${
+          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs md:text-sm font-semibold transition-all duration-150 ${
             activeTab === 'maintenances'
-              ? 'bg-amber-600 text-white shadow-sm'
-              : 'text-muted-foreground hover:bg-accent'
+              ? 'bg-gradient-to-r from-amber-600 to-orange-600 text-white shadow-md shadow-amber-600/25 border border-white/20 font-bold'
+              : 'text-muted-foreground hover:text-foreground hover:bg-white/40 dark:hover:bg-slate-800/40'
           }`}
         >
           <Wrench className="h-4 w-4" />
-          Mantenimientos ({maintenances.length})
+          <span>Mantenimientos</span>
+          <span className={`text-[11px] px-1.5 py-0.5 rounded-full font-bold ${activeTab === 'maintenances' ? 'bg-white/25 text-white' : 'bg-muted text-muted-foreground'}`}>
+            {maintenances.length}
+          </span>
         </button>
         <button
           onClick={() => setActiveTab('fuel')}
-          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all ${
+          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs md:text-sm font-semibold transition-all duration-150 ${
             activeTab === 'fuel'
-              ? 'bg-amber-600 text-white shadow-sm'
-              : 'text-muted-foreground hover:bg-accent'
+              ? 'bg-gradient-to-r from-amber-600 to-orange-600 text-white shadow-md shadow-amber-600/25 border border-white/20 font-bold'
+              : 'text-muted-foreground hover:text-foreground hover:bg-white/40 dark:hover:bg-slate-800/40'
           }`}
         >
           <Fuel className="h-4 w-4" />
-          Cargas de Combustible ({fuelLogs.length})
+          <span>Cargas de Combustible</span>
+          <span className={`text-[11px] px-1.5 py-0.5 rounded-full font-bold ${activeTab === 'fuel' ? 'bg-white/25 text-white' : 'bg-muted text-muted-foreground'}`}>
+            {fuelLogs.length}
+          </span>
         </button>
       </div>
 

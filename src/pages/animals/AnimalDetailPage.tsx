@@ -151,7 +151,7 @@ export default function AnimalDetailPage() {
       <AnimalActions animal={a} />
 
       <Tabs.Root defaultValue="datos" className="space-y-4">
-        <Tabs.List className="grid grid-cols-3 border border-white/60 dark:border-white/10 rounded-2xl overflow-hidden glass-panel">
+        <Tabs.List className="grid grid-cols-3 p-1.5 gap-1.5 border border-white/60 dark:border-white/10 rounded-2xl glass-card backdrop-blur-xl">
           <TabHead value="datos" icon={Camera} label={t('animals:tabs.dataAndPhotos')} />
           <TabHead value="historia" icon={Activity} label={t('animals:tabs.history')} />
           <TabHead value="dinero" icon={BarChart3} label={t('animals:tabs.moneyAndCompare')} />
@@ -197,7 +197,7 @@ function TabHead({ value, icon: Icon, label }: { value: string; icon: LucideIcon
   return (
     <Tabs.Trigger
       value={value}
-      className="flex items-center justify-center gap-2 px-4 py-3 text-sm hover:bg-accent data-[state=active]:bg-accent data-[state=active]:font-semibold transition-colors"
+      className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs md:text-sm font-semibold transition-all duration-150 text-muted-foreground hover:text-foreground hover:bg-white/40 dark:hover:bg-slate-800/40 data-[state=active]:bg-gradient-to-r data-[state=active]:from-emerald-600 data-[state=active]:to-teal-600 data-[state=active]:text-white data-[state=active]:shadow-md data-[state=active]:shadow-emerald-600/25 data-[state=active]:border data-[state=active]:border-white/20 data-[state=active]:font-bold"
     >
       <Icon className="h-4 w-4" aria-hidden />
       {label}

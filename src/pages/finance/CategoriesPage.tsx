@@ -3,7 +3,7 @@
  */
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import * as Tabs from '@radix-ui/react-tabs';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Plus, Lock } from 'lucide-react';
 import i18n from '@/lib/i18n';
 import { Button } from '@/components/ui/button';
@@ -36,17 +36,17 @@ export default function CategoriesPage() {
     <div className="p-6 space-y-4">
       <h1 className="text-2xl font-bold">{t('finance:category.title')}</h1>
 
-      <Tabs.Root defaultValue="expense" className="space-y-3">
-        <Tabs.List className="flex gap-2 border-b">
-          <Tabs.Trigger value="expense" className="px-3 py-1 data-[state=active]:border-b-2">
+      <Tabs defaultValue="expense" className="space-y-4">
+        <TabsList>
+          <TabsTrigger value="expense">
             {t('finance:category.expenseTab')}
-          </Tabs.Trigger>
-          <Tabs.Trigger value="income" className="px-3 py-1 data-[state=active]:border-b-2">
+          </TabsTrigger>
+          <TabsTrigger value="income">
             {t('finance:category.incomeTab')}
-          </Tabs.Trigger>
-        </Tabs.List>
+          </TabsTrigger>
+        </TabsList>
 
-        <Tabs.Content value="expense" className="space-y-3">
+        <TabsContent value="expense" className="space-y-3">
           <div className="flex justify-end">
             <Dialog open={openExp} onOpenChange={setOpenExp}>
               <DialogTrigger asChild>
@@ -82,9 +82,9 @@ export default function CategoriesPage() {
               ))}
             </TableBody>
           </Table>
-        </Tabs.Content>
+        </TabsContent>
 
-        <Tabs.Content value="income" className="space-y-3">
+        <TabsContent value="income" className="space-y-3">
           <div className="flex justify-end">
             <Dialog open={openInc} onOpenChange={setOpenInc}>
               <DialogTrigger asChild>
@@ -120,8 +120,8 @@ export default function CategoriesPage() {
               ))}
             </TableBody>
           </Table>
-        </Tabs.Content>
-      </Tabs.Root>
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }

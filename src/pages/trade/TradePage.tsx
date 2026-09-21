@@ -179,39 +179,48 @@ export default function TradePage() {
       )}
 
       {/* Tabs */}
-      <div className="flex items-center gap-2 border-b border-border/60 pb-2">
+      <div className="inline-flex flex-wrap items-center gap-1.5 p-1.5 rounded-2xl glass-card border border-white/60 dark:border-white/10 backdrop-blur-xl shadow-sm">
         <button
           onClick={() => setActiveTab('sales')}
-          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all ${
+          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs md:text-sm font-semibold transition-all duration-150 ${
             activeTab === 'sales'
-              ? 'bg-emerald-600 text-white shadow-sm'
-              : 'text-muted-foreground hover:bg-accent'
+              ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-md shadow-emerald-600/25 border border-white/20 font-bold'
+              : 'text-muted-foreground hover:text-foreground hover:bg-white/40 dark:hover:bg-slate-800/40'
           }`}
         >
           <ArrowUpRight className="h-4 w-4" />
-          Ventas de Ganado & Cosechas ({sales.length})
+          <span>Ventas de Ganado & Cosechas</span>
+          <span className={`text-[11px] px-1.5 py-0.5 rounded-full font-bold ${activeTab === 'sales' ? 'bg-white/25 text-white' : 'bg-muted text-muted-foreground'}`}>
+            {sales.length}
+          </span>
         </button>
         <button
           onClick={() => setActiveTab('purchases')}
-          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all ${
+          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs md:text-sm font-semibold transition-all duration-150 ${
             activeTab === 'purchases'
-              ? 'bg-emerald-600 text-white shadow-sm'
-              : 'text-muted-foreground hover:bg-accent'
+              ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-md shadow-emerald-600/25 border border-white/20 font-bold'
+              : 'text-muted-foreground hover:text-foreground hover:bg-white/40 dark:hover:bg-slate-800/40'
           }`}
         >
           <ArrowDownRight className="h-4 w-4" />
-          Compras ({purchases.length})
+          <span>Compras</span>
+          <span className={`text-[11px] px-1.5 py-0.5 rounded-full font-bold ${activeTab === 'purchases' ? 'bg-white/25 text-white' : 'bg-muted text-muted-foreground'}`}>
+            {purchases.length}
+          </span>
         </button>
         <button
           onClick={() => setActiveTab('supplies')}
-          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all ${
+          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs md:text-sm font-semibold transition-all duration-150 ${
             activeTab === 'supplies'
-              ? 'bg-emerald-600 text-white shadow-sm'
-              : 'text-muted-foreground hover:bg-accent'
+              ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-md shadow-emerald-600/25 border border-white/20 font-bold'
+              : 'text-muted-foreground hover:text-foreground hover:bg-white/40 dark:hover:bg-slate-800/40'
           }`}
         >
           <Package className="h-4 w-4" />
-          Inventario en Bodega ({supplies.length})
+          <span>Inventario en Bodega</span>
+          <span className={`text-[11px] px-1.5 py-0.5 rounded-full font-bold ${activeTab === 'supplies' ? 'bg-white/25 text-white' : 'bg-muted text-muted-foreground'}`}>
+            {supplies.length}
+          </span>
         </button>
       </div>
 

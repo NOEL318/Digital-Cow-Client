@@ -45,13 +45,17 @@ export default function VaccinationsPage() {
   };
 
   const tabBtn = (m: Mode) =>
-    `px-3 py-1 rounded ${mode === m ? 'bg-accent font-medium' : 'border'}`;
+    `px-4 py-2 rounded-xl text-xs md:text-sm font-semibold transition-all duration-150 ${
+      mode === m
+        ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-md shadow-emerald-600/25 border border-white/20 font-bold'
+        : 'text-muted-foreground hover:text-foreground hover:bg-white/40 dark:hover:bg-slate-800/40'
+    }`;
 
   return (
     <div className="p-6 space-y-4">
       <h1 className="text-2xl font-bold">{t('health:vaccination.title')}</h1>
 
-      <div className="flex gap-2">
+      <div className="inline-flex items-center gap-1.5 p-1.5 rounded-2xl glass-card border border-white/60 dark:border-white/10 backdrop-blur-xl shadow-sm">
         <button type="button" className={tabBtn('individual')} onClick={() => setMode('individual')}>
           {t('health:vaccination.individual')}
         </button>
@@ -60,7 +64,7 @@ export default function VaccinationsPage() {
         </button>
       </div>
 
-      <div className="border rounded p-4">
+      <div className="glass-card rounded-2xl p-6 border border-white/60 dark:border-white/10">
         {mode === 'individual' ? (
           <VaccinationForm
             submitting={createOne.isPending}
