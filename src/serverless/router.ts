@@ -1716,6 +1716,359 @@ export class ServerlessRouter {
       };
     }
 
+    // -------------------------------------------------------------
+    // TERRENOS, POTREROS Y CORRALES (LANDS)
+    // -------------------------------------------------------------
+    if (path === '/lands') {
+      if (method === 'GET') {
+        let lands = db.getAll('lands');
+        if (query.ranchId) lands = lands.filter(l => l.ranchId === Number(query.ranchId));
+        if (query.type) lands = lands.filter(l => l.type === query.type);
+        return { status: 200, data: lands };
+      }
+      if (method === 'POST') {
+        const item = db.insert('lands', {
+          accountId: 1,
+          status: 'ACTIVE',
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+          ...body
+        });
+        return { status: 201, data: item };
+      }
+    }
+
+    const landIdMatch = path.match(/^\/lands\/(\d+)$/);
+    if (landIdMatch) {
+      const lid = Number(landIdMatch[1]);
+      if (method === 'GET') {
+        const item = db.getById('lands', lid);
+        return item ? { status: 200, data: item } : { status: 404, data: { message: 'Land not found' } };
+      }
+      if (method === 'PUT') {
+        const updated = db.update('lands', lid, { ...body, updatedAt: new Date().toISOString() });
+        return { status: 200, data: updated };
+      }
+      if (method === 'DELETE') {
+        db.delete('lands', lid);
+        return { status: 204, data: null };
+      }
+    }
+
+    const landRotateMatch = path.match(/^\/lands\/(\d+)\/rotate$/);
+    if (landRotateMatch && method === 'POST') {
+      const lid = Number(landRotateMatch[1]);
+      const current = db.getById('lands', lid);
+      if (!current) return { status: 404, data: { message: 'Land not found' } };
+      const newStatus = current.status === 'ACTIVE' ? 'RESTING' : 'ACTIVE';
+      const updated = db.update('lands', lid, {
+        status: newStatus,
+        daysInRest: newStatus === 'RESTING' ? 1 : 0,
+        daysInUse: newStatus === 'ACTIVE' ? 1 : 0,
+        currentAnimalCount: newStatus === 'RESTING' ? 0 : (body.animalCount ?? 15),
+        updatedAt: new Date().toISOString()
+      });
+      return { status: 200, data: updated };
+    }
+
+    // -------------------------------------------------------------
+    // CULTIVOS, SIEMBRAS Y COSECHAS (CROPS, PLANTINGS, HARVESTS)
+    // -------------------------------------------------------------
+    if (path === '/crops') {
+      if (method === 'GET') {
+        return { status: 200, data: db.getAll('crops') };
+      }
+      if (method === 'POST') {
+        const c = db.insert('crops', body);
+        return { status: 201, data: c };
+      }
+    }
+
+    if (path === '/plantings') {
+      if (method === 'GET') {
+        let list = db.getAll('plantings');
+        if (query.ranchId) list = list.filter(p => p.ranchId === Number(query.ranchId));
+        if (query.status) list = list.filter(p => p.status === query.status);
+        return { status: 200, data: list };
+      }
+      if (method === 'POST') {
+        const inv = (Number(body.seedCost) || 0) + (Number(body.fertilizerCost) || 0) + (Number(body.agrochemicalCost) || 0) + (Number(body.laborCost) || 0) + (Number(body.machineryCost) || 0);
+        const item = db.insert('plantings', {
+          accountId: 1,
+          status: 'PLANNED',
+          progressPercentage: 10,
+          totalInvestment: inv,
+          createdAt: new Date().toISOString(),
+          ...body
+        });
+        return { status: 201, data: item };
+      }
+    }
+
+    const plantingIdMatch = path.match(/^\/plantings\/(\d+)$/);
+    if (plantingIdMatch) {
+      const pid = Number(plantingIdMatch[1]);
+      if (method === 'GET') {
+        const item = db.getById('plantings', pid);
+        return item ? { status: 200, data: item } : { status: 404, data: { message: 'Planting not found' } };
+      }
+      if (method === 'PUT') {
+        const inv = (Number(body.seedCost) || 0) + (Number(body.fertilizerCost) || 0) + (Number(body.agrochemicalCost) || 0) + (Number(body.laborCost) || 0) + (Number(body.machineryCost) || 0);
+        const updated = db.update('plantings', pid, { ...body, totalInvestment: inv > 0 ? inv : body.totalInvestment });
+        return { status: 200, data: updated };
+      }
+      if (method === 'DELETE') {
+        db.delete('plantings', pid);
+        return { status: 204, data: null };
+      }
+    }
+
+    if (path === '/harvests') {
+      if (method === 'GET') {
+        let list = db.getAll('harvests');
+        if (query.ranchId) list = list.filter(h => h.ranchId === Number(query.ranchId));
+        return { status: 200, data: list };
+      }
+      if (method === 'POST') {
+        const yieldPerHa = body.areaHectares > 0 ? Number((body.totalYieldTons / body.areaHectares).toFixed(2)) : 0;
+        const rev = (body.salePricePerTon || 0) * (body.totalYieldTons || 0);
+        const item = db.insert('harvests', {
+          accountId: 1,
+          yieldPerHa,
+          totalRevenue: rev,
+          createdAt: new Date().toISOString(),
+          ...body
+        });
+        // Si viene con plantingId, marcar planting como cosechada
+        if (body.plantingId) {
+          db.update('plantings', body.plantingId, {
+            status: 'HARVESTED',
+            actualHarvestDate: body.harvestDate || new Date().toISOString().split('T')[0],
+            progressPercentage: 100
+          });
+        }
+        return { status: 201, data: item };
+      }
+    }
+
+    const harvestIdMatch = path.match(/^\/harvests\/(\d+)$/);
+    if (harvestIdMatch && method === 'DELETE') {
+      db.delete('harvests', Number(harvestIdMatch[1]));
+      return { status: 204, data: null };
+    }
+
+    // -------------------------------------------------------------
+    // MAQUINARIA Y EQUIPOS (MACHINERY, MAINTENANCES, FUEL)
+    // -------------------------------------------------------------
+    if (path === '/machinery') {
+      if (method === 'GET') {
+        let list = db.getAll('machinery');
+        if (query.ranchId) list = list.filter(m => m.ranchId === Number(query.ranchId));
+        return { status: 200, data: list };
+      }
+      if (method === 'POST') {
+        const m = db.insert('machinery', {
+          accountId: 1,
+          status: 'OPERATIONAL',
+          currentHoursMeter: 0,
+          nextServiceHours: 250,
+          createdAt: new Date().toISOString(),
+          ...body
+        });
+        return { status: 201, data: m };
+      }
+    }
+
+    const machineryIdMatch = path.match(/^\/machinery\/(\d+)$/);
+    if (machineryIdMatch) {
+      const mid = Number(machineryIdMatch[1]);
+      if (method === 'GET') {
+        const m = db.getById('machinery', mid);
+        return m ? { status: 200, data: m } : { status: 404, data: { message: 'Machinery not found' } };
+      }
+      if (method === 'PUT') {
+        const updated = db.update('machinery', mid, body);
+        return { status: 200, data: updated };
+      }
+      if (method === 'DELETE') {
+        db.delete('machinery', mid);
+        return { status: 204, data: null };
+      }
+    }
+
+    const machineryMaintMatch = path.match(/^\/machinery\/(\d+)\/maintenances$/);
+    if (machineryMaintMatch) {
+      const mid = Number(machineryMaintMatch[1]);
+      if (method === 'GET') {
+        const list = db.filter('machineryMaintenances', m => m.machineryId === mid);
+        return { status: 200, data: list };
+      }
+      if (method === 'POST') {
+        const item = db.insert('machineryMaintenances', {
+          accountId: 1,
+          machineryId: mid,
+          createdAt: new Date().toISOString(),
+          ...body
+        });
+        // Actualizar horas del próximo servicio en maquinaria
+        const mach = db.getById('machinery', mid);
+        if (mach && body.hoursMeter) {
+          db.update('machinery', mid, {
+            currentHoursMeter: Math.max(mach.currentHoursMeter, body.hoursMeter),
+            nextServiceHours: body.hoursMeter + 250,
+            status: 'OPERATIONAL'
+          });
+        }
+        return { status: 201, data: item };
+      }
+    }
+
+    if (path === '/machinery/maintenances' && method === 'GET') {
+      return { status: 200, data: db.getAll('machineryMaintenances') };
+    }
+
+    const machineryFuelMatch = path.match(/^\/machinery\/(\d+)\/fuel$/);
+    if (machineryFuelMatch) {
+      const mid = Number(machineryFuelMatch[1]);
+      if (method === 'GET') {
+        const list = db.filter('fuelLogs', f => f.machineryId === mid);
+        return { status: 200, data: list };
+      }
+      if (method === 'POST') {
+        const total = (body.liters || 0) * (body.costPerLiter || 0);
+        const item = db.insert('fuelLogs', {
+          accountId: 1,
+          machineryId: mid,
+          totalCost: total,
+          createdAt: new Date().toISOString(),
+          ...body
+        });
+        // Actualizar horómetro si es mayor
+        const mach = db.getById('machinery', mid);
+        if (mach && body.hoursMeter && body.hoursMeter > mach.currentHoursMeter) {
+          db.update('machinery', mid, { currentHoursMeter: body.hoursMeter });
+        }
+        return { status: 201, data: item };
+      }
+    }
+
+    if (path === '/machinery/fuel' && method === 'GET') {
+      return { status: 200, data: db.getAll('fuelLogs') };
+    }
+
+    // -------------------------------------------------------------
+    // INSUMOS Y ALMACÉN (SUPPLIES)
+    // -------------------------------------------------------------
+    if (path === '/supplies') {
+      if (method === 'GET') {
+        return { status: 200, data: db.getAll('supplies') };
+      }
+      if (method === 'POST') {
+        const item = db.insert('supplies', {
+          accountId: 1,
+          createdAt: new Date().toISOString(),
+          ...body
+        });
+        return { status: 201, data: item };
+      }
+    }
+
+    const supplyMovementMatch = path.match(/^\/supplies\/(\d+)\/movements$/);
+    if (supplyMovementMatch && method === 'POST') {
+      const sid = Number(supplyMovementMatch[1]);
+      const sup = db.getById('supplies', sid);
+      if (!sup) return { status: 404, data: { message: 'Supply item not found' } };
+      const qty = Number(body.quantity) || 0;
+      const total = qty * (Number(body.unitCost) || sup.costPerUnit);
+      const isExit = body.type.startsWith('USAGE_');
+      const newStock = isExit ? sup.currentStock - qty : sup.currentStock + qty;
+      db.update('supplies', sid, { currentStock: Math.max(0, newStock) });
+
+      const movement = db.insert('supplyMovements', {
+        accountId: 1,
+        supplyItemId: sid,
+        totalCost: total,
+        createdAt: new Date().toISOString(),
+        ...body
+      });
+      return { status: 201, data: movement };
+    }
+
+    if (path === '/supplies/movements' && method === 'GET') {
+      return { status: 200, data: db.getAll('supplyMovements') };
+    }
+
+    // -------------------------------------------------------------
+    // COMERCIO AGROPECUARIO (TRADES: COMPRAS Y VENTAS)
+    // -------------------------------------------------------------
+    if (path === '/trades') {
+      if (method === 'GET') {
+        let list = db.getAll('trades');
+        if (query.ranchId) list = list.filter(t => t.ranchId === Number(query.ranchId));
+        if (query.type) list = list.filter(t => t.type === query.type);
+        return { status: 200, data: list };
+      }
+      if (method === 'POST') {
+        const tot = Number(body.totalAmount) || (Number(body.quantity || 0) * Number(body.unitPrice || 0));
+        const item = db.insert('trades', {
+          accountId: 1,
+          totalAmount: tot,
+          paymentStatus: body.paymentStatus || 'PAID',
+          createdAt: new Date().toISOString(),
+          ...body
+        });
+        return { status: 201, data: item };
+      }
+    }
+
+    const tradeIdMatch = path.match(/^\/trades\/(\d+)$/);
+    if (tradeIdMatch && method === 'DELETE') {
+      db.delete('trades', Number(tradeIdMatch[1]));
+      return { status: 204, data: null };
+    }
+
+    // -------------------------------------------------------------
+    // AGRONOMY & FARM KPIS CONSOLIDATED
+    // -------------------------------------------------------------
+    if (path === '/agronomy/kpis' && method === 'GET') {
+      const lands = db.getAll('lands');
+      const plantings = db.getAll('plantings');
+      const harvests = db.getAll('harvests');
+      const machinery = db.getAll('machinery');
+      const trades = db.getAll('trades');
+
+      const totalHectaresPlantings = plantings
+        .filter(p => p.status !== 'HARVESTED' && p.status !== 'LOST')
+        .reduce((sum, p) => sum + (p.areaHectares || 0), 0);
+
+      const totalTonsHarvested = harvests.reduce((sum, h) => sum + (h.totalYieldTons || 0), 0);
+      const totalCropRevenue = harvests.reduce((sum, h) => sum + (h.totalRevenue || 0), 0);
+      const totalMachineryCount = machinery.length;
+      const operationalMachinery = machinery.filter(m => m.status === 'OPERATIONAL').length;
+
+      const totalLivestockSales = trades
+        .filter(t => t.type === 'SALE_LIVESTOCK')
+        .reduce((sum, t) => sum + (t.totalAmount || 0), 0);
+
+      const totalPastureHectares = lands
+        .filter(l => l.type === 'PASTURE')
+        .reduce((sum, l) => sum + (l.areaHectares || 0), 0);
+
+      return {
+        status: 200,
+        data: {
+          activeCropsHectares: Number(totalHectaresPlantings.toFixed(1)),
+          totalTonsHarvested: Number(totalTonsHarvested.toFixed(1)),
+          totalCropRevenue,
+          totalLivestockSales,
+          totalPastureHectares: Number(totalPastureHectares.toFixed(1)),
+          machineryCount: totalMachineryCount,
+          operationalMachinery,
+          maintenancePendingCount: machinery.filter(m => m.currentHoursMeter >= m.nextServiceHours - 50).length
+        }
+      };
+    }
+
     // Si ningun handler coincide, devuelve 200 vacio o 404 informativo
     console.warn('[ServerlessRouter unhandled route]', method, path);
     return {

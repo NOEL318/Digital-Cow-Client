@@ -585,6 +585,183 @@ export interface ServerlessMilkSale {
   createdAt: string;
 }
 
+export interface ServerlessLand {
+  id: number;
+  accountId: number;
+  ranchId: number;
+  name: string;
+  type: 'PASTURE' | 'AGRICULTURAL' | 'FEEDLOT' | 'INFRASTRUCTURE';
+  areaHectares: number;
+  soilType?: 'CLAY' | 'LOAM' | 'SANDY' | 'SILT' | 'ORGANIC' | null;
+  irrigationType?: 'RAIN_FED' | 'DRIP' | 'SPRINKLER' | 'FLOOD' | 'PIVOT' | 'NONE' | null;
+  status: 'ACTIVE' | 'RESTING' | 'PREPARATION' | 'OCCUPIED' | 'MAINTENANCE';
+  pastureGrassType?: string | null;
+  carryingCapacityUGM?: number | null;
+  currentAnimalCount?: number | null;
+  daysInRest?: number | null;
+  daysInUse?: number | null;
+  currentCrop?: string | null;
+  notes?: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ServerlessCrop {
+  id: number;
+  name: string;
+  scientificName?: string | null;
+  category: 'GRAIN' | 'FORAGE' | 'LEGUME' | 'PASTURE' | 'TUBER' | 'OTHER';
+  standardCycleDays: number;
+  expectedYieldTonsPerHa: number;
+  recommendedSeedingRateKgHa: number;
+  notes?: string | null;
+}
+
+export interface ServerlessPlanting {
+  id: number;
+  accountId: number;
+  ranchId: number;
+  landId: number;
+  cropId: number;
+  cropName: string;
+  variety: string;
+  plantingDate: string;
+  expectedHarvestDate: string;
+  actualHarvestDate?: string | null;
+  areaHectares: number;
+  seedingRateKgHa: number;
+  status: 'PLANNED' | 'GERMINATION' | 'VEGETATIVE' | 'FLOWERING' | 'MATURATION' | 'HARVESTED' | 'LOST';
+  progressPercentage: number;
+  seedCost: number;
+  fertilizerCost: number;
+  agrochemicalCost: number;
+  laborCost: number;
+  machineryCost: number;
+  totalInvestment: number;
+  notes?: string | null;
+  createdAt: string;
+}
+
+export interface ServerlessHarvest {
+  id: number;
+  accountId: number;
+  ranchId: number;
+  plantingId: number;
+  landId: number;
+  cropName: string;
+  harvestDate: string;
+  areaHectares: number;
+  totalYieldTons: number;
+  yieldPerHa: number;
+  moisturePercentage?: number | null;
+  grainQuality: 'PREMIUM' | 'STANDARD' | 'FEED_GRADE' | 'DAMAGED';
+  destination: 'SILO' | 'DIRECT_SALE' | 'FEEDLOT' | 'BALES';
+  salePricePerTon?: number | null;
+  totalRevenue?: number | null;
+  netProfit?: number | null;
+  notes?: string | null;
+  createdAt: string;
+}
+
+export interface ServerlessMachinery {
+  id: number;
+  accountId: number;
+  ranchId: number;
+  name: string;
+  type: 'TRACTOR' | 'HARVESTER' | 'PLANTER' | 'SPRAYER' | 'TRAILER' | 'IRRIGATION' | 'FEED_MIXER' | 'SCALE' | 'TOOL' | 'OTHER';
+  brand: string;
+  model: string;
+  year: number;
+  serialNumber?: string | null;
+  status: 'OPERATIONAL' | 'IN_MAINTENANCE' | 'OUT_OF_SERVICE';
+  currentHoursMeter: number;
+  nextServiceHours: number;
+  fuelType: 'DIESEL' | 'GASOLINE' | 'ELECTRIC' | 'NONE';
+  fuelEfficiencyLitersPerHour?: number | null;
+  assignedOperator?: string | null;
+  purchaseDate?: string | null;
+  purchasePrice?: number | null;
+  notes?: string | null;
+  createdAt: string;
+}
+
+export interface ServerlessMachineryMaintenance {
+  id: number;
+  accountId: number;
+  machineryId: number;
+  maintenanceDate: string;
+  type: 'PREVENTIVE' | 'CORRECTIVE' | 'OVERHAUL';
+  hoursMeter: number;
+  description: string;
+  cost: number;
+  performedBy: string;
+  partsReplaced?: string | null;
+  notes?: string | null;
+  createdAt: string;
+}
+
+export interface ServerlessFuelLog {
+  id: number;
+  accountId: number;
+  machineryId: number;
+  loggedAt: string;
+  liters: number;
+  costPerLiter: number;
+  totalCost: number;
+  hoursMeter: number;
+  notes?: string | null;
+  createdAt: string;
+}
+
+export interface ServerlessSupplyItem {
+  id: number;
+  accountId: number;
+  name: string;
+  category: 'SEED' | 'FERTILIZER' | 'AGROCHEMICAL' | 'FUEL' | 'FEED' | 'MEDICATION' | 'TOOL' | 'OTHER';
+  unit: 'KG' | 'TON' | 'LITER' | 'BAG' | 'BALE' | 'DOSE' | 'PIECE';
+  currentStock: number;
+  minStockAlert: number;
+  costPerUnit: number;
+  warehouseLocation?: string | null;
+  notes?: string | null;
+  createdAt: string;
+}
+
+export interface ServerlessSupplyMovement {
+  id: number;
+  accountId: number;
+  supplyItemId: number;
+  movementDate: string;
+  type: 'PURCHASE' | 'USAGE_CROP' | 'USAGE_LIVESTOCK' | 'USAGE_MACHINERY' | 'ADJUSTMENT';
+  quantity: number;
+  unitCost: number;
+  totalCost: number;
+  referenceType?: 'PLANTING' | 'FEEDING' | 'MAINTENANCE' | 'SALE' | null;
+  referenceId?: number | null;
+  notes?: string | null;
+  createdAt: string;
+}
+
+export interface ServerlessTrade {
+  id: number;
+  accountId: number;
+  ranchId: number;
+  type: 'SALE_LIVESTOCK' | 'SALE_CROP' | 'SALE_MILK' | 'PURCHASE_INPUTS' | 'PURCHASE_LIVESTOCK' | 'PURCHASE_EQUIPMENT';
+  tradeDate: string;
+  entityName: string;
+  description: string;
+  quantity: number;
+  unit: string;
+  unitPrice: number;
+  totalAmount: number;
+  paymentStatus: 'PAID' | 'PENDING' | 'PARTIAL';
+  invoiceNumber?: string | null;
+  weightScaleKg?: number | null;
+  shrinkagePercentage?: number | null;
+  notes?: string | null;
+  createdAt: string;
+}
+
 export interface ServerlessDatabase {
   version: number;
   accounts: ServerlessAccount[];
@@ -633,4 +810,14 @@ export interface ServerlessDatabase {
   incomes: ServerlessIncome[];
   animalSales: ServerlessAnimalSale[];
   milkSales: ServerlessMilkSale[];
+  lands: ServerlessLand[];
+  crops: ServerlessCrop[];
+  plantings: ServerlessPlanting[];
+  harvests: ServerlessHarvest[];
+  machinery: ServerlessMachinery[];
+  machineryMaintenances: ServerlessMachineryMaintenance[];
+  fuelLogs: ServerlessFuelLog[];
+  supplies: ServerlessSupplyItem[];
+  supplyMovements: ServerlessSupplyMovement[];
+  trades: ServerlessTrade[];
 }

@@ -48,6 +48,11 @@ import ReportsPanelPage from '@/pages/reports/ReportsPanelPage';
 import AnimalReportPage from '@/pages/reports/AnimalReportPage';
 import InicioPage from '@/pages/inicio/InicioPage';
 import PanelIndexPage from '@/pages/panel/PanelIndexPage';
+import AgriculturePage from '@/pages/crops/AgriculturePage';
+import MachineryPage from '@/pages/machinery/MachineryPage';
+import LandsPage from '@/pages/lands/LandsPage';
+import FieldCalculatorsPage from '@/pages/calculators/FieldCalculatorsPage';
+import TradePage from '@/pages/trade/TradePage';
 import { VacunarFlow } from '@/features/wizard/VacunarFlow';
 import { PesarFlow } from '@/features/wizard/PesarFlow';
 import { OrdenarFlow } from '@/features/wizard/OrdenarFlow';
@@ -143,6 +148,12 @@ export function AppRouter() {
           <Route path="/panel/produccion" element={<ProductionPanelPage />} />
           <Route path="/panel/reportes" element={<ReportsPanelPage />} />
           <Route path="/panel/reportes/animal/:id" element={<AnimalReportPage />} />
+
+          <Route path="/agricultura" element={<AgriculturePage />} />
+          <Route path="/maquinaria" element={<MachineryPage />} />
+          <Route path="/terrenos" element={<LandsPage />} />
+          <Route path="/calculadoras" element={<FieldCalculatorsPage />} />
+          <Route path="/comercio" element={<TradePage />} />
 
           <Route path="/ajustes" element={<AjustesIndexPage />} />
           <Route path="/ajustes/perfil" element={<ProfileSettingsPage />} />
