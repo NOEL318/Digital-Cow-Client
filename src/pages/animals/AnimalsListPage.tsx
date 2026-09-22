@@ -92,7 +92,7 @@ export default function AnimalsListPage() {
           />
         </div>
         <select
-          className="border rounded px-2 py-2 bg-background text-base"
+          className="glass-input h-11 w-auto min-w-[140px] font-medium"
           value={params.get('ranchId') ?? ''}
           onChange={e => setParam('ranchId', e.target.value || undefined)}
           aria-label={t('fields.ranch')}
@@ -101,7 +101,7 @@ export default function AnimalsListPage() {
           {(ranches.data ?? []).map(r => <option key={r.id} value={r.id}>{r.name}</option>)}
         </select>
         <select
-          className="border rounded px-2 py-2 bg-background text-base"
+          className="glass-input h-11 w-auto min-w-[140px] font-medium"
           value={params.get('breedId') ?? ''}
           onChange={e => setParam('breedId', e.target.value || undefined)}
           aria-label={t('fields.breed')}
@@ -110,7 +110,7 @@ export default function AnimalsListPage() {
           {(breeds.data ?? []).map(b => <option key={b.id} value={b.id}>{b.nameEs}</option>)}
         </select>
         <select
-          className="border rounded px-2 py-2 bg-background text-base"
+          className="glass-input h-11 w-auto min-w-[140px] font-medium"
           value={params.get('status') ?? ''}
           onChange={e => setParam('status', e.target.value || undefined)}
           aria-label={t('fields.status')}

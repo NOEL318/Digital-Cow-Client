@@ -79,9 +79,32 @@
       radial-gradient(at 50% 100%, rgba(168, 85, 247, 0.06) 0px, transparent 45%);
     background-attachment: fixed;
   }
+
+  /* Estilo base unificado glassmorphism para inputs, selects y textareas */
+  select:not([multiple]) {
+    @apply h-11 rounded-xl border border-white/60 dark:border-white/15 bg-white/70 dark:bg-slate-900/60 px-3.5 py-2 text-sm text-foreground backdrop-blur-md shadow-sm transition-all duration-150;
+    @apply hover:border-emerald-500/50 hover:bg-white/85 dark:hover:bg-slate-900/85 hover:shadow-md;
+    @apply focus:outline-none focus:ring-2 focus:ring-emerald-500/40 focus:border-emerald-600 focus:bg-white/95 dark:focus:bg-slate-900/95 focus:shadow-md;
+    @apply disabled:cursor-not-allowed disabled:opacity-50 disabled:bg-muted/40;
+  }
+
+  textarea {
+    @apply rounded-xl border border-white/60 dark:border-white/15 bg-white/70 dark:bg-slate-900/60 p-3.5 text-sm text-foreground backdrop-blur-md shadow-sm transition-all duration-150;
+    @apply placeholder:text-muted-foreground/60;
+    @apply hover:border-emerald-500/50 hover:bg-white/85 dark:hover:bg-slate-900/85 hover:shadow-md;
+    @apply focus:outline-none focus:ring-2 focus:ring-emerald-500/40 focus:border-emerald-600 focus:bg-white/95 dark:focus:bg-slate-900/95 focus:shadow-md;
+    @apply disabled:cursor-not-allowed disabled:opacity-50 disabled:bg-muted/40;
+  }
 }
 
 @layer utilities {
+  .glass-input {
+    @apply flex h-11 w-full rounded-xl border border-white/60 dark:border-white/15 bg-white/70 dark:bg-slate-900/60 px-3.5 py-2 text-sm text-foreground backdrop-blur-md shadow-sm transition-all duration-150;
+    @apply placeholder:text-muted-foreground/60;
+    @apply hover:border-emerald-500/50 hover:bg-white/85 dark:hover:bg-slate-900/85 hover:shadow-md;
+    @apply focus:outline-none focus:ring-2 focus:ring-emerald-500/40 focus:border-emerald-600 focus:bg-white/95 dark:focus:bg-slate-900/95 focus:shadow-md;
+    @apply disabled:cursor-not-allowed disabled:opacity-50 disabled:bg-muted/40;
+  }
   .glass {
     @apply backdrop-blur-xl bg-white/70 dark:bg-slate-900/60 border border-white/50 dark:border-white/10 shadow-sm;
   }

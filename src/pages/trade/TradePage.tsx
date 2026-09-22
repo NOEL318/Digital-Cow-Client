@@ -471,7 +471,7 @@ function NewTradeModal({ open, defaultType, onClose, onSaved }: { open: boolean;
             <div>
               <Label className="text-xs">Tipo de Operación</Label>
               <select
-                className="w-full mt-1 border rounded-lg p-2 text-sm bg-background"
+                className="glass-input mt-1"
                 value={formData.type}
                 onChange={e => setFormData(p => ({ ...p, type: e.target.value as any }))}
               >
@@ -612,7 +612,7 @@ function NewSupplyMovementModal({ open, supplyId, onClose, onSaved }: { open: bo
           <div>
             <Label className="text-xs">Insumo</Label>
             <select
-              className="w-full mt-1 border rounded-lg p-2 text-sm bg-background"
+              className="glass-input mt-1"
               value={formData.supplyItemId}
               onChange={e => {
                 const sid = Number(e.target.value);
@@ -634,7 +634,7 @@ function NewSupplyMovementModal({ open, supplyId, onClose, onSaved }: { open: bo
             <div>
               <Label className="text-xs">Destino / Uso</Label>
               <select
-                className="w-full mt-1 border rounded-lg p-2 text-sm bg-background"
+                className="glass-input mt-1"
                 value={formData.type}
                 onChange={e => setFormData(p => ({ ...p, type: e.target.value as any }))}
               >
