@@ -35,7 +35,7 @@ export function AnimalForm({ initial, onSubmit, submitting }: Props) {
       <div><Label htmlFor="name">{t('animals:fields.name')}</Label><Input id="name" {...form.register('name')} /></div>
       <div>
         <Label htmlFor="sex">{t('animals:fields.sex')}</Label>
-        <select id="sex" {...form.register('sex')} className="w-full h-10 rounded border bg-background px-3">
+        <select id="sex" {...form.register('sex')} className="glass-input">
           {(['FEMALE','MALE'] as const).map(s => <option key={s} value={s}>{t(`animals:sex.${s}`)}</option>)}
         </select>
       </div>
@@ -46,7 +46,7 @@ export function AnimalForm({ initial, onSubmit, submitting }: Props) {
       </div>
       <div>
         <Label htmlFor="breedId">{t('animals:fields.breed')}</Label>
-        <select id="breedId" {...form.register('breedId')} className="w-full h-10 rounded border bg-background px-3">
+        <select id="breedId" {...form.register('breedId')} className="glass-input">
           <option value="">-</option>
           {(breeds.data ?? []).map(b => <option key={b.id} value={b.id}>{b.nameEs}</option>)}
         </select>
@@ -60,13 +60,13 @@ export function AnimalForm({ initial, onSubmit, submitting }: Props) {
       </div>
       <div>
         <Label htmlFor="purpose">{t('animals:fields.purpose')}</Label>
-        <select id="purpose" {...form.register('purpose')} className="w-full h-10 rounded border bg-background px-3">
+        <select id="purpose" {...form.register('purpose')} className="glass-input">
           {(['BEEF','DAIRY','DUAL'] as const).map(p => <option key={p} value={p}>{t(`animals:purpose.${p}`)}</option>)}
         </select>
       </div>
       <div>
         <Label htmlFor="status">{t('animals:fields.status')}</Label>
-        <select id="status" {...form.register('status')} className="w-full h-10 rounded border bg-background px-3">
+        <select id="status" {...form.register('status')} className="glass-input">
           {(['ACTIVE','SOLD','DEAD','MISSING','TRANSFERRED'] as const).map(s => <option key={s} value={s}>{t(`animals:status.${s}`)}</option>)}
         </select>
       </div>

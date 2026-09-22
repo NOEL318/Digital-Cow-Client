@@ -561,7 +561,7 @@ function NewMachineryModal({ open, onClose, onSaved }: { open: boolean; onClose:
             <div>
               <Label className="text-xs">Tipo</Label>
               <select
-                className="w-full mt-1 border rounded-lg p-2 text-sm bg-background"
+                className="glass-input mt-1"
                 value={formData.type}
                 onChange={e => setFormData(p => ({ ...p, type: e.target.value as any }))}
               >
@@ -627,7 +627,7 @@ function NewMachineryModal({ open, onClose, onSaved }: { open: boolean; onClose:
             <div>
               <Label className="text-xs">Combustible</Label>
               <select
-                className="w-full mt-1 border rounded-lg p-2 text-sm bg-background"
+                className="glass-input mt-1"
                 value={formData.fuelType}
                 onChange={e => setFormData(p => ({ ...p, fuelType: e.target.value as any }))}
               >
@@ -698,7 +698,7 @@ function NewMaintenanceModal({ open, machineryId, onClose, onSaved }: { open: bo
             <div>
               <Label className="text-xs">Equipo</Label>
               <select
-                className="w-full mt-1 border rounded-lg p-2 text-sm bg-background"
+                className="glass-input mt-1"
                 value={formData.machineryId}
                 onChange={e => {
                   const mid = Number(e.target.value);
@@ -730,7 +730,7 @@ function NewMaintenanceModal({ open, machineryId, onClose, onSaved }: { open: bo
             <div>
               <Label className="text-xs">Tipo</Label>
               <select
-                className="w-full mt-1 border rounded-lg p-2 text-sm bg-background"
+                className="glass-input mt-1"
                 value={formData.type}
                 onChange={e => setFormData(p => ({ ...p, type: e.target.value as any }))}
               >
@@ -835,7 +835,7 @@ function NewFuelModal({ open, machineryId, onClose, onSaved }: { open: boolean; 
           <div>
             <Label className="text-xs">Equipo</Label>
             <select
-              className="w-full mt-1 border rounded-lg p-2 text-sm bg-background"
+              className="glass-input mt-1"
               value={formData.machineryId}
               onChange={e => {
                 const mid = Number(e.target.value);

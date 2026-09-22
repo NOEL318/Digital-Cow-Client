@@ -440,7 +440,7 @@ function NewLandModal({ open, onClose, onSaved }: { open: boolean; onClose: () =
             <div>
               <Label className="text-xs">Tipo de Terreno</Label>
               <select
-                className="w-full mt-1 border rounded-lg p-2 text-sm bg-background"
+                className="glass-input mt-1"
                 value={formData.type}
                 onChange={e => setFormData(p => ({ ...p, type: e.target.value as any }))}
               >
@@ -466,7 +466,7 @@ function NewLandModal({ open, onClose, onSaved }: { open: boolean; onClose: () =
             <div>
               <Label className="text-xs">Tipo de Suelo</Label>
               <select
-                className="w-full mt-1 border rounded-lg p-2 text-sm bg-background"
+                className="glass-input mt-1"
                 value={formData.soilType || 'LOAM'}
                 onChange={e => setFormData(p => ({ ...p, soilType: e.target.value as any }))}
               >
@@ -480,7 +480,7 @@ function NewLandModal({ open, onClose, onSaved }: { open: boolean; onClose: () =
             <div>
               <Label className="text-xs">Riego</Label>
               <select
-                className="w-full mt-1 border rounded-lg p-2 text-sm bg-background"
+                className="glass-input mt-1"
                 value={formData.irrigationType || 'RAIN_FED'}
                 onChange={e => setFormData(p => ({ ...p, irrigationType: e.target.value as any }))}
               >

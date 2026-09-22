@@ -497,7 +497,7 @@ function NewPlantingModal({ open, onClose, onSaved }: { open: boolean; onClose: 
             <div>
               <Label className="text-xs">Cultivo</Label>
               <select
-                className="w-full mt-1 border rounded-lg p-2 text-sm bg-background"
+                className="glass-input mt-1"
                 value={formData.cropId}
                 onChange={e => {
                   const cid = Number(e.target.value);
@@ -528,7 +528,7 @@ function NewPlantingModal({ open, onClose, onSaved }: { open: boolean; onClose: 
             <div>
               <Label className="text-xs">Terreno / Parcela</Label>
               <select
-                className="w-full mt-1 border rounded-lg p-2 text-sm bg-background"
+                className="glass-input mt-1"
                 value={formData.landId}
                 onChange={e => setFormData(p => ({ ...p, landId: Number(e.target.value) }))}
               >
@@ -658,7 +658,7 @@ function NewHarvestModal({ open, plantingId, onClose, onSaved }: { open: boolean
             <div>
               <Label className="text-xs">Siembra de Origen</Label>
               <select
-                className="w-full mt-1 border rounded-lg p-2 text-sm bg-background"
+                className="glass-input mt-1"
                 value={formData.plantingId}
                 onChange={e => {
                   const pid = Number(e.target.value);
@@ -726,7 +726,7 @@ function NewHarvestModal({ open, plantingId, onClose, onSaved }: { open: boolean
             <div>
               <Label className="text-xs">Destino del Producto</Label>
               <select
-                className="w-full mt-1 border rounded-lg p-2 text-sm bg-background"
+                className="glass-input mt-1"
                 value={formData.destination}
                 onChange={e => setFormData(p => ({ ...p, destination: e.target.value as any }))}
               >
